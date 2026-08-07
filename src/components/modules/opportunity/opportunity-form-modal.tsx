@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import {
   Opportunity,
   OpportunityCategory,
@@ -94,12 +95,17 @@ function OpportunityFormContent({
         : await createOpportunityAction(payload);
 
       if (res.success) {
+        toast.success(
+          isEditing ? "Opportunity updated successfully!" : "Opportunity created successfully!"
+        );
         onClose();
       } else {
         setErrorMsg(res.error || "Failed to save opportunity.");
+        toast.error(res.error || "Failed to save opportunity.");
       }
     } catch {
       setErrorMsg("An unexpected error occurred.");
+      toast.error("An unexpected error occurred.");
     } finally {
       setIsSubmitting(false);
     }

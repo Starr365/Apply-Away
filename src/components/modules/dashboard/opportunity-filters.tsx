@@ -47,7 +47,7 @@ export function OpportunityFilters() {
   return (
     <div className="glass-panel p-4 rounded-2xl space-y-4 sm:space-y-0 sm:flex sm:items-center sm:justify-between sm:gap-4">
       {/* Search Input Form */}
-      <form onSubmit={handleSearchSubmit} className="flex-1 min-w-[200px] relative">
+      <form onSubmit={handleSearchSubmit} className="flex-1 min-w-50 relative">
         <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
         <input
           type="text"

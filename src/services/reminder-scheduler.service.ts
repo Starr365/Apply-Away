@@ -86,7 +86,7 @@ export class ReminderSchedulerService {
           if (timeDiff >= config.minMs && timeDiff <= config.maxMs) {
             // Check if reminder was already sent
             const alreadySent = opp.reminderLogs.some(
-              (log) => log.reminderType === reminderType
+              (log: { reminderType: string }) => log.reminderType === reminderType
             );
 
             if (alreadySent) {

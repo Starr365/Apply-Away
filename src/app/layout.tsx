@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import { SessionProvider } from "@/components/providers/session-provider";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const inter = Inter({
@@ -44,6 +45,7 @@ export default function RootLayout({
       <body className="font-sans antialiased bg-slate-950 text-slate-100 selection:bg-purple-500 selection:text-white min-h-screen flex flex-col">
         <SessionProvider>
           <main className="flex-1">{children}</main>
+          <Toaster position="top-right" theme="dark" richColors />
         </SessionProvider>
       </body>
     </html>
