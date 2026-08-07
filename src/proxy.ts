@@ -1,12 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-/**
- * Lightweight Edge-compatible Route Protection Middleware.
- * Prevents Edge Function bundle bloat by checking session cookies directly,
- * keeping Edge Function size under 10KB (far below Vercel's 1MB limit).
- */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Retrieve Auth.js / NextAuth session cookie (supports both dev and secure HTTPS production names)
