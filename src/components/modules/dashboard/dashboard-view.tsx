@@ -9,6 +9,7 @@ import { OpportunityFormModal } from "@/components/modules/opportunity/opportuni
 import { AICaptureModal } from "@/components/modules/capture/ai-capture-modal";
 import { Plus, Sparkles, CheckCircle2, Clock, Layers, Wand2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface DashboardViewProps {
   opportunities: Opportunity[];
@@ -58,7 +59,15 @@ export function DashboardView({
           </p>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href="/calendar"
+            className="h-11 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white text-sm font-semibold inline-flex items-center space-x-2 transition-all"
+          >
+            <Clock className="w-4 h-4 text-purple-400" />
+            <span>Calendar View</span>
+          </Link>
+
           <button
             type="button"
             onClick={() => setIsAICaptureOpen(true)}
