@@ -27,14 +27,20 @@ export function LandingHeader() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Logo Branding */}
-        <div className="flex items-center space-x-3 select-none">
-          <div className="w-9 h-9 rounded-xl bg-linear-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
-            <Sparkles className="w-5 h-5 text-white" />
-          </div>
-          <span className="font-outfit font-extrabold text-xl tracking-tight text-foreground">
-            Apply Away
-          </span>
-        </div>
+        <Link href="/" className="flex items-center space-x-3 select-none">
+          {/* Mobile Icon */}
+          <img
+            src="/vault-logo.png"
+            alt="Apply Away Icon"
+            className="w-8 h-8 md:hidden object-contain"
+          />
+          {/* Desktop Full Logo */}
+          <img
+            src="/valut-text-logo.png"
+            alt="Apply Away Logo"
+            className="h-8 w-auto hidden md:block object-contain dark:invert transition-all"
+          />
+        </Link>
 
         {/* Navigation Links */}
         <nav className="hidden md:flex items-center space-x-8 text-xs font-semibold text-muted-foreground">

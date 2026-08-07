@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { Sparkles, Lock, ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { Lock, ShieldCheck } from "lucide-react";
 
 export function LandingFooter() {
   return (
@@ -10,14 +10,13 @@ export function LandingFooter() {
         
         {/* Logo Brand column */}
         <div className="space-y-4 col-span-1 md:col-span-2">
-          <div className="flex items-center space-x-3 select-none">
-            <div className="w-8 h-8 rounded-lg bg-linear-to-tr from-purple-600 to-indigo-500 flex items-center justify-center">
-              <Sparkles className="w-4.5 h-4.5 text-white" />
-            </div>
-            <span className="font-outfit font-extrabold text-lg tracking-tight text-white">
-              Apply Away
-            </span>
-          </div>
+          <Link href="/" className="flex items-center space-x-3 select-none">
+            <img
+              src="/text-vault.png"
+              alt="Apply Away Logo"
+              className="h-7 w-auto object-contain dark:invert transition-all"
+            />
+          </Link>
           <p className="text-xs text-muted-foreground max-w-xs leading-relaxed">
             Automate and track fellowships, scholarships, internships, grants, and career pipelines in one secure vault.
           </p>

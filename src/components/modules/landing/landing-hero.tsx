@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Sparkles, ArrowRight, ShieldCheck, Wand2 } from "lucide-react";
+import { ArrowRight, ShieldCheck, Wand2 } from "lucide-react";
+import { AnimatedContainer } from "@/components/ui/animated-container";
 
 export function LandingHero() {
   const [urlInput] = useState("https://www.schwarzmanscholars.org/apply");
@@ -32,9 +33,9 @@ export function LandingHero() {
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         {/* Left Info Column */}
-        <div className="lg:col-span-5 space-y-6 text-center lg:text-left">
+        <AnimatedContainer delay={200} className="lg:col-span-5 space-y-6 text-center lg:text-left">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-[10px] font-bold text-purple-400 uppercase tracking-widest mx-auto lg:mx-0">
-            <Sparkles className="w-3.5 h-3.5" />
+            <img src="/vault-logo.png" alt="Icon" className="w-4 h-4 object-contain" />
             <span>AI-Powered Opportunity Vault</span>
           </div>
 
@@ -71,10 +72,10 @@ export function LandingHero() {
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>Multi-Tenant Vault Database Isolation</span>
           </div>
-        </div>
+        </AnimatedContainer>
 
         {/* Right Product Mockup Column */}
-        <div className="lg:col-span-7">
+        <AnimatedContainer delay={300} className="lg:col-span-7">
           <div className="relative rounded-2xl border border-border/80 bg-card/65 backdrop-blur-md shadow-2xl p-4 sm:p-5 overflow-hidden group hover:border-purple-500/30 transition-all duration-300">
             {/* Header window control strip */}
             <div className="flex items-center justify-between pb-4 border-b border-border/60">
@@ -175,7 +176,7 @@ export function LandingHero() {
 
             </div>
           </div>
-        </div>
+        </AnimatedContainer>
       </div>
     </section>
   );

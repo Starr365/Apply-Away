@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { AnimatedContainer } from "@/components/ui/animated-container";
 
 // Primary FAQ List (8 Questions)
 const PRIMARY_FAQS = [
@@ -67,49 +68,52 @@ export function LandingFAQ() {
   return (
     <section id="faq" className="py-24 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto space-y-16">
-
+        
         {/* Header Block */}
-        <div className="text-center space-y-3 max-w-xl mx-auto">
+        <AnimatedContainer delay={100} className="text-center space-y-3 max-w-xl mx-auto">
           <div className="text-xs font-bold text-purple-400 uppercase tracking-widest select-none">
             Common Inquiries
           </div>
-          <h2 className="text-3xl font-bold font-outfit text-white leading-tight">
-            Got questions? We&apos;ve got answers.
+          <h2 className="text-3xl font-bold font-outfit text-foreground leading-tight">
+            Before your next application, you might be wondering…
           </h2>
           <p className="text-xs sm:text-sm text-muted-foreground select-none">
-            Before your next application, you might be wondering…
+            Got questions? We&apos;ve got answers.
           </p>
-        </div>
+        </AnimatedContainer>
 
         {/* Primary FAQs */}
         <div className="space-y-4">
           {PRIMARY_FAQS.map((faq, idx) => {
             const isOpen = openPrimary === idx;
             return (
-              <div
+              <AnimatedContainer
                 key={`primary-${idx}`}
-                className="glass-card rounded-2xl overflow-hidden border border-border/80 transition-all duration-300"
+                delay={150 + idx * 50}
+                className="bg-card/45 backdrop-blur-md rounded-2xl overflow-hidden border border-border/80 transition-all duration-300"
               >
                 <button
                   onClick={() => setOpenPrimary(isOpen ? null : idx)}
                   type="button"
-                  className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-white hover:bg-slate-900/40 transition-colors cursor-pointer"
+                  className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-slate-900/40 dark:hover:bg-slate-900/20 transition-colors cursor-pointer"
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
-                    className={`w-4 h-4 text-purple-400 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
-                      }`}
+                    className={`w-4 h-4 text-purple-400 transition-transform duration-300 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
                 <div
-                  className={`transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? "max-h-60 border-t border-border/50" : "max-h-0"
-                    }`}
+                  className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                    isOpen ? "max-h-60 border-t border-border/50" : "max-h-0"
+                  }`}
                 >
                   <p className="p-5 text-xs text-muted-foreground leading-relaxed text-left">
                     {faq.a}
                   </p>
                 </div>
-              </div>
+              </AnimatedContainer>
             );
           })}
         </div>
@@ -119,12 +123,13 @@ export function LandingFAQ() {
           <button
             onClick={() => setShowMore((prev) => !prev)}
             type="button"
-            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl border border-border hover:border-purple-500/30 bg-card/40 hover:bg-card text-xs font-bold text-white transition-all cursor-pointer"
+            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl border border-border hover:border-purple-500/30 bg-card/40 hover:bg-card text-xs font-bold text-foreground transition-all cursor-pointer"
           >
             <span>{showMore ? "Show fewer questions" : "More questions"}</span>
             <ChevronDown
-              className={`w-3.5 h-3.5 text-purple-400 transition-transform duration-300 ${showMore ? "rotate-180" : ""
-                }`}
+              className={`w-3.5 h-3.5 text-purple-400 transition-transform duration-300 ${
+                showMore ? "rotate-180" : ""
+              }`}
             />
           </button>
         </div>
@@ -137,22 +142,24 @@ export function LandingFAQ() {
               return (
                 <div
                   key={`secondary-${idx}`}
-                  className="glass-card rounded-2xl overflow-hidden border border-border/80 transition-all duration-300"
+                  className="bg-card/45 backdrop-blur-md rounded-2xl overflow-hidden border border-border/80 transition-all duration-300"
                 >
                   <button
                     onClick={() => setOpenSecondary(isOpen ? null : idx)}
                     type="button"
-                    className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-white hover:bg-slate-900/40 transition-colors cursor-pointer"
+                    className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-slate-900/40 dark:hover:bg-slate-900/20 transition-colors cursor-pointer"
                   >
                     <span>{faq.q}</span>
                     <ChevronDown
-                      className={`w-4 h-4 text-purple-400 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
-                        }`}
+                      className={`w-4 h-4 text-purple-400 transition-transform duration-300 ${
+                        isOpen ? "rotate-180" : ""
+                      }`}
                     />
                   </button>
                   <div
-                    className={`transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? "max-h-60 border-t border-border/50" : "max-h-0"
-                      }`}
+                    className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                      isOpen ? "max-h-60 border-t border-border/50" : "max-h-0"
+                    }`}
                   >
                     <p className="p-5 text-xs text-muted-foreground leading-relaxed text-left">
                       {faq.a}
