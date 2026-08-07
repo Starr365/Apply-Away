@@ -7,7 +7,7 @@ import { OpportunityTable } from "./opportunity-table";
 import { OpportunityPagination } from "./opportunity-pagination";
 import { OpportunityFormModal } from "@/components/modules/opportunity/opportunity-form-modal";
 import { AICaptureModal } from "@/components/modules/capture/ai-capture-modal";
-import { Plus, Sparkles, CheckCircle2, Clock, Layers, Wand2 } from "lucide-react";
+import { Plus, Sparkles, CheckCircle2, Clock, Layers, Wand2, BarChart3 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -66,6 +66,14 @@ export function DashboardView({
           >
             <Clock className="w-4 h-4 text-purple-400" />
             <span>Calendar View</span>
+          </Link>
+
+          <Link
+            href="/reflection"
+            className="h-11 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white text-sm font-semibold inline-flex items-center space-x-2 transition-all"
+          >
+            <BarChart3 className="w-4 h-4 text-emerald-400" />
+            <span>Reflection & Analytics</span>
           </Link>
 
           <button
