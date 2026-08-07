@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "sonner";
 import { Opportunity, OpportunityStatus, OpportunityPriority } from "@/domain/opportunity.types";
 import { CategoryBadge, StatusBadge, PriorityBadge } from "@/components/ui/badge";
 import { formatDate, getDaysRemaining } from "@/lib/utils";
@@ -18,6 +17,7 @@ import {
   Building,
 } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/components/ui/toast-provider";
 
 interface OpportunityCardProps {
   opportunity: Opportunity;
@@ -25,6 +25,7 @@ interface OpportunityCardProps {
 }
 
 export function OpportunityCard({ opportunity, onEdit }: OpportunityCardProps) {
+  const toast = useToast();
   const [showMenu, setShowMenu] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 

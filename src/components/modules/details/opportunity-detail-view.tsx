@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
 import { Opportunity, ActivityLog } from "@/domain/opportunity.types";
 import { CategoryBadge, StatusBadge, PriorityBadge } from "@/components/ui/badge";
 import { formatDate, getDaysRemaining } from "@/lib/utils";
@@ -23,6 +22,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { OpportunityFormModal } from "@/components/modules/opportunity/opportunity-form-modal";
+import { useToast } from "@/components/ui/toast-provider";
 
 interface OpportunityDetailViewProps {
   opportunity: Opportunity;
@@ -33,6 +33,7 @@ export function OpportunityDetailView({
   opportunity,
   activityLogs,
 }: OpportunityDetailViewProps) {
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState<
     "overview" | "essays" | "checklist" | "notes" | "timeline"
   >("overview");

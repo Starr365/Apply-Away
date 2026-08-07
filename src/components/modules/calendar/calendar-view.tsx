@@ -1,9 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
+import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const CalendarRenderer = dynamic(() => import("./calendar-renderer"), {
+  ssr: false,
+  loading: () => <Skeleton className="h-125 w-full rounded-3xl animate-pulse" />,
+});
+
 import { Opportunity } from "@/domain/opportunity.types";
 import { CategoryBadge, StatusBadge, PriorityBadge } from "@/components/ui/badge";
 import { formatDate, getDaysRemaining } from "@/lib/utils";
@@ -93,22 +98,7 @@ export function CalendarView({ opportunities }: CalendarViewProps) {
 
       {/* FullCalendar Widget Container */}
       <div className="glass-panel p-4 sm:p-6 rounded-3xl overflow-hidden border border-slate-800/80 shadow-2xl">
-        <div className="fullcalendar-dark-theme">
-          <FullCalendar
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            plugins={[dayGridPlugin as any, interactionPlugin as any]}
-            initialView="dayGridMonth"
-            events={calendarEvents}
-            eventClick={handleEventClick}
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "",
-            }}
-            height="auto"
-            aspectRatio={1.5}
-          />
-        </div>
+        <CalendarRenderer events={calendarEvents} onEventClick={handleEventClick} />
       </div>
 
       {/* Quick View Opportunity Modal */}

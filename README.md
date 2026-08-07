@@ -1,15 +1,15 @@
-# 🚀 Apply Away – AI-Powered Opportunity Vault
+# Apply Away – AI-Powered Opportunity Vault
 
 > **Apply Away** is an intelligent, full-stack personal opportunity vault that empowers professionals, researchers, and students to effortlessly capture, organize, track, and analyze fellowships, scholarships, grants, internships, and career opportunities in one secure dashboard.
 
 ---
 
-## 📌 Executive Summary (For Product & Business Readers)
+## Executive Summary 
 
-### ❓ The Problem
+### The Problem
 High-achieving applicants often discover opportunities scattered across WhatsApp messages, LinkedIn posts, email newsletters, and web links. Managing deadlines, application requirements, essay prompts, and progress across spreadsheets leads to missed deadlines, lost information, and administrative overwhelm.
 
-### 💡 The Solution
+### The Solution
 **Apply Away** acts as a centralized "second brain" for your career and academic applications:
 - **Instant AI Extraction**: Simply paste a web link or text message—our AI automatically extracts the title, host organization, application deadlines, requirements, benefits, and essay prompts into your vault.
 - **Duplicate Prevention**: Warns you if you try to add an opportunity you are already tracking.
@@ -54,7 +54,7 @@ graph TD
 
 ---
 
-## 🛠️ Technical Architecture Specification (For Engineers)
+## Technical Architecture Specification (For Engineers)
 
 ### Technology Stack Overview
 
@@ -73,7 +73,7 @@ graph TD
 
 ---
 
-## 📐 Architectural Design Decisions
+## Architectural Design Decisions
 
 1. **Multi-Tenant SaaS Data Isolation**:
    - Every single database model (`Opportunity`, `EssayQuestion`, `ActivityLog`, `ReminderLog`, `MonthlyReflection`) references `userId` via foreign key constraints with `onDelete: Cascade`.
@@ -91,7 +91,7 @@ graph TD
 
 ---
 
-## 📁 Repository Directory Structure
+## Repository Directory Structure
 
 ```
 apply-away/
@@ -123,7 +123,7 @@ apply-away/
 
 ---
 
-## 💻 Quick Start & Setup Guide
+## Quick Start & Setup Guide
 
 ### 1. Prerequisites
 - **Node.js 18+**
@@ -183,7 +183,7 @@ Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🧪 Quality Verification
+## Quality Verification
 
 ```bash
 # Run ESLint checks

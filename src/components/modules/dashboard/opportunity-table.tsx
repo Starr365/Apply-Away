@@ -8,6 +8,8 @@ import { ExternalLink, Pencil, Trash2, FolderOpen, ArrowUpDown } from "lucide-re
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { deleteOpportunityAction } from "@/app/actions/opportunity.actions";
 
+import { EmptyState } from "@/components/ui/empty-state";
+
 interface OpportunityTableProps {
   opportunities: Opportunity[];
   onEdit: (opp: Opportunity) => void;
@@ -39,15 +41,12 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
 
   if (opportunities.length === 0) {
     return (
-      <div className="glass-panel p-12 rounded-3xl text-center space-y-4">
-        <div className="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mx-auto">
-          <FolderOpen className="w-7 h-7" />
-        </div>
-        <h3 className="text-lg font-bold font-outfit text-white">No Opportunities Found</h3>
-        <p className="text-xs text-slate-400 max-w-sm mx-auto">
-          No records match your active search or filter criteria. Try resetting filters or adding a new opportunity.
-        </p>
-      </div>
+      <EmptyState
+        icon={FolderOpen}
+        title="No Opportunities Found"
+        description="No records match your active search or filter criteria. Try resetting filters or adding a new opportunity."
+        className="glass-panel"
+      />
     );
   }
 
