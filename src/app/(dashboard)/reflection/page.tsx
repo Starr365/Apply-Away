@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { ReflectionView } from "@/components/modules/reflection/reflection-view";
 import Link from "next/link";
 import { Sparkles, ArrowLeft, User } from "lucide-react";
-import { OpportunityStatus, ActivityLog } from "@/domain/opportunity.types";
+import { Opportunity, OpportunityStatus, ActivityLog } from "@/domain/opportunity.types";
 
 export default async function ReflectionPage() {
   const session = await auth();
@@ -14,13 +14,13 @@ export default async function ReflectionPage() {
   }
 
   // Fetch all user opportunities for metrics calculations
-  const opportunities = await prisma.opportunity.findMany({
+  const opportunities = (await prisma.opportunity.findMany({
     where: { userId },
-  });
+  })) as unknown as Opportunity[];
 
   // Calculate Category breakdown
   const categoryCounts: Record<string, number> = {};
-  opportunities.forEach((opp) => {
+  opportunities.forEach((opp: Opportunity) => {
     const cat = opp.category || "OTHER";
     categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
   });
@@ -59,7 +59,7 @@ export default async function ReflectionPage() {
     Rejected: 0,
   };
 
-  opportunities.forEach((opp) => {
+  opportunities.forEach((opp: Opportunity) => {
     const label = statusLabels[opp.status] || "Not Started";
     statusCounts[label] = (statusCounts[label] || 0) + 1;
   });
@@ -87,12 +87,12 @@ export default async function ReflectionPage() {
     const monthKey = d.toISOString().slice(0, 7); // e.g. "2026-08"
     const monthLabel = d.toLocaleString("default", { month: "short", year: "2-digit" });
 
-    const totalCreatedInMonth = opportunities.filter((opp) => {
+    const totalCreatedInMonth = opportunities.filter((opp: Opportunity) => {
       const createdKey = new Date(opp.createdAt).toISOString().slice(0, 7);
       return createdKey === monthKey;
     }).length;
 
-    const totalSubmittedInMonth = opportunities.filter((opp) => {
+    const totalSubmittedInMonth = opportunities.filter((opp: Opportunity) => {
       const updatedKey = new Date(opp.updatedAt).toISOString().slice(0, 7);
       return updatedKey === monthKey && (opp.status === "SUBMITTED" || opp.status === "ACCEPTED");
     }).length;
@@ -106,7 +106,7 @@ export default async function ReflectionPage() {
 
   // Submitted this month
   const currentMonthKey = now.toISOString().slice(0, 7);
-  const submittedThisMonth = opportunities.filter((opp) => {
+  const submittedThisMonth = opportunities.filter((opp: Opportunity) => {
     const updatedKey = new Date(opp.updatedAt).toISOString().slice(0, 7);
     return updatedKey === currentMonthKey && (opp.status === "SUBMITTED" || opp.status === "ACCEPTED");
   }).length;
@@ -117,7 +117,7 @@ export default async function ReflectionPage() {
   });
 
   const reflectionsMap: Record<string, { id: string; monthYear: string; content: string }> = {};
-  reflections.forEach((ref) => {
+  reflections.forEach((ref: { id: string; monthYear: string; content: string }) => {
     reflectionsMap[ref.monthYear] = {
       id: ref.id,
       monthYear: ref.monthYear,

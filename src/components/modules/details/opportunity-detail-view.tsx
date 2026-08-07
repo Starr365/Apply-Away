@@ -206,7 +206,7 @@ export function OpportunityDetailView({
         <button
           type="button"
           onClick={() => setActiveTab("overview")}
-          className={`flex-1 min-w-[110px] py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "overview"
               ? "bg-purple-600 text-white shadow-md"
               : "text-slate-400 hover:text-slate-200"
@@ -219,7 +219,7 @@ export function OpportunityDetailView({
         <button
           type="button"
           onClick={() => setActiveTab("essays")}
-          className={`flex-1 min-w-[110px] py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "essays"
               ? "bg-purple-600 text-white shadow-md"
               : "text-slate-400 hover:text-slate-200"
@@ -232,7 +232,7 @@ export function OpportunityDetailView({
         <button
           type="button"
           onClick={() => setActiveTab("checklist")}
-          className={`flex-1 min-w-[110px] py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "checklist"
               ? "bg-purple-600 text-white shadow-md"
               : "text-slate-400 hover:text-slate-200"
@@ -245,7 +245,7 @@ export function OpportunityDetailView({
         <button
           type="button"
           onClick={() => setActiveTab("notes")}
-          className={`flex-1 min-w-[110px] py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "notes"
               ? "bg-purple-600 text-white shadow-md"
               : "text-slate-400 hover:text-slate-200"
@@ -258,7 +258,7 @@ export function OpportunityDetailView({
         <button
           type="button"
           onClick={() => setActiveTab("timeline")}
-          className={`flex-1 min-w-[110px] py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "timeline"
               ? "bg-purple-600 text-white shadow-md"
               : "text-slate-400 hover:text-slate-200"

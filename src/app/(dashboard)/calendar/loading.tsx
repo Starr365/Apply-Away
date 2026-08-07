@@ -19,7 +19,7 @@ export default function CalendarLoading() {
         </div>
 
         <Skeleton className="h-14 rounded-2xl" />
-        <Skeleton className="h-[500px] rounded-3xl" />
+        <Skeleton className="h-125 rounded-3xl" />
       </main>
     </div>
   );
