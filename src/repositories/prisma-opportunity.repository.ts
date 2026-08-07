@@ -10,6 +10,7 @@ import {
 } from "@/domain/opportunity.types";
 
 type OpportunityWhereInput = NonNullable<Parameters<typeof prisma.opportunity.findMany>[0]>["where"];
+type OpportunityUpdateInput = NonNullable<Parameters<typeof prisma.opportunity.update>[0]>["data"];
 
 /**
  * Concrete Prisma implementation of IOpportunityRepository.
@@ -121,7 +122,7 @@ export class PrismaOpportunityRepository implements IOpportunityRepository {
 
     const record = await prisma.opportunity.update({
       where: { id },
-      data: updatePayload,
+      data: updatePayload as OpportunityUpdateInput,
       include: {
         essayQuestions: true,
       },
