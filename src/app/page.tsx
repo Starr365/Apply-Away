@@ -74,7 +74,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-slate-800/60 py-6 bg-slate-950/60">
         <div className="max-w-6xl mx-auto px-4 text-center text-xs text-slate-500">
-          Apply Away &copy; {new Date().getFullYear()} – Built with Next.js 15, React 19 & Clean Architecture.
+          Apply Away &copy; {new Date().getFullYear()} – Built for all by Starr365.
         </div>
       </footer>
     </div>
