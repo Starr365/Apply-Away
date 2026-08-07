@@ -8,7 +8,8 @@ import {
   CreateOpportunityDto,
   UpdateOpportunityDto,
 } from "@/domain/opportunity.types";
-import { Prisma } from "@prisma/client";
+
+type OpportunityWhereInput = NonNullable<Parameters<typeof prisma.opportunity.findMany>[0]>["where"];
 
 /**
  * Concrete Prisma implementation of IOpportunityRepository.
@@ -41,7 +42,7 @@ export class PrismaOpportunityRepository implements IOpportunityRepository {
       limit = 10,
     } = params;
 
-    const where: Prisma.OpportunityWhereInput = {
+    const where: OpportunityWhereInput = {
       userId,
       ...(category ? { category } : {}),
       ...(status ? { status } : {}),
@@ -105,8 +106,9 @@ export class PrismaOpportunityRepository implements IOpportunityRepository {
     userId: string,
     data: UpdateOpportunityDto
   ): Promise<Opportunity> {
-    const updateData = { ...data };
-    delete updateData.essayQuestions;
+    const updatePayload = { ...data };
+    delete (updatePayload as Record<string, unknown>).essayQuestions;
+    delete (updatePayload as Record<string, unknown>).userId;
 
     // Verify user ownership
     const existing = await prisma.opportunity.findFirst({
@@ -119,7 +121,7 @@ export class PrismaOpportunityRepository implements IOpportunityRepository {
 
     const record = await prisma.opportunity.update({
       where: { id },
-      data: updateData,
+      data: updatePayload,
       include: {
         essayQuestions: true,
       },
@@ -148,7 +150,7 @@ export class PrismaOpportunityRepository implements IOpportunityRepository {
     organization: string,
     officialUrl?: string
   ): Promise<Opportunity[]> {
-    const orConditions: Prisma.OpportunityWhereInput[] = [
+    const orConditions: NonNullable<OpportunityWhereInput>[] = [
       {
         title: { equals: title, mode: "insensitive" },
         organization: { equals: organization, mode: "insensitive" },

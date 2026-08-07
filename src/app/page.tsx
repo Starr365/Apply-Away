@@ -2,15 +2,15 @@ import { Sparkles, Calendar, Layers } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+    <div className="min-h-screen flex flex-col justify-between bg-linear-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
       {/* Header */}
       <header className="border-b border-slate-800/60 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+            <div className="w-9 h-9 rounded-xl bg-linear-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
-            <span className="font-outfit font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+            <span className="font-outfit font-bold text-xl tracking-tight bg-clip-text text-transparent bg-linear-to-r from-white via-slate-200 to-slate-400">
               Apply Away
             </span>
           </div>
@@ -30,7 +30,7 @@ export default function Home() {
             <span>AI-Powered Personal Opportunity Vault</span>
           </div>
           <h1 className="text-4xl sm:text-6xl font-extrabold font-outfit tracking-tight text-white leading-tight">
-            Never Miss Another <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400">Deadline</span> or Opportunity.
+            Never Miss Another <span className="bg-clip-text text-transparent bg-linear-to-r from-purple-400 via-pink-400 to-indigo-400">Deadline</span> or Opportunity.
           </h1>
           <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto">
             Extract, organize, and manage fellowships, scholarships, grants, and career applications in one centralized, intelligent vault.
