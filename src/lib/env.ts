@@ -20,6 +20,8 @@ const envSchema = z.object({
     .string()
     .url("NEXTAUTH_URL must be a valid URL")
     .default("http://localhost:3000"),
+  AUTH_GOOGLE_ID: z.string().optional(),
+  AUTH_GOOGLE_SECRET: z.string().optional(),
 
   // AI Service Configuration
   OPENAI_API_KEY: z.string().optional(),

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
+import { SessionProvider } from "@/components/providers/session-provider";
 import "./globals.css";
 
 const inter = Inter({
@@ -41,7 +42,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable} dark`}>
       <body className="font-sans antialiased bg-slate-950 text-slate-100 selection:bg-purple-500 selection:text-white min-h-screen flex flex-col">
-        <main className="flex-1">{children}</main>
+        <SessionProvider>
+          <main className="flex-1">{children}</main>
+        </SessionProvider>
       </body>
     </html>
   );
