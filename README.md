@@ -147,7 +147,7 @@ npm install
 Create an `env.local` file in the root folder:
 
 ```env
-# Database Connection (PostgreSQL / Neon)
+# Database Connection
 DATABASE_URL="postgresql://user:password@localhost:5432/apply_away?schema=public"
 
 # Auth.js Secrets
