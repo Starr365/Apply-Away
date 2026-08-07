@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { Sparkles, ArrowRight, ShieldCheck, Mail, User as UserIcon } from "lucide-react";
+import { useToast } from "@/components/ui/toast-provider";
 
 export default function LoginPage() {
+  const toast = useToast();
   const [email, setEmail] = useState("user@applyaway.app");
   const [name, setName] = useState("Apply Away User");
   const [isLoading, setIsLoading] = useState(false);
@@ -25,15 +27,8 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    try {
-      await signIn("google", { callbackUrl: "/dashboard" });
-    } catch (err) {
-      console.error("Google Sign-in failed:", err);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleGoogleSignIn = () => {
+    toast.info("Google Sign-In is coming soon for this MVP stage!");
   };
 
   return (
