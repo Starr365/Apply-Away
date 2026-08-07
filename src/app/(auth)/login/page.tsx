@@ -4,9 +4,11 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { Sparkles, ArrowRight, ShieldCheck, Mail, User as UserIcon } from "lucide-react";
 import { useToast } from "@/components/ui/toast-provider";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const toast = useToast();
+  const router = useRouter();
   const [email, setEmail] = useState("user@applyaway.app");
   const [name, setName] = useState("Apply Away User");
   const [isLoading, setIsLoading] = useState(false);
@@ -15,13 +17,20 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await signIn("credentials", {
+      const res = await signIn("credentials", {
         email,
         name,
-        callbackUrl: "/dashboard",
+        redirect: false,
       });
+      if (res?.error) {
+        toast.error(res.error || "Failed to sign in.");
+      } else {
+        toast.success("Access granted! Entering opportunity vault...");
+        router.push("/dashboard");
+      }
     } catch (err) {
       console.error("Sign-in failed:", err);
+      toast.error("An unexpected error occurred during sign-in.");
     } finally {
       setIsLoading(false);
     }
