@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { Opportunity, ActivityLog } from "@/domain/opportunity.types";
 import { CategoryBadge, StatusBadge, PriorityBadge } from "@/components/ui/badge";
 import { formatDate, getDaysRemaining } from "@/lib/utils";
@@ -80,11 +81,17 @@ export function OpportunityDetailView({
     setIsSavingNotes(true);
     setNotesSuccess(false);
     try {
-      await updatePersonalNotesAction(opportunity.id, notes);
-      setNotesSuccess(true);
-      setTimeout(() => setNotesSuccess(false), 3000);
+      const res = await updatePersonalNotesAction(opportunity.id, notes);
+      if (res.success) {
+        toast.success("Personal vault notes saved!");
+        setNotesSuccess(true);
+        setTimeout(() => setNotesSuccess(false), 3000);
+      } else {
+        toast.error(res.error || "Failed to save notes.");
+      }
     } catch (err) {
       console.error("Failed to save notes:", err);
+      toast.error("Failed to save notes.");
     } finally {
       setIsSavingNotes(false);
     }
@@ -93,9 +100,15 @@ export function OpportunityDetailView({
   const handleSaveEssayDraft = async (essayId: string) => {
     setSavingEssayId(essayId);
     try {
-      await updateEssayDraftAction(essayId, essayDrafts[essayId] || "");
+      const res = await updateEssayDraftAction(essayId, essayDrafts[essayId] || "");
+      if (res.success) {
+        toast.success("Essay draft response saved!");
+      } else {
+        toast.error(res.error || "Failed to save draft.");
+      }
     } catch (err) {
       console.error("Failed to save essay draft:", err);
+      toast.error("Failed to save draft.");
     } finally {
       setSavingEssayId(null);
     }

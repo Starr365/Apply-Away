@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { Opportunity, OpportunityStatus, OpportunityPriority } from "@/domain/opportunity.types";
 import { CategoryBadge, StatusBadge, PriorityBadge } from "@/components/ui/badge";
 import { formatDate, getDaysRemaining } from "@/lib/utils";
@@ -31,18 +32,34 @@ export function OpportunityCard({ opportunity, onEdit }: OpportunityCardProps) {
 
   const handleStatusChange = async (status: OpportunityStatus) => {
     setShowMenu(false);
-    await updateOpportunityStatusAction(opportunity.id, status);
+    const res = await updateOpportunityStatusAction(opportunity.id, status);
+    if (res.success) {
+      toast.success(`Status updated to ${status.replace(/_/g, " ")}`);
+    } else {
+      toast.error(res.error || "Failed to update status.");
+    }
   };
 
   const handlePriorityChange = async (priority: OpportunityPriority) => {
     setShowMenu(false);
-    await updateOpportunityPriorityAction(opportunity.id, priority);
+    const res = await updateOpportunityPriorityAction(opportunity.id, priority);
+    if (res.success) {
+      toast.success(`Priority updated to ${priority}`);
+    } else {
+      toast.error(res.error || "Failed to update priority.");
+    }
   };
 
   const handleDelete = async () => {
     if (!confirm(`Are you sure you want to delete "${opportunity.title}"?`)) return;
     setIsDeleting(true);
-    await deleteOpportunityAction(opportunity.id);
+    const res = await deleteOpportunityAction(opportunity.id);
+    if (res.success) {
+      toast.success("Opportunity deleted.");
+    } else {
+      toast.error(res.error || "Failed to delete record.");
+      setIsDeleting(false);
+    }
   };
 
   return (

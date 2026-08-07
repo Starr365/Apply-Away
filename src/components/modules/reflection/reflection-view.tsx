@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { saveMonthlyReflectionAction } from "@/app/actions/reflection.actions";
 import { ApplicationVelocityChart } from "./charts/application-velocity-chart";
 import { CategoryPieChart } from "./charts/category-pie-chart";
@@ -67,11 +68,15 @@ export function ReflectionView({
     try {
       const res = await saveMonthlyReflectionAction(selectedMonth, reflectionText);
       if (res.success) {
+        toast.success(`Reflection notes saved for ${selectedMonth}!`);
         setSaveSuccess(true);
         setTimeout(() => setSaveSuccess(false), 3000);
+      } else {
+        toast.error(res.error || "Failed to save reflection.");
       }
     } catch (err) {
       console.error("Failed to save reflection:", err);
+      toast.error("Failed to save reflection.");
     } finally {
       setIsSaving(false);
     }
