@@ -1,0 +1,119 @@
+"use client";
+
+import { useState } from "react";
+import { Opportunity } from "@/domain/opportunity.types";
+import { OpportunityFilters } from "./opportunity-filters";
+import { OpportunityTable } from "./opportunity-table";
+import { OpportunityPagination } from "./opportunity-pagination";
+import { OpportunityFormModal } from "@/components/modules/opportunity/opportunity-form-modal";
+import { Plus, Sparkles, CheckCircle2, Clock, Layers } from "lucide-react";
+
+interface DashboardViewProps {
+  opportunities: Opportunity[];
+  total: number;
+  currentPage: number;
+  limit: number;
+  stats: {
+    total: number;
+    inProgress: number;
+    submitted: number;
+    dueSoon: number;
+  };
+}
+
+export function DashboardView({
+  opportunities,
+  total,
+  currentPage,
+  limit,
+  stats,
+}: DashboardViewProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingOpportunity, setEditingOpportunity] = useState<Opportunity | null>(null);
+
+  const handleCreateNew = () => {
+    setEditingOpportunity(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (opp: Opportunity) => {
+    setEditingOpportunity(opp);
+    setIsModalOpen(true);
+  };
+
+  return (
+    <div className="space-y-8">
+      {/* Action Header & Greeting */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800/80 pb-6">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold font-outfit text-white">
+            Opportunity Vault
+          </h1>
+          <p className="text-sm text-slate-400 mt-1">
+            Organize, track, and manage your career and fellowship applications.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleCreateNew}
+          className="h-11 px-5 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-sm font-semibold text-white shadow-lg shadow-purple-600/20 inline-flex items-center space-x-2 transition-all cursor-pointer"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Add Opportunity</span>
+        </button>
+      </div>
+
+      {/* Summary Metrics Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="glass-card p-4 rounded-2xl space-y-1">
+          <div className="flex items-center justify-between text-xs text-slate-400">
+            <span>Total Vault</span>
+            <Layers className="w-4 h-4 text-purple-400" />
+          </div>
+          <div className="text-2xl font-bold font-outfit text-white">{stats.total}</div>
+        </div>
+
+        <div className="glass-card p-4 rounded-2xl space-y-1">
+          <div className="flex items-center justify-between text-xs text-slate-400">
+            <span>In Progress</span>
+            <Sparkles className="w-4 h-4 text-sky-400" />
+          </div>
+          <div className="text-2xl font-bold font-outfit text-sky-400">{stats.inProgress}</div>
+        </div>
+
+        <div className="glass-card p-4 rounded-2xl space-y-1">
+          <div className="flex items-center justify-between text-xs text-slate-400">
+            <span>Submitted</span>
+            <CheckCircle2 className="w-4 h-4 text-purple-400" />
+          </div>
+          <div className="text-2xl font-bold font-outfit text-purple-400">{stats.submitted}</div>
+        </div>
+
+        <div className="glass-card p-4 rounded-2xl space-y-1">
+          <div className="flex items-center justify-between text-xs text-slate-400">
+            <span>Due Soon</span>
+            <Clock className="w-4 h-4 text-amber-400" />
+          </div>
+          <div className="text-2xl font-bold font-outfit text-amber-400">{stats.dueSoon}</div>
+        </div>
+      </div>
+
+      {/* Filters Bar */}
+      <OpportunityFilters />
+
+      {/* Main Data Table / Mobile Card Grid */}
+      <OpportunityTable opportunities={opportunities} onEdit={handleEdit} />
+
+      {/* Pagination Controls */}
+      <OpportunityPagination totalItems={total} currentPage={currentPage} limit={limit} />
+
+      {/* Create / Edit Form Modal */}
+      <OpportunityFormModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        opportunityToEdit={editingOpportunity}
+      />
+    </div>
+  );
+}
