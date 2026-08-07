@@ -127,7 +127,7 @@ function Toast({
       role="alert"
       aria-live="assertive"
       className={cn(
-        "flex items-center gap-3 px-4 py-3 rounded-xl border backdrop-blur-md shadow-2xl shadow-black/20 transition-all duration-300 ease-out min-w-[320px] max-w-[420px]",
+        "flex items-center gap-3 px-4 py-3 rounded-xl border backdrop-blur-md shadow-2xl shadow-black/20 transition-all duration-300 ease-out min-w-[320px] max-w-105",
         config.border,
         config.bg,
         isVisible && !isExiting
@@ -194,7 +194,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       {/* Toast Container – fixed top-right */}
       <div
-        className="fixed top-4 right-4 z-[9999] flex flex-col gap-2 pointer-events-auto"
+        className="fixed top-4 right-4 z-9999 flex flex-col gap-2 pointer-events-auto"
         aria-label="Notifications"
       >
         {toasts.map((t) => (

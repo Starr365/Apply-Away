@@ -7,7 +7,7 @@ export function PwaRegister() {
     if (
       typeof window !== "undefined" &&
       "serviceWorker" in navigator &&
-      (window as any).workbox === undefined
+      (window as unknown as { workbox?: unknown }).workbox === undefined
     ) {
       navigator.serviceWorker
         .register("/sw.js")

@@ -23,7 +23,7 @@ export default function OfflinePage() {
         <div className="space-y-2">
           <h1 className="text-2xl font-bold font-outfit text-white">You are offline</h1>
           <p className="text-sm text-slate-400 max-w-sm mx-auto">
-            It looks like you don't have an active internet connection. Previously cached pages and dashboard metrics may still be available.
+            It looks like you don&apos;t have an active internet connection. Previously cached pages and dashboard metrics may still be available.
           </p>
         </div>
         <Link
