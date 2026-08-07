@@ -2,13 +2,23 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, ShieldCheck, Wand2 } from "lucide-react";
 import { AnimatedContainer } from "@/components/ui/animated-container";
+
+interface ParsedOpportunity {
+  title: string;
+  organization: string;
+  deadline: string;
+  category: string;
+  priority: string;
+  status: string;
+}
 
 export function LandingHero() {
   const [urlInput] = useState("https://www.schwarzmanscholars.org/apply");
   const [isParsing, setIsParsing] = useState(false);
-  const [parsedData, setParsedData] = useState<any>(null);
+  const [parsedData, setParsedData] = useState<ParsedOpportunity | null>(null);
 
   const handleSimulateParse = () => {
     setIsParsing(true);
@@ -35,7 +45,9 @@ export function LandingHero() {
         {/* Left Info Column */}
         <AnimatedContainer delay={200} className="lg:col-span-5 space-y-6 text-center lg:text-left">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-[10px] font-bold text-purple-400 uppercase tracking-widest mx-auto lg:mx-0">
-            <img src="/vault-logo.png" alt="Icon" className="w-4 h-4 object-contain" />
+            <div className="relative w-4 h-4">
+              <Image src="/vault-logo.png" alt="Icon" fill sizes="16px" className="object-contain" />
+            </div>
             <span>AI-Powered Opportunity Vault</span>
           </div>
 

@@ -20,12 +20,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const detectedTheme = savedTheme || (prefersDark ? "dark" : "light");
 
-    if (detectedTheme !== "dark") {
-      setTimeout(() => {
+    setTimeout(() => {
+      if (detectedTheme !== "dark") {
         setTheme(detectedTheme);
-      }, 0);
-    }
-    setMounted(true);
+      }
+      setMounted(true);
+    }, 0);
   }, []);
 
   useEffect(() => {

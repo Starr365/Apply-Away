@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { AnimatedContainer } from "@/components/ui/animated-container";
 
@@ -16,8 +17,8 @@ export function LandingCTA() {
         delay={150}
         className="max-w-4xl mx-auto bg-card/45 backdrop-blur-md border border-border/80 p-8 sm:p-16 rounded-3xl text-center space-y-6 relative z-10 shadow-2xl"
       >
-        <div className="inline-flex w-12 h-12 rounded-2xl bg-slate-900/40 border border-border/40 items-center justify-center shadow-lg select-none">
-          <img src="/vault-logo.png" alt="Icon" className="w-6 h-6 object-contain" />
+        <div className="inline-flex w-12 h-12 rounded-2xl bg-slate-900/40 border border-border/40 items-center justify-center shadow-lg select-none relative">
+          <Image src="/vault-logo.png" alt="Icon" fill sizes="24px" className="object-contain p-2.5" />
         </div>
         
         <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-foreground">

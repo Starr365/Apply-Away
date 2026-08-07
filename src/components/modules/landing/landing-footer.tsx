@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Lock, ShieldCheck } from "lucide-react";
 
 export function LandingFooter() {
@@ -11,11 +12,15 @@ export function LandingFooter() {
         {/* Logo Brand column */}
         <div className="space-y-4 col-span-1 md:col-span-2">
           <Link href="/" className="flex items-center space-x-3 select-none">
-            <img
-              src="/text-vault.png"
-              alt="Apply Away Logo"
-              className="h-7 w-auto object-contain dark:invert transition-all"
-            />
+            <div className="relative h-7 w-28">
+              <Image
+                src="/text-vault.png"
+                alt="Apply Away Logo"
+                fill
+                sizes="112px"
+                className="object-contain dark:invert transition-all"
+              />
+            </div>
           </Link>
           <p className="text-xs text-muted-foreground max-w-xs leading-relaxed">
             Automate and track fellowships, scholarships, internships, grants, and career pipelines in one secure vault.

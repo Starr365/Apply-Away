@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useTheme } from "@/components/providers/theme-provider";
-import { Sparkles, Sun, Moon } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 
 export function LandingHeader() {
   const { theme, toggleTheme } = useTheme();
@@ -29,17 +30,27 @@ export function LandingHeader() {
         {/* Logo Branding */}
         <Link href="/" className="flex items-center space-x-3 select-none">
           {/* Mobile Icon */}
-          <img
-            src="/vault-logo.png"
-            alt="Apply Away Icon"
-            className="w-8 h-8 md:hidden object-contain"
-          />
+          <div className="relative w-8 h-8 md:hidden">
+            <Image
+              src="/vault-logo.png"
+              alt="Apply Away Icon"
+              fill
+              sizes="32px"
+              priority
+              className="object-contain"
+            />
+          </div>
           {/* Desktop Full Logo */}
-          <img
-            src="/valut-text-logo.png"
-            alt="Apply Away Logo"
-            className="h-8 w-auto hidden md:block object-contain dark:invert transition-all"
-          />
+          <div className="relative h-8 w-36 hidden md:block">
+            <Image
+              src="/valut-text-logo.png"
+              alt="Apply Away Logo"
+              fill
+              sizes="144px"
+              priority
+              className="object-contain dark:invert transition-all"
+            />
+          </div>
         </Link>
 
         {/* Navigation Links */}

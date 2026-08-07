@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { BarChart3, Calendar as CalendarIcon, Sparkles } from "lucide-react";
 import { AnimatedContainer } from "@/components/ui/animated-container";
 
@@ -132,10 +133,12 @@ export function LandingShowcase() {
 
             <AnimatedContainer delay={300} className="lg:col-span-7 w-full">
               <div className="relative rounded-2xl overflow-hidden border border-border shadow-xl h-64 sm:h-80">
-                <img
+                <Image
                   src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80"
                   alt="Students collaborating on application guidelines"
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 to-transparent flex items-end p-6">
                   <div className="space-y-1">
