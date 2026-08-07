@@ -2,12 +2,23 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Sparkles, ArrowRight, ShieldCheck, Wand2 } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, ShieldCheck, Wand2 } from "lucide-react";
+import { AnimatedContainer } from "@/components/ui/animated-container";
+
+interface ParsedOpportunity {
+  title: string;
+  organization: string;
+  deadline: string;
+  category: string;
+  priority: string;
+  status: string;
+}
 
 export function LandingHero() {
   const [urlInput] = useState("https://www.schwarzmanscholars.org/apply");
   const [isParsing, setIsParsing] = useState(false);
-  const [parsedData, setParsedData] = useState<any>(null);
+  const [parsedData, setParsedData] = useState<ParsedOpportunity | null>(null);
 
   const handleSimulateParse = () => {
     setIsParsing(true);
@@ -27,14 +38,16 @@ export function LandingHero() {
   return (
     <section className="relative pt-32 pb-24 overflow-hidden px-4 sm:px-6">
       {/* Background Ambient Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-[350px] h-[350px] bg-sky-500/10 dark:bg-sky-500/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-87.5 h-87.5 bg-sky-500/10 dark:bg-sky-500/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         {/* Left Info Column */}
-        <div className="lg:col-span-5 space-y-6 text-center lg:text-left">
+        <AnimatedContainer delay={200} className="lg:col-span-5 space-y-6 text-center lg:text-left">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-[10px] font-bold text-purple-400 uppercase tracking-widest mx-auto lg:mx-0">
-            <Sparkles className="w-3.5 h-3.5" />
+            <div className="relative w-4 h-4">
+              <Image src="/vault-logo.png" alt="Icon" fill sizes="16px" className="object-contain" />
+            </div>
             <span>AI-Powered Opportunity Vault</span>
           </div>
 
@@ -71,10 +84,10 @@ export function LandingHero() {
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>Multi-Tenant Vault Database Isolation</span>
           </div>
-        </div>
+        </AnimatedContainer>
 
         {/* Right Product Mockup Column */}
-        <div className="lg:col-span-7">
+        <AnimatedContainer delay={300} className="lg:col-span-7">
           <div className="relative rounded-2xl border border-border/80 bg-card/65 backdrop-blur-md shadow-2xl p-4 sm:p-5 overflow-hidden group hover:border-purple-500/30 transition-all duration-300">
             {/* Header window control strip */}
             <div className="flex items-center justify-between pb-4 border-b border-border/60">
@@ -109,7 +122,7 @@ export function LandingHero() {
               </div>
 
               {/* Extraction portal preview */}
-              <div className="p-4 rounded-xl border border-purple-500/20 bg-purple-500/[0.02] space-y-3">
+              <div className="p-4 rounded-xl border border-purple-500/20 bg-purple-500/2 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 text-xs font-bold text-purple-400">
                     <Wand2 className="w-3.5 h-3.5 animate-pulse" />
@@ -175,7 +188,7 @@ export function LandingHero() {
 
             </div>
           </div>
-        </div>
+        </AnimatedContainer>
       </div>
     </section>
   );

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useTheme } from "@/components/providers/theme-provider";
-import { Sparkles, Sun, Moon } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 
 export function LandingHeader() {
   const { theme, toggleTheme } = useTheme();
@@ -27,14 +28,30 @@ export function LandingHeader() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Logo Branding */}
-        <div className="flex items-center space-x-3 select-none">
-          <div className="w-9 h-9 rounded-xl bg-linear-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
-            <Sparkles className="w-5 h-5 text-white" />
+        <Link href="/" className="flex items-center space-x-3 select-none">
+          {/* Mobile Icon */}
+          <div className="relative w-8 h-8 md:hidden">
+            <Image
+              src="/vault-logo.png"
+              alt="Apply Away Icon"
+              fill
+              sizes="32px"
+              priority
+              className="object-contain"
+            />
           </div>
-          <span className="font-outfit font-extrabold text-xl tracking-tight text-foreground">
-            Apply Away
-          </span>
-        </div>
+          {/* Desktop Full Logo */}
+          <div className="relative h-8 w-36 hidden md:block">
+            <Image
+              src="/valut-text-logo.png"
+              alt="Apply Away Logo"
+              fill
+              sizes="144px"
+              priority
+              className="object-contain dark:invert transition-all"
+            />
+          </div>
+        </Link>
 
         {/* Navigation Links */}
         <nav className="hidden md:flex items-center space-x-8 text-xs font-semibold text-muted-foreground">

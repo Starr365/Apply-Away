@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import { Wand2, Clock } from "lucide-react";
+import { AnimatedContainer } from "@/components/ui/animated-container";
 
 const STEPS = [
   {
@@ -26,24 +26,25 @@ const STEPS = [
 
 export function LandingHowItWorks() {
   return (
-    <section id="how-it-works" className="py-24 px-4 sm:px-6 bg-card/10">
+    <section id="how-it-works" className="py-24 px-4 sm:px-6 bg-card/10 border-t border-b border-border/40">
       <div className="max-w-7xl mx-auto space-y-16">
-        <div className="text-center space-y-3 max-w-xl mx-auto">
+        <AnimatedContainer delay={100} className="text-center space-y-3 max-w-xl mx-auto">
           <div className="text-xs font-bold text-purple-400 uppercase tracking-widest">Simplifying Tracking</div>
-          <h2 className="text-3xl font-bold font-outfit text-white">Paste, Extract, Automate.</h2>
+          <h2 className="text-3xl font-bold font-outfit text-foreground">Paste, Extract, Automate.</h2>
           <p className="text-xs sm:text-sm text-muted-foreground">
             Say goodbye to messy bookmarks and spreadsheets. We parse structural parameters and cron notify your timeline.
           </p>
-        </div>
+        </AnimatedContainer>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {STEPS.map((step) => (
-            <div
+          {STEPS.map((step, idx) => (
+            <AnimatedContainer
               key={step.num}
-              className="glass-card p-6 rounded-2xl space-y-4 hover:border-purple-500/20 transition-all text-left"
+              delay={200 + idx * 100}
+              className="bg-card/45 backdrop-blur-md border border-border/80 p-6 rounded-2xl space-y-4 hover:border-purple-500/20 transition-all text-left"
             >
               <div className="text-3xl font-extrabold font-outfit text-purple-500/35">{step.num}</div>
-              <h3 className="text-base font-bold font-outfit text-white">{step.title}</h3>
+              <h3 className="text-base font-bold font-outfit text-foreground">{step.title}</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">{step.desc}</p>
               
               {/* Visual Indicators */}
@@ -68,7 +69,7 @@ export function LandingHowItWorks() {
                   </div>
                 )}
               </div>
-            </div>
+            </AnimatedContainer>
           ))}
         </div>
       </div>

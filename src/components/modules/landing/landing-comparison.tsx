@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import { CheckCircle2, X } from "lucide-react";
+import { AnimatedContainer } from "@/components/ui/animated-container";
 
 const COMPARE_ITEMS = [
   {
@@ -25,22 +25,22 @@ export function LandingComparison() {
   return (
     <section id="compare" className="py-24 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto space-y-16">
-        <div className="text-center space-y-3 max-w-xl mx-auto">
+        <AnimatedContainer delay={100} className="text-center space-y-3 max-w-xl mx-auto">
           <div className="text-xs font-bold text-purple-400 uppercase tracking-widest">Modern Workflows</div>
-          <h2 className="text-3xl font-bold font-outfit text-white">Manual Spreadsheets vs. Apply Away</h2>
+          <h2 className="text-3xl font-bold font-outfit text-foreground">Manual Spreadsheets vs. Apply Away</h2>
           <p className="text-xs sm:text-sm text-muted-foreground">
             Why spreadsheet tracking fails active students and early-career professionals.
           </p>
-        </div>
+        </AnimatedContainer>
 
-        <div className="glass-panel rounded-2xl overflow-hidden border border-border shadow-2xl">
+        <AnimatedContainer delay={200} className="bg-card/45 backdrop-blur-md rounded-2xl overflow-hidden border border-border/80 shadow-2xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs select-none">
               <thead>
-                <tr className="border-b border-border/80 bg-slate-900/60 font-bold text-white uppercase tracking-wider">
-                  <th className="p-4">Tracking criteria</th>
-                  <th className="p-4 border-l border-border/60">Traditional tracking</th>
-                  <th className="p-4 border-l border-border/60 text-purple-300">Apply Away Vault</th>
+                <tr className="border-b border-border/85 bg-slate-900/60 dark:bg-slate-900/30 font-bold text-foreground uppercase tracking-wider">
+                  <th className="p-4 text-foreground dark:text-white">Tracking criteria</th>
+                  <th className="p-4 border-l border-border/60 text-foreground dark:text-white">Traditional tracking</th>
+                  <th className="p-4 border-l border-border/60 text-purple-600 dark:text-purple-300">Apply Away Vault</th>
                 </tr>
               </thead>
               <tbody>
@@ -49,17 +49,17 @@ export function LandingComparison() {
                     key={idx}
                     className="border-b border-border/40 hover:bg-card/25 transition-colors"
                   >
-                    <td className="p-4 font-semibold text-white">{item.label}</td>
+                    <td className="p-4 font-semibold text-foreground">{item.label}</td>
                     <td className="p-4 border-l border-border/60 text-muted-foreground">
                       <span className="inline-flex items-center space-x-1.5">
                         <X className="w-4 h-4 text-rose-500" />
                         <span>{item.without}</span>
                       </span>
                     </td>
-                    <td className="p-4 border-l border-border/60 text-slate-200">
+                    <td className="p-4 border-l border-border/60 text-foreground">
                       <span className="inline-flex items-center space-x-1.5">
                         <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                        <span className="font-medium">{item.with}</span>
+                        <span className="font-medium text-foreground">{item.with}</span>
                       </span>
                     </td>
                   </tr>
@@ -67,7 +67,7 @@ export function LandingComparison() {
               </tbody>
             </table>
           </div>
-        </div>
+        </AnimatedContainer>
       </div>
     </section>
   );
