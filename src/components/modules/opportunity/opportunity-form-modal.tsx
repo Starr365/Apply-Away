@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
 import {
   Opportunity,
   OpportunityCategory,
@@ -13,6 +12,7 @@ import {
   updateOpportunityAction,
 } from "@/app/actions/opportunity.actions";
 import { X, Sparkles, Plus, Check } from "lucide-react";
+import { useToast } from "@/components/ui/toast-provider";
 
 interface OpportunityFormModalProps {
   isOpen: boolean;
@@ -43,6 +43,7 @@ function OpportunityFormContent({
   onClose: () => void;
   opportunityToEdit?: Opportunity | null;
 }) {
+  const toast = useToast();
   const isEditing = Boolean(opportunityToEdit);
 
   const [title, setTitle] = useState(opportunityToEdit?.title || "");
