@@ -17,11 +17,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("apply-away-theme") as Theme | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      setTheme(prefersDark ? "dark" : "light");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const detectedTheme = savedTheme || (prefersDark ? "dark" : "light");
+
+    if (detectedTheme !== "dark") {
+      setTimeout(() => {
+        setTheme(detectedTheme);
+      }, 0);
     }
     setMounted(true);
   }, []);

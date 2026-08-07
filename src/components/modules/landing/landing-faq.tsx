@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { ChevronDown, Plus, Minus } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 // Primary FAQ List (8 Questions)
 const PRIMARY_FAQS = [
@@ -74,10 +74,10 @@ export function LandingFAQ() {
             Common Inquiries
           </div>
           <h2 className="text-3xl font-bold font-outfit text-white leading-tight">
-            Before your next application, you might be wondering…Got questions? We&apos;ve got answers.
+            Got questions? We&apos;ve got answers.
           </h2>
           <p className="text-xs sm:text-sm text-muted-foreground select-none">
-
+            Before your next application, you might be wondering…
           </p>
         </div>
 

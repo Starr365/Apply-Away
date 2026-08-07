@@ -44,7 +44,7 @@ export function LandingShowcase() {
                 </div>
                 
                 <div className="h-48 rounded-xl bg-background/80 border border-border/60 flex items-end justify-between p-4 relative overflow-hidden select-none">
-                  <div className="absolute inset-0 bg-linear-to-t from-purple-500/[0.02] to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-linear-to-t from-purple-500/2 to-transparent pointer-events-none" />
                   
                   {/* Bars */}
                   {["Mar", "Apr", "May", "Jun"].map((month, idx) => {
@@ -86,7 +86,7 @@ export function LandingShowcase() {
                       <div
                         key={idx}
                         className={`h-10 rounded-lg border border-border/40 bg-background/40 flex flex-col justify-between p-1.5 ${
-                          hasDeadline ? "border-purple-500/30 bg-purple-500/[0.02]" : ""
+                          hasDeadline ? "border-purple-500/30 bg-purple-500/2" : ""
                         }`}
                       >
                         <span className="text-[8px] text-slate-500">{dayNum}</span>

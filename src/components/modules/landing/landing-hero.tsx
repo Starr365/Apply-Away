@@ -27,8 +27,8 @@ export function LandingHero() {
   return (
     <section className="relative pt-32 pb-24 overflow-hidden px-4 sm:px-6">
       {/* Background Ambient Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-[350px] h-[350px] bg-sky-500/10 dark:bg-sky-500/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-87.5 h-87.5 bg-sky-500/10 dark:bg-sky-500/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         {/* Left Info Column */}
@@ -109,7 +109,7 @@ export function LandingHero() {
               </div>
 
               {/* Extraction portal preview */}
-              <div className="p-4 rounded-xl border border-purple-500/20 bg-purple-500/[0.02] space-y-3">
+              <div className="p-4 rounded-xl border border-purple-500/20 bg-purple-500/2 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 text-xs font-bold text-purple-400">
                     <Wand2 className="w-3.5 h-3.5 animate-pulse" />

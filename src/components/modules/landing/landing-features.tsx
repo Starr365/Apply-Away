@@ -33,7 +33,7 @@ const COMPONENT_FEATURES = [
 export function LandingFeatures() {
   return (
     <section id="features" className="py-24 px-4 sm:px-6 relative">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/[0.04] rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 bg-purple-500/4 rounded-full blur-[140px] pointer-events-none" />
       
       <div className="max-w-7xl mx-auto space-y-16 relative z-10">
         <div className="text-center space-y-3 max-w-xl mx-auto">
