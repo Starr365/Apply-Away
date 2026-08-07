@@ -41,6 +41,33 @@
     --badge-competition: 12 76% 61%;
     --badge-research: 174 72% 40%;
   }
+
+  .light {
+    --background: 210 40% 96%; /* Alice Blue light blue-grey */
+    --foreground: 224 71% 4%; /* Deep Prussian Blue */
+
+    --card: 210 40% 98%;
+    --card-foreground: 224 71% 4%;
+
+    --popover: 210 40% 98%;
+    --popover-foreground: 224 71% 4%;
+
+    --primary: 263 70% 50%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 90%;
+    --secondary-foreground: 224 71% 4%;
+
+    --muted: 210 40% 90%;
+    --muted-foreground: 215.4 16.3% 45%;
+
+    --accent: 210 40% 90%;
+    --accent-foreground: 224 71% 4%;
+
+    --border: 210 40% 86%;
+    --input: 210 40% 86%;
+    --ring: 263 70% 50%;
+  }
 }
 
 @layer base {

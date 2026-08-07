@@ -3,6 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { ToastProvider } from "@/components/ui/toast-provider";
 import { PwaRegister } from "@/components/providers/pwa-register";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import "./globals.css";
 
 const inter = Inter({
@@ -42,13 +43,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${outfit.variable} dark`}>
-      <body className="font-sans antialiased bg-slate-950 text-slate-100 selection:bg-purple-500 selection:text-white min-h-screen flex flex-col">
+    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
+      <body className="font-sans antialiased bg-background text-foreground selection:bg-purple-500 selection:text-white min-h-screen flex flex-col transition-colors duration-300">
         <SessionProvider>
-          <ToastProvider>
-            <PwaRegister />
-            <main className="flex-1">{children}</main>
-          </ToastProvider>
+          <ThemeProvider>
+            <ToastProvider>
+              <PwaRegister />
+              <main className="flex-1">{children}</main>
+            </ToastProvider>
+          </ThemeProvider>
         </SessionProvider>
       </body>
     </html>
