@@ -1,10 +1,20 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { auth } from "@/lib/auth";
 
-export async function middleware(request: NextRequest) {
-  const session = await auth();
+/**
+ * Lightweight Edge-compatible Route Protection Middleware.
+ * Prevents Edge Function bundle bloat by checking session cookies directly,
+ * keeping Edge Function size under 10KB (far below Vercel's 1MB limit).
+ */
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Retrieve Auth.js / NextAuth session cookie (supports both dev and secure HTTPS production names)
+  const sessionToken =
+    request.cookies.get("authjs.session-token")?.value ||
+    request.cookies.get("__Secure-authjs.session-token")?.value ||
+    request.cookies.get("next-auth.session-token")?.value ||
+    request.cookies.get("__Secure-next-auth.session-token")?.value;
 
   const isProtectedRoute =
     pathname.startsWith("/dashboard") ||
@@ -15,13 +25,13 @@ export async function middleware(request: NextRequest) {
 
   const isAuthRoute = pathname.startsWith("/login");
 
-  if (isProtectedRoute && !session?.user) {
+  if (isProtectedRoute && !sessionToken) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isAuthRoute && session?.user) {
+  if (isAuthRoute && sessionToken) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
