@@ -15,7 +15,7 @@ High-achieving applicants often discover opportunities scattered across WhatsApp
 - **Duplicate Prevention**: Warns you if you try to add an opportunity you are already tracking.
 - **Smart Deadline Calendar & Reminders**: Visualizes upcoming deadlines on an interactive calendar and dispatches timely email alerts in your local timezone (`Africa/Lagos`, `America/New_York`, etc.) so you never miss a submission window.
 - **Essay & Preparation Tracker**: Provides dedicated drafting space for every essay prompt, interactive document checklists (Resume, Transcripts, Recommendations), and personal vault notes.
-- **Reflection & Growth Dashboard**: Visualizes your application progress over time with charts, track acceptance rates, and log monthly reflection notes.
+- **Reflection & Growth Dashboard**: Visualizes your application progress over time with charts, tracks acceptance rates, and logs monthly reflection notes.
 
 ---
 
@@ -64,12 +64,12 @@ graph TD
 | **Language** | **TypeScript 5 (Strict)** | End-to-end type safety spanning domain entities, DB models, AI schemas, and UI components. |
 | **Database** | **PostgreSQL & Prisma v6** | ACID-compliant relational storage using Prisma ORM with native text arrays (`String[]`) for eligibility/benefits lists. |
 | **Authentication**| **Auth.js v5 (`next-auth`)** | Google OAuth & Credentials auth with custom JWT session callbacks and multi-tenant DB isolation (`userId` FK). |
-| **Edge Security** | **Lightweight Middleware** | Zero-dependency cookie inspection (`<5KB`) ensuring Edge Function compliance under Vercel's 1MB limit. |
+| **Edge Security** | **Lightweight Proxy** | Next.js 16 `proxy.ts` cookie inspection (`<5KB`) ensuring Edge Function compliance under Vercel's 1MB limit. |
 | **AI Integration**| **OpenAI API (`gpt-4o-mini`)** | Structured Output parsing via strict JSON schema enforcement to ensure predictable JSON payloads. |
 | **Calendar** | **FullCalendar v6** | Interactive month day-grid calendar widget customized with dark-mode glassmorphic design tokens. |
 | **Analytics** | **Recharts** | Composable, responsive SVG chart library for data visualizations. |
-| **Notifications** | **Sonner** | Non-blocking toast notification provider for real-time action feedback. |
-| **Scheduling** | **`node-cron` & Nodemailer** | Background cron scanner with `date-fns-tz` timezone conversion and exponential backoff retries (`retryWithBackoff`). |
+| **Notifications** | **Custom Toast System** | Zero-dependency toast notification provider supporting success, error, info, and warning states. |
+| **Scheduling** | **`node-cron` & Nodemailer** | Background cron scanner with `date-fns-tz` timezone conversion and exponential backoff retries. |
 
 ---
 
@@ -80,11 +80,11 @@ graph TD
    - Repositories and Server Actions strictly pull `userId` from verified `await auth()` session context.
 
 2. **Vercel Edge Function Optimization**:
-   - Resolved Edge Function bundle size bloat by removing heavy Prisma dependencies from `middleware.ts`.
-   - `middleware.ts` reads session tokens directly from HTTP cookies, reducing Edge bundle size from **1.09 MB** to **< 5 KB**.
+   - Resolved Edge Function bundle size bloat by moving heavy Prisma dependencies from `proxy.ts`.
+   - `proxy.ts` reads session tokens directly from HTTP cookies, reducing Edge bundle size to **< 5 KB**.
 
 3. **Idempotent Email Reminders with Exponential Backoff**:
-   - Evaluates active deadlines across 5 milestone windows (`14_DAYS`, `7_DAYS`, `3_DAYS`, `24_HOURS`, `12_HOURS`).
+   - Evaluates active deadlines across 5 milestone windows (`14_DAYS`, `7_DAYS`, `3_DAYS`, `1_DAY`, `DUE_TODAY`).
    - Queries `reminder_logs` before dispatch to prevent duplicate email alerts.
    - Converts UTC deadlines into the user's timezone (`user.timezone`) before formatting alerts.
    - Retries failed SMTP sends up to 3 times using exponential backoff.
@@ -99,6 +99,7 @@ apply-away/
 │   └── schema.prisma            # Multi-tenant PostgreSQL models & composite indexes
 ├── src/
 │   ├── app/
+│   │   ├── (landing)/           # Public Route Group (SaaS Landing Page & layouts)
 │   │   ├── (auth)/login/        # Login page with Google OAuth & Credentials
 │   │   ├── (dashboard)/         # Authenticated route group
 │   │   │   ├── dashboard/       # Main Vault Dashboard & Data Table
@@ -109,15 +110,16 @@ apply-away/
 │   │   ├── actions/             # Server Actions (Opportunity, AI, Detail, Reflection)
 │   │   ├── api/                 # API Controllers ([...nextauth], Cron triggers)
 │   │   ├── globals.css          # Glassmorphic CSS design system tokens
-│   │   └── layout.tsx           # Root layout mounting Sonner Toaster provider
+│   │   └── layout.tsx           # Root layout mounting Theme & Toast providers
 │   ├── components/
-│   │   ├── modules/             # Feature components (Dashboard, Capture, Details, Calendar, Reflection)
-│   │   └── ui/                  # Atomic UI primitives (Badge, Skeleton, Toaster)
+│   │   ├── modules/             # Feature components (Dashboard, Capture, Details, Calendar, Reflection, Landing)
+│   │   ├── providers/           # Theme, session, and service worker registration providers
+│   │   └── ui/                  # Atomic UI primitives (Badge, Skeleton, PageHeader, MetricCard)
 │   ├── domain/                  # Strongly typed domain entities & Zod schemas
 │   ├── repositories/            # Repository contracts & PrismaOpportunityRepository
 │   ├── services/                # Dedicated AI, Duplicate Detector, Email, and Reminder Services
 │   └── lib/                     # Prisma singleton, Auth.js config, Retry & Timezone helpers
-├── middleware.ts                # Ultra-lightweight Edge Route Protection Middleware (<5KB)
+├── proxy.ts                     # Ultra-lightweight Edge Route Protection Proxy (<5KB)
 └── README.md
 ```
 
@@ -142,28 +144,28 @@ npm install
 
 ### 3. Environment Configuration
 
-Create a `.env` file in the root folder:
+Create an `env.local` file in the root folder:
 
 ```env
-# Database Connection
-DATABASE_URL="postgresql://postgres:password@localhost:5432/apply_away?schema=public"
+# Database Connection (PostgreSQL / Neon)
+DATABASE_URL="postgresql://user:password@localhost:5432/apply_away?schema=public"
 
 # Auth.js Secrets
-AUTH_SECRET="your-super-secret-32-character-key"
-AUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-super-secret-key-32-characters"
+NEXTAUTH_URL="http://localhost:3000"
 
 # OpenAI API Key (For AI Extraction)
 OPENAI_API_KEY="sk-proj-your-openai-api-key"
 
-# Optional SMTP Settings (Falls back to mock console logs if empty)
-SMTP_HOST="smtp.gmail.com"
-SMTP_PORT="587"
-SMTP_USER="your-email@gmail.com"
-SMTP_PASS="your-app-password"
-SMTP_FROM='"Apply Away" <reminders@applyaway.app>'
+# Resend Email API Key (Timezone-Aware Notifications)
+RESEND_API_KEY="re_your-resend-api-key"
+EMAIL_FROM="Apply Away <onboarding@resend.dev>"
 
-# Optional Cron Secret for Vercel Cron
-CRON_SECRET="your-cron-secret-token"
+# Default Timezone
+DEFAULT_TIMEZONE="Africa/Lagos"
+
+# Application Environment
+NODE_ENV="development"
 ```
 
 ### 4. Database Setup & Migrations
@@ -192,6 +194,3 @@ npm run lint
 # Compile production build
 npm run build
 ```
-
----
-
