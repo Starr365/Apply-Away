@@ -1,9 +1,9 @@
 import { IAIExtractionService } from "./interfaces/ai-extraction.service";
-import { OpenAIAIExtractionService } from "./openai-extraction.service";
+import { GeminiAIExtractionService } from "./gemini-extraction.service";
 
 /**
- * Factory pattern returning the production OpenAI extraction service instance.
+ * Factory pattern returning the production Gemini extraction service instance.
  */
 export function getAIExtractionService(): IAIExtractionService {
-  return new OpenAIAIExtractionService();
+  return new GeminiAIExtractionService();
 }

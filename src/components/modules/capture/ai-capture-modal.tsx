@@ -15,6 +15,8 @@ import {
   Loader2,
   Building,
   Calendar,
+  PenLine,
+  ShieldAlert,
 } from "lucide-react";
 import { OpportunityCategory } from "@/domain/opportunity.types";
 
@@ -22,15 +24,17 @@ interface AICaptureModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  onFallbackManual?: () => void;
 }
 
-export function AICaptureModal({ isOpen, onClose, onSuccess }: AICaptureModalProps) {
+export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }: AICaptureModalProps) {
   const [activeTab, setActiveTab] = useState<"url" | "text">("url");
   const [urlInput, setUrlInput] = useState("");
   const [textInput, setTextInput] = useState("");
 
   const [isExtracting, setIsExtracting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [isQuotaError, setIsQuotaError] = useState(false);
 
   // Extracted Data Preview State
   const [extractedData, setExtractedData] = useState<ExtractedOpportunityData | null>(null);
@@ -44,6 +48,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess }: AICaptureModalPro
     e.preventDefault();
     setIsExtracting(true);
     setErrorMsg("");
+    setIsQuotaError(false);
     setExtractedData(null);
     setIsDuplicate(false);
 
@@ -61,6 +66,9 @@ export function AICaptureModal({ isOpen, onClose, onSuccess }: AICaptureModalPro
         }
       } else {
         setErrorMsg(res.error || "Failed to extract opportunity data.");
+        if (res.isQuotaError) {
+          setIsQuotaError(true);
+        }
       }
     } catch {
       setErrorMsg("An unexpected error occurred during AI extraction.");
@@ -110,7 +118,13 @@ export function AICaptureModal({ isOpen, onClose, onSuccess }: AICaptureModalPro
   const handleResetModal = () => {
     setExtractedData(null);
     setIsDuplicate(false);
+    setIsQuotaError(false);
     setErrorMsg("");
+  };
+
+  const handleContinueManually = () => {
+    onClose();
+    onFallbackManual?.();
   };
 
   return (
@@ -138,25 +152,51 @@ export function AICaptureModal({ isOpen, onClose, onSuccess }: AICaptureModalPro
           </button>
         </div>
 
-        {errorMsg && (
+        {/* Quota / Rate Limit Error Banner */}
+        {isQuotaError && (
+          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-3">
+            <div className="flex items-start space-x-3">
+              <ShieldAlert className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <div className="space-y-1.5">
+                <p className="text-sm font-semibold text-amber-300">AI Usage Limit Reached</p>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  AI extraction is temporarily unavailable. You&apos;ve reached the current AI usage limit.
+                  You can still add this opportunity manually, or try again later.
+                </p>
+              </div>
+            </div>
+            {onFallbackManual && (
+              <button
+                type="button"
+                onClick={handleContinueManually}
+                className="w-full h-11 rounded-xl bg-slate-900 border border-slate-700/80 hover:bg-slate-800 text-xs font-semibold text-white flex items-center justify-center space-x-2 transition-colors cursor-pointer"
+              >
+                <PenLine className="w-4 h-4 text-purple-400" />
+                <span>Continue manually</span>
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* General Error (non-quota) */}
+        {errorMsg && !isQuotaError && (
           <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-300">
             {errorMsg}
           </div>
         )}
 
         {/* Step 1: Input Form (when not previewing) */}
-        {!extractedData && (
+        {!extractedData && !isQuotaError && (
           <div className="space-y-5">
             {/* Input Method Tabs */}
             <div className="flex rounded-xl bg-slate-900/90 p-1 border border-slate-800">
               <button
                 type="button"
                 onClick={() => setActiveTab("url")}
-                className={`flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-                  activeTab === "url"
+                className={`flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "url"
                     ? "bg-purple-600 text-white shadow-md"
                     : "text-slate-400 hover:text-slate-200"
-                }`}
+                  }`}
               >
                 <LinkIcon className="w-3.5 h-3.5" />
                 <span>Website URL</span>
@@ -164,11 +204,10 @@ export function AICaptureModal({ isOpen, onClose, onSuccess }: AICaptureModalPro
               <button
                 type="button"
                 onClick={() => setActiveTab("text")}
-                className={`flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-                  activeTab === "text"
+                className={`flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "text"
                     ? "bg-purple-600 text-white shadow-md"
                     : "text-slate-400 hover:text-slate-200"
-                }`}
+                  }`}
               >
                 <FileText className="w-3.5 h-3.5" />
                 <span>Copied Message / Text</span>
@@ -331,3 +370,4 @@ export function AICaptureModal({ isOpen, onClose, onSuccess }: AICaptureModalPro
     </div>
   );
 }
+

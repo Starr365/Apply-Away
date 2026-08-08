@@ -8,7 +8,7 @@ const COMPONENT_FEATURES = [
     title: "AI Capture Portal",
     desc: "Instantly translate messy PDF guidelines or webpage portals into structured pipeline records.",
     icon: Wand2,
-    badge: "OpenAI v4",
+    badge: "Gemini AI",
   },
   {
     title: "Timezone-Aware Cron",
