@@ -13,7 +13,9 @@ interface CalendarRendererProps {
 
 export default function CalendarRenderer({ events, onEventClick }: CalendarRendererProps) {
   const plugins = [
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (dayGridPlugin as any).default || dayGridPlugin,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (interactionPlugin as any).default || interactionPlugin,
   ];
 

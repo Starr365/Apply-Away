@@ -6,7 +6,6 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/components/ui/toast-provider";
 import {
-  Sparkles,
   ArrowRight,
   ShieldCheck,
   Mail,
