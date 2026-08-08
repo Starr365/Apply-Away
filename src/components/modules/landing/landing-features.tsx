@@ -37,7 +37,7 @@ export function LandingFeatures() {
       
       <div className="max-w-7xl mx-auto space-y-16 relative z-10">
         <AnimatedContainer delay={100} className="text-center space-y-3 max-w-xl mx-auto">
-          <div className="text-xs font-bold text-purple-400 uppercase tracking-widest">Platform capabilities</div>
+          <div className="text-xs font-bold text-purple-650 dark:text-purple-400 uppercase tracking-widest">Platform capabilities</div>
           <h2 className="text-3xl font-bold font-outfit text-foreground">Full-Suite Pipeline Engine</h2>
           <p className="text-xs sm:text-sm text-muted-foreground">
             Designed for high-productivity students, researchers, and early-career innovators.
@@ -54,7 +54,7 @@ export function LandingFeatures() {
                 className="bg-card/45 backdrop-blur-md border border-border/80 p-6 rounded-2xl flex flex-col justify-between h-56 hover:border-purple-500/20 transition-all text-left"
               >
                 <div className="space-y-4">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-650 dark:text-purple-400">
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="space-y-1.5">

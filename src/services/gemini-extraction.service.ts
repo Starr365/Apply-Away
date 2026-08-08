@@ -27,7 +27,17 @@ export class GeminiAIExtractionService implements IAIExtractionService {
 
   async extractFromUrl(url: string): Promise<ExtractedOpportunityData> {
     const pageText = await this.fetchUrlContent(url);
-    return this.extractFromText(pageText);
+    const textWithUrl = `Source URL: ${url}\n\n${pageText}`;
+    const data = await this.extractFromText(textWithUrl);
+
+    // Normalize and fallback if AI did not extract URLs
+    if (!data.officialUrl || data.officialUrl.trim() === "") {
+      data.officialUrl = url;
+    }
+    if (!data.applicationUrl || data.applicationUrl.trim() === "") {
+      data.applicationUrl = url;
+    }
+    return data;
   }
 
   async extractFromText(text: string): Promise<ExtractedOpportunityData> {

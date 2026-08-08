@@ -23,8 +23,20 @@ export async function createOpportunityAction(formData: unknown) {
     return { success: false, error: "Unauthorized. Please sign in." };
   }
 
+  const rawData = { ...(formData as object) } as Record<string, unknown>;
+  const parseDate = (val: unknown) => {
+    if (!val) return null;
+    const d = new Date(val as string);
+    return isNaN(d.getTime()) ? null : d;
+  };
+
+  if ("deadline" in rawData) rawData.deadline = parseDate(rawData.deadline);
+  if ("startDate" in rawData) rawData.startDate = parseDate(rawData.startDate);
+  if ("interviewDate" in rawData) rawData.interviewDate = parseDate(rawData.interviewDate);
+  if ("deadlineUtc" in rawData) rawData.deadlineUtc = parseDate(rawData.deadlineUtc);
+
   const result = CreateOpportunityDtoSchema.safeParse({
-    ...(formData as object),
+    ...rawData,
     userId: session.user.id,
   });
 
@@ -67,7 +79,19 @@ export async function updateOpportunityAction(id: string, formData: unknown) {
     return { success: false, error: "Unauthorized. Please sign in." };
   }
 
-  const result = UpdateOpportunityDtoSchema.safeParse(formData);
+  const rawData = { ...(formData as object) } as Record<string, unknown>;
+  const parseDate = (val: unknown) => {
+    if (!val) return null;
+    const d = new Date(val as string);
+    return isNaN(d.getTime()) ? null : d;
+  };
+
+  if ("deadline" in rawData) rawData.deadline = parseDate(rawData.deadline);
+  if ("startDate" in rawData) rawData.startDate = parseDate(rawData.startDate);
+  if ("interviewDate" in rawData) rawData.interviewDate = parseDate(rawData.interviewDate);
+  if ("deadlineUtc" in rawData) rawData.deadlineUtc = parseDate(rawData.deadlineUtc);
+
+  const result = UpdateOpportunityDtoSchema.safeParse(rawData);
   if (!result.success) {
     return {
       success: false,

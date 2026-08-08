@@ -11,7 +11,7 @@ export function LandingShowcase() {
       <div className="max-w-7xl mx-auto space-y-20">
         
         <AnimatedContainer delay={100} className="text-center space-y-3 max-w-xl mx-auto">
-          <div className="text-xs font-bold text-purple-400 uppercase tracking-widest select-none">Product Showcase</div>
+          <div className="text-xs font-bold text-purple-605 dark:text-purple-400 uppercase tracking-widest select-none">Product Showcase</div>
           <h2 className="text-3xl font-bold font-outfit text-foreground">High-Fidelity Interface</h2>
           <p className="text-xs sm:text-sm text-muted-foreground">
             A visually premium dashboard tailored specifically to opportunity vault tracking.
@@ -24,14 +24,14 @@ export function LandingShowcase() {
           {/* Showcase 1: Recharts Velocity */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
             <AnimatedContainer delay={200} className="lg:col-span-5 space-y-5">
-              <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+              <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-650 dark:text-purple-400">
                 <BarChart3 className="w-5 h-5" />
               </div>
               <h3 className="text-2xl font-bold font-outfit text-foreground">Reflection & Analytics</h3>
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                 Track application velocity curves, conversion pipelines (Not Started → Submitted → Accepted), and categories breakdown. Visual charts provide an instant health audit of your career progression.
               </p>
-              <div className="flex items-center space-x-2 text-xs font-semibold text-purple-400 select-none">
+              <div className="flex items-center space-x-2 text-xs font-semibold text-purple-605 dark:text-purple-400 select-none">
                 <span>Standard chart rendering via Recharts library</span>
               </div>
             </AnimatedContainer>
@@ -41,7 +41,7 @@ export function LandingShowcase() {
                 <div className="flex items-center justify-between pb-3 border-b border-border/50 text-xs select-none">
                   <span className="font-bold text-foreground">Application Velocity Index</span>
                   <div className="flex space-x-1.5">
-                    <span className="px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-[9px] font-bold text-purple-400">6 MONTHS</span>
+                    <span className="px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-[9px] font-bold text-purple-650 dark:text-purple-400">6 MONTHS</span>
                   </div>
                 </div>
                 
@@ -103,14 +103,14 @@ export function LandingShowcase() {
             </AnimatedContainer>
 
             <AnimatedContainer delay={200} className="lg:col-span-5 space-y-5">
-              <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+              <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-650 dark:text-purple-400">
                 <CalendarIcon className="w-5 h-5" />
               </div>
               <h3 className="text-2xl font-bold font-outfit text-foreground">Deadline Calendar View</h3>
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                 Consolidated timeline display highlighting upcoming fellowship, scholarship, and grant deadlines. Standard priority tags render high, medium, and low colors to organize your study windows.
               </p>
-              <div className="flex items-center space-x-2 text-xs font-semibold text-purple-400 select-none">
+              <div className="flex items-center space-x-2 text-xs font-semibold text-purple-605 dark:text-purple-400 select-none">
                 <span>Synchronized with custom client dynamic loader</span>
               </div>
             </AnimatedContainer>
@@ -119,14 +119,14 @@ export function LandingShowcase() {
           {/* Showcase 3: Authentic Stock Photo */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
             <AnimatedContainer delay={200} className="lg:col-span-5 space-y-5">
-              <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+              <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-650 dark:text-purple-400">
                 <Sparkles className="w-5 h-5" />
               </div>
               <h3 className="text-2xl font-bold font-outfit text-foreground">Premium User Experience</h3>
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                 Organize documents, transcripts, and letter drafts without hassle. Designed to maximize your efficiency during peak academic and career application cycles.
               </p>
-              <div className="flex items-center space-x-2 text-xs font-semibold text-purple-400 select-none">
+              <div className="flex items-center space-x-2 text-xs font-semibold text-purple-605 dark:text-purple-400 select-none">
                 <span>Dedicated to your academic and professional growth</span>
               </div>
             </AnimatedContainer>
@@ -142,7 +142,7 @@ export function LandingShowcase() {
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 to-transparent flex items-end p-6">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-purple-400 uppercase tracking-widest select-none">Workspace Focus</span>
+                    <span className="text-[10px] font-bold text-purple-605 dark:text-purple-400 uppercase tracking-widest select-none">Workspace Focus</span>
                     <h4 className="text-sm font-bold text-white">Consolidate your academic and career roadmap</h4>
                   </div>
                 </div>

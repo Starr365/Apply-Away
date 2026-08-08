@@ -6,7 +6,7 @@ import { Lock, ShieldCheck } from "lucide-react";
 
 export function LandingFooter() {
   return (
-    <footer className="border-t border-border/80 bg-slate-950/60 py-12 px-4 sm:px-6">
+    <footer className="border-t border-border/80 bg-slate-100/30 dark:bg-slate-950/60 py-12 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-left">
         
         {/* Logo Brand column */}
@@ -29,20 +29,20 @@ export function LandingFooter() {
 
         {/* Links column 1 */}
         <div className="space-y-3">
-          <div className="text-xs font-bold text-white uppercase tracking-wider select-none">Resources</div>
+          <div className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider select-none">Resources</div>
           <ul className="space-y-2 text-[11px] text-muted-foreground">
-            <li><a href="#features" className="hover:text-purple-400 transition-colors">Platform Features</a></li>
-            <li><a href="#how-it-works" className="hover:text-purple-400 transition-colors">Step-by-Step Guide</a></li>
-            <li><a href="#showcase" className="hover:text-purple-400 transition-colors">Interface Gallery</a></li>
+            <li><a href="#features" className="hover:text-purple-650 dark:hover:text-purple-400 transition-colors">Platform Features</a></li>
+            <li><a href="#how-it-works" className="hover:text-purple-650 dark:hover:text-purple-400 transition-colors">Step-by-Step Guide</a></li>
+            <li><a href="#showcase" className="hover:text-purple-650 dark:hover:text-purple-400 transition-colors">Interface Gallery</a></li>
           </ul>
         </div>
 
         {/* Links column 2 */}
         <div className="space-y-3">
-          <div className="text-xs font-bold text-white uppercase tracking-wider select-none">Vault Security</div>
+          <div className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider select-none">Vault Security</div>
           <ul className="space-y-2 text-[11px] text-muted-foreground">
-            <li><span className="flex items-center space-x-1.5"><Lock className="w-3 h-3 text-purple-400" /> <span>Multi-Tenant DB</span></span></li>
-            <li><span className="flex items-center space-x-1.5"><ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> <span>Session Encrypted</span></span></li>
+            <li><span className="flex items-center space-x-1.5"><Lock className="w-3 h-3 text-purple-605 dark:text-purple-400" /> <span>Multi-Tenant DB</span></span></li>
+            <li><span className="flex items-center space-x-1.5"><ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> <span>Session Encrypted</span></span></li>
           </ul>
         </div>
       </div>

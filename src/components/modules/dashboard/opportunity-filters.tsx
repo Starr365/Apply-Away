@@ -54,14 +54,14 @@ export function OpportunityFilters() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search opportunity title, organization..."
-          className="w-full h-11 pl-10 pr-4 rounded-xl bg-slate-900/90 border border-slate-700/80 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+          className="w-full h-11 pl-10 pr-4 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
         />
       </form>
 
       {/* Filter Dropdowns */}
       <div className="flex flex-wrap items-center gap-2">
-        <div className="flex items-center space-x-1 text-xs text-slate-400 mr-1">
-          <Filter className="w-3.5 h-3.5 text-purple-400" />
+        <div className="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400 mr-1">
+          <Filter className="w-3.5 h-3.5 text-purple-650 dark:text-purple-400" />
           <span className="hidden sm:inline">Filters:</span>
         </div>
 
@@ -69,7 +69,7 @@ export function OpportunityFilters() {
         <select
           value={category}
           onChange={(e) => handleFilterChange("category", e.target.value)}
-          className="h-11 px-3 rounded-xl bg-slate-900 border border-slate-700/80 text-xs text-slate-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 cursor-pointer"
+          className="h-11 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 cursor-pointer"
         >
           <option value="">All Categories</option>
           <option value="FELLOWSHIP">Fellowship</option>
@@ -89,7 +89,7 @@ export function OpportunityFilters() {
         <select
           value={status}
           onChange={(e) => handleFilterChange("status", e.target.value)}
-          className="h-11 px-3 rounded-xl bg-slate-900 border border-slate-700/80 text-xs text-slate-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 cursor-pointer"
+          className="h-11 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 cursor-pointer"
         >
           <option value="">All Statuses</option>
           <option value="NOT_STARTED">Not Started</option>
@@ -104,7 +104,7 @@ export function OpportunityFilters() {
         <select
           value={priority}
           onChange={(e) => handleFilterChange("priority", e.target.value)}
-          className="h-11 px-3 rounded-xl bg-slate-900 border border-slate-700/80 text-xs text-slate-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 cursor-pointer"
+          className="h-11 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 cursor-pointer"
         >
           <option value="">All Priorities</option>
           <option value="HIGH">High</option>
@@ -117,7 +117,7 @@ export function OpportunityFilters() {
           <button
             type="button"
             onClick={handleResetFilters}
-            className="h-11 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 flex items-center space-x-1.5 transition-colors cursor-pointer"
+            className="h-11 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs text-slate-700 dark:text-slate-300 flex items-center space-x-1.5 transition-colors cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset</span>
