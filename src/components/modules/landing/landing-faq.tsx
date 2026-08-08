@@ -109,9 +109,11 @@ export function LandingFAQ() {
                     isOpen ? "max-h-60 border-t border-border/50" : "max-h-0"
                   }`}
                 >
-                  <p className="p-5 text-xs text-muted-foreground leading-relaxed text-left">
-                    {faq.a}
-                  </p>
+                  {isOpen && (
+                    <p className="p-5 text-xs text-muted-foreground leading-relaxed text-left">
+                      {faq.a}
+                    </p>
+                  )}
                 </div>
               </AnimatedContainer>
             );
@@ -161,9 +163,11 @@ export function LandingFAQ() {
                       isOpen ? "max-h-60 border-t border-border/50" : "max-h-0"
                     }`}
                   >
-                    <p className="p-5 text-xs text-muted-foreground leading-relaxed text-left">
-                      {faq.a}
-                    </p>
+                    {isOpen && (
+                      <p className="p-5 text-xs text-muted-foreground leading-relaxed text-left">
+                        {faq.a}
+                      </p>
+                    )}
                   </div>
                 </div>
               );
