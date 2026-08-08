@@ -8,11 +8,7 @@ const repository = new PrismaOpportunityRepository();
 
 export default async function CalendarPage() {
   const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId || !session) {
-    return null; // Handled by middleware
-  }
+  const userId = session?.user?.id || "";
 
   // Fetch opportunities with deadlines for this user
   const { items: opportunities } = await repository.findAll({

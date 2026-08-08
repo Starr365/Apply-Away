@@ -8,11 +8,7 @@ import { Opportunity, ActivityLog } from "@/domain/opportunity.types";
 
 export default async function ReflectionPage() {
   const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId || !session) {
-    return null; // Handled by middleware
-  }
+  const userId = session?.user?.id || "";
 
   // Fetch all user opportunities for metrics calculations
   const opportunities = (await prisma.opportunity.findMany({

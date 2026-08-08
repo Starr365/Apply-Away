@@ -4,12 +4,10 @@ import type { NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Retrieve Auth.js / NextAuth session cookie (supports both dev and secure HTTPS production names)
-  const sessionToken =
-    request.cookies.get("authjs.session-token")?.value ||
-    request.cookies.get("__Secure-authjs.session-token")?.value ||
-    request.cookies.get("next-auth.session-token")?.value ||
-    request.cookies.get("__Secure-next-auth.session-token")?.value;
+  // Retrieve Auth.js / NextAuth session cookie (supports standard, chunked, and prefixed cookie names)
+  const hasSessionToken = request.cookies.getAll().some((cookie) =>
+    cookie.name.includes("session-token")
+  );
 
   const isProtectedRoute =
     pathname.startsWith("/dashboard") ||
@@ -18,15 +16,15 @@ export function proxy(request: NextRequest) {
     pathname.startsWith("/reflection") ||
     pathname.startsWith("/profile");
 
-  const isAuthRoute = pathname.startsWith("/login");
+  const isAuthRoute = pathname.startsWith("/auth");
 
-  if (isProtectedRoute && !sessionToken) {
-    const loginUrl = new URL("/login", request.url);
+  if (isProtectedRoute && !hasSessionToken) {
+    const loginUrl = new URL("/auth", request.url);
     loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isAuthRoute && sessionToken) {
+  if (isAuthRoute && hasSessionToken) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
@@ -40,6 +38,6 @@ export const config = {
     "/calendar/:path*",
     "/reflection/:path*",
     "/profile/:path*",
-    "/login",
+    "/auth",
   ],
 };

@@ -43,8 +43,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
-      <body className="font-sans antialiased bg-background text-foreground selection:bg-purple-500 selection:text-white min-h-screen flex flex-col transition-colors duration-300">
+    <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
+      <body
+        suppressHydrationWarning
+        className="font-sans antialiased bg-background text-foreground selection:bg-purple-500 selection:text-white min-h-screen flex flex-col transition-colors duration-300"
+      >
         <SessionProvider>
           <ThemeProvider>
             <ToastProvider>

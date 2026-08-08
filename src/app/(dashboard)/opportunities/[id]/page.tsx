@@ -16,11 +16,7 @@ interface OpportunityDetailPageProps {
 
 export default async function OpportunityDetailPage({ params }: OpportunityDetailPageProps) {
   const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId || !session) {
-    return null; // Handled by middleware redirect
-  }
+  const userId = session?.user?.id || "";
 
   const { id } = await params;
 

@@ -131,7 +131,7 @@ export default function ProfilePage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => signOut({ callbackUrl: "/login" })}
+                  onClick={() => signOut({ callbackUrl: "/auth" })}
                   className="h-10 px-4 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs font-semibold flex items-center space-x-2 transition-all cursor-pointer"
                   aria-label="Sign out of your account"
                 >

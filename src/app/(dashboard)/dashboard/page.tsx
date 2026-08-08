@@ -21,11 +21,7 @@ interface DashboardPageProps {
 
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId || !session) {
-    return null; // Handled by middleware redirect
-  }
+  const userId = session?.user?.id || "";
 
   const params = await searchParams;
 

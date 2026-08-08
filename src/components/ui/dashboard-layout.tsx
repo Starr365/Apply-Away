@@ -4,7 +4,7 @@ import type { Session } from "next-auth";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
-  session: Session;
+  session: Session | null;
   /** Footer subtitle text after the year (e.g. "Deadline Calendar") */
   footerLabel?: string;
   /** Show "Back to Vault Dashboard" button */
@@ -67,7 +67,7 @@ export function DashboardLayout({
               aria-label="User profile"
             >
               <User className="w-3.5 h-3.5 text-purple-400" aria-hidden="true" />
-              <span>{session.user?.name || "Profile"}</span>
+              <span>{session?.user?.name || "Profile"}</span>
             </Link>
           </nav>
         </div>

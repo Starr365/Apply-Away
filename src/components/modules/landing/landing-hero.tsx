@@ -65,7 +65,7 @@ export function LandingHero() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
             <Link
-              href="/login"
+              href="/auth"
               className="h-12 px-6 w-full sm:w-auto rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-sm font-bold text-white shadow-lg shadow-purple-600/30 flex items-center justify-center space-x-2 transition-all group"
             >
               <span>Get Started Free</span>

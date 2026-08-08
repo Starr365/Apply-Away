@@ -16,7 +16,20 @@ async function main() {
     },
   });
 
+  // Create test user with plaintext password (for development only)
+  const testUser = await prisma.user.upsert({
+    where: { email: "test@applyaway.app" },
+    update: {},
+    create: {
+      email: "test@applyaway.app",
+      name: "Apply Away Tester",
+      passwordPlain: "SeedPass123!",
+      timezone: "Africa/Lagos",
+    },
+  });
+
   console.log("✅ Database schema initialized with empty opportunity vault.");
+  console.log(`✅ Seeded test user: ${testUser.email} (password: SeedPass123!)`);
 }
 
 main()
