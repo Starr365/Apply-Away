@@ -11,7 +11,7 @@ import { AnimatedContainer } from "@/components/ui/animated-container";
 import { MetricCard } from "@/components/ui/metric-card";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { PageHeader } from "@/components/ui/page-header";
-import { Plus, Sparkles, CheckCircle2, Clock, Layers, Wand2, BarChart3 } from "lucide-react";
+import { Plus, Sparkles, CheckCircle2, Clock, Layers, Wand2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -65,15 +65,6 @@ export function DashboardView({
           >
             <Clock className="w-4 h-4 text-purple-600 dark:text-purple-400" aria-hidden="true" />
             <span>Calendar View</span>
-          </Link>
-
-          <Link
-            href="/reflection"
-            className="h-11 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-sm font-semibold inline-flex items-center space-x-2 transition-all"
-            aria-label="View reflection and analytics"
-          >
-            <BarChart3 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
-            <span>Reflection & Analytics</span>
           </Link>
 
           <button

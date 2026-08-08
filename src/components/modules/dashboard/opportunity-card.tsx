@@ -15,9 +15,11 @@ import {
   Trash2,
   Clock,
   Building,
+  FolderOpen,
 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/components/ui/toast-provider";
+import Link from "next/link";
 
 interface OpportunityCardProps {
   opportunity: Opportunity;
@@ -76,9 +78,21 @@ export function OpportunityCard({ opportunity, onEdit }: OpportunityCardProps) {
             <Building className="w-3.5 h-3.5" />
             <span>{opportunity.organization}</span>
           </div>
-          <h3 className="text-base font-bold font-outfit text-slate-900 dark:text-white leading-snug line-clamp-2">
-            {opportunity.title}
-          </h3>
+          {opportunity.officialUrl || opportunity.applicationUrl ? (
+            <a
+              href={opportunity.officialUrl || opportunity.applicationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-base font-bold font-outfit text-primary hover:underline leading-snug line-clamp-2 inline-flex items-center gap-1 group"
+            >
+              <span>{opportunity.title}</span>
+              <ExternalLink className="w-3.5 h-3.5 opacity-70 group-hover:opacity-100 transition-opacity" />
+            </a>
+          ) : (
+            <h3 className="text-base font-bold font-outfit text-slate-900 dark:text-white leading-snug line-clamp-2">
+              {opportunity.title}
+            </h3>
+          )}
         </div>
 
         {/* Dropdown Menu Toggle */}
@@ -93,6 +107,15 @@ export function OpportunityCard({ opportunity, onEdit }: OpportunityCardProps) {
 
           {showMenu && (
             <div className="absolute right-0 top-10 z-30 w-48 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 shadow-2xl p-1.5 space-y-1 text-xs text-slate-700 dark:text-slate-300">
+              <Link
+                href={`/opportunities/${opportunity.id}`}
+                onClick={() => setShowMenu(false)}
+                className="w-full px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center space-x-2 text-left cursor-pointer animate-in fade-in slide-in-from-top-1 duration-150"
+              >
+                <FolderOpen className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                <span>View Details</span>
+              </Link>
+
               <button
                 type="button"
                 onClick={() => {
