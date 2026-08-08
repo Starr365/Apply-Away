@@ -1,18 +1,13 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ReflectionView } from "@/components/modules/reflection/reflection-view";
-import { DashboardLayout } from "@/components/ui/dashboard-layout";
 import { PageHeader } from "@/components/ui/page-header";
 import { STATUS_LABELS } from "@/lib/constants";
 import { Opportunity, ActivityLog } from "@/domain/opportunity.types";
 
 export default async function ReflectionPage() {
   const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId || !session) {
-    return null; // Handled by middleware
-  }
+  const userId = session?.user?.id || "";
 
   // Fetch all user opportunities for metrics calculations
   const opportunities = (await prisma.opportunity.findMany({
@@ -121,27 +116,25 @@ export default async function ReflectionPage() {
   });
 
   return (
-    <DashboardLayout session={session} showBackButton footerLabel="Reflection & Analytics">
-      <div className="space-y-6">
-        <PageHeader
-          title="Reflection & Analytics Dashboard"
-          description="Track application velocity, category distribution, pipeline conversions, and monthly journal notes."
-        />
+    <div className="space-y-6">
+      <PageHeader
+        title="Reflection & Analytics Dashboard"
+        description="Track application velocity, category distribution, pipeline conversions, and monthly journal notes."
+      />
 
-        <ReflectionView
-          velocityData={velocityData}
-          categoryData={categoryData}
-          statusData={statusData}
-          recentActivities={recentActivities as unknown as ActivityLog[]}
-          reflectionsMap={reflectionsMap}
-          stats={{
-            totalApplications: opportunities.length,
-            submittedThisMonth,
-            acceptanceRate,
-            topCategory: topCat,
-          }}
-        />
-      </div>
-    </DashboardLayout>
+      <ReflectionView
+        velocityData={velocityData}
+        categoryData={categoryData}
+        statusData={statusData}
+        recentActivities={recentActivities as unknown as ActivityLog[]}
+        reflectionsMap={reflectionsMap}
+        stats={{
+          totalApplications: opportunities.length,
+          submittedThisMonth,
+          acceptanceRate,
+          topCategory: topCat,
+        }}
+      />
+    </div>
   );
 }

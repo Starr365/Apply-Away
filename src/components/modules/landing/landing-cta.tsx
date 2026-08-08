@@ -34,7 +34,7 @@ export function LandingCTA() {
 
         <div className="pt-4 flex justify-center">
           <Link
-            href="/login"
+            href="/auth"
             className="h-12 px-8 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-sm font-bold text-white shadow-lg shadow-purple-600/30 flex items-center space-x-2 transition-all group"
           >
             <span>Get Started Free</span>

@@ -78,14 +78,14 @@ export function LandingHeader() {
           </button>
 
           <Link
-            href="/login"
+            href="/auth"
             className="text-xs font-bold hover:text-purple-400 transition-colors text-foreground"
           >
             Sign In
           </Link>
 
           <Link
-            href="/login"
+            href="/auth"
             className="h-9 px-4 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white flex items-center justify-center shadow-lg shadow-purple-600/25 transition-all"
           >
             Get Started Free

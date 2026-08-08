@@ -14,10 +14,11 @@ export interface AIExtractionActionResult {
   duplicateMatchType?: "URL_MATCH" | "TITLE_ORG_MATCH" | "NONE";
   existingOpportunityId?: string;
   error?: string;
+  isQuotaError?: boolean;
 }
 
 /**
- * Server Action: Extract opportunity from URL or raw text input via OpenAI Structured Outputs.
+ * Server Action: Extract opportunity from URL or raw text input via Google Gemini Structured Outputs.
  */
 export async function extractOpportunityAction(params: {
   url?: string;
@@ -61,9 +62,17 @@ export async function extractOpportunityAction(params: {
       existingOpportunityId: dupCheck.existingOpportunity?.id,
     };
   } catch (err: unknown) {
-    console.error("AI Extraction Action failed:", err);
+    console.error("[AIExtraction] Server action failed:", (err as Error)?.message || err);
+
+    // Detect quota/rate-limit errors from the Gemini service
+    const isQuotaError =
+      (err as Error & { isQuotaError?: boolean })?.isQuotaError === true ||
+      ((err as Error)?.message || "").includes("usage limit");
+
     const errorMessage =
       err instanceof Error ? err.message : "Failed to extract opportunity data. Please try again.";
-    return { success: false, error: errorMessage };
+
+    return { success: false, error: errorMessage, isQuotaError };
   }
 }
+

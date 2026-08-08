@@ -21,6 +21,8 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
+  passwordHash  String?  // hashed password for regular users
+  passwordPlain String?  // plaintext password for seeded test user only
   accounts           Account[]
   sessions           Session[]
   opportunities      Opportunity[]

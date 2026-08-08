@@ -141,6 +141,7 @@ export function DashboardView({
         isOpen={isAICaptureOpen}
         onClose={() => setIsAICaptureOpen(false)}
         onSuccess={() => router.refresh()}
+        onFallbackManual={handleCreateNew}
       />
     </div>
   );

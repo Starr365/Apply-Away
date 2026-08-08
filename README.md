@@ -65,7 +65,7 @@ graph TD
 | **Database** | **PostgreSQL & Prisma v6** | ACID-compliant relational storage using Prisma ORM with native text arrays (`String[]`) for eligibility/benefits lists. |
 | **Authentication**| **Auth.js v5 (`next-auth`)** | Google OAuth & Credentials auth with custom JWT session callbacks and multi-tenant DB isolation (`userId` FK). |
 | **Edge Security** | **Lightweight Proxy** | Next.js 16 `proxy.ts` cookie inspection (`<5KB`) ensuring Edge Function compliance under Vercel's 1MB limit. |
-| **AI Integration**| **OpenAI API (`gpt-4o-mini`)** | Structured Output parsing via strict JSON schema enforcement to ensure predictable JSON payloads. |
+| **AI Integration**| **Google Gemini API (`gemini-3.6-flash`)** | Structured Output parsing via constrained JSON schema decoding to ensure predictable JSON payloads. |
 | **Calendar** | **FullCalendar v6** | Interactive month day-grid calendar widget customized with dark-mode glassmorphic design tokens. |
 | **Analytics** | **Recharts** | Composable, responsive SVG chart library for data visualizations. |
 | **Notifications** | **Custom Toast System** | Zero-dependency toast notification provider supporting success, error, info, and warning states. |
@@ -154,8 +154,9 @@ DATABASE_URL="postgresql://user:password@localhost:5432/apply_away?schema=public
 NEXTAUTH_SECRET="your-super-secret-key-32-characters"
 NEXTAUTH_URL="http://localhost:3000"
 
-# OpenAI API Key (For AI Extraction)
-OPENAI_API_KEY="sk-proj-your-openai-api-key"
+# Google Gemini API (AI Structured Extraction)
+GEMINI_API_KEY="your-gemini-api-key"
+GEMINI_MODEL="gemini-3.6-flash"
 
 # Resend Email API Key (Timezone-Aware Notifications)
 RESEND_API_KEY="re_your-resend-api-key"

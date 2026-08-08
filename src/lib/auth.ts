@@ -4,16 +4,17 @@ import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import { env } from "@/lib/env";
+import * as bcrypt from "bcryptjs";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || "http://localhost:3000",
   session: {
     strategy: "jwt",
   },
   pages: {
-    signIn: "/login",
-    error: "/login",
+    signIn: "/auth",
+    error: "/auth",
   },
   providers: [
     Google({
@@ -26,23 +27,41 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       credentials: {
         email: { label: "Email", type: "email", placeholder: "user@applyaway.app" },
         name: { label: "Name", type: "text", placeholder: "Apply Away User" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email) return null;
 
         const email = String(credentials.email).toLowerCase().trim();
-        const name = credentials.name ? String(credentials.name) : "Apply Away User";
+        const password = credentials.password ? String(credentials.password) : null;
 
-        // Find or create user in Prisma DB
+        // Find user in Prisma DB
         let user = await prisma.user.findUnique({
           where: { email },
         });
 
-        if (!user) {
+        if (user) {
+          if (user.passwordHash && password) {
+            const isValid = await bcrypt.compare(password, user.passwordHash);
+            if (!isValid) return null;
+          } else if (user.passwordPlain) {
+            if (password !== user.passwordPlain) return null;
+          } else if (password) {
+            // User exists but has neither passwordHash nor passwordPlain (e.g. seeded user@applyaway.app)
+            const passwordHash = await bcrypt.hash(password, 12);
+            user = await prisma.user.update({
+              where: { id: user.id },
+              data: { passwordHash },
+            });
+          }
+        } else {
+          // User does not exist, auto-create user with hashed password
+          const passwordHash = password ? await bcrypt.hash(password, 12) : null;
           user = await prisma.user.create({
             data: {
               email,
-              name,
+              name: credentials.name ? String(credentials.name) : "Apply Away User",
+              passwordHash,
               timezone: "Africa/Lagos",
             },
           });

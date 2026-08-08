@@ -2,7 +2,6 @@ import { auth } from "@/lib/auth";
 import { PrismaOpportunityRepository } from "@/repositories/prisma-opportunity.repository";
 import { DashboardView } from "@/components/modules/dashboard/dashboard-view";
 import { OpportunityCategory, OpportunityStatus } from "@/domain/opportunity.types";
-import { DashboardLayout } from "@/components/ui/dashboard-layout";
 import { prisma } from "@/lib/prisma";
 
 const repository = new PrismaOpportunityRepository();
@@ -21,11 +20,7 @@ interface DashboardPageProps {
 
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId || !session) {
-    return null; // Handled by middleware redirect
-  }
+  const userId = session?.user?.id || "";
 
   const params = await searchParams;
 
@@ -63,20 +58,19 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   ]);
 
   return (
-    <DashboardLayout session={session} footerLabel="Multi-Tenant Opportunity Vault">
-      <DashboardView
-        opportunities={opportunities}
-        total={total}
-        currentPage={page}
-        limit={limit}
-        stats={{
-          total: totalCount,
-          inProgress: inProgressCount,
-          submitted: submittedCount,
-          dueSoon: dueSoonCount,
-        }}
-      />
-    </DashboardLayout>
+    <DashboardView
+      opportunities={opportunities}
+      total={total}
+      currentPage={page}
+      limit={limit}
+      stats={{
+        total: totalCount,
+        inProgress: inProgressCount,
+        submitted: submittedCount,
+        dueSoon: dueSoonCount,
+      }}
+    />
   );
 }
+
 
