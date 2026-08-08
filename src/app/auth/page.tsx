@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
+import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/components/ui/toast-provider";
@@ -94,8 +95,15 @@ function AuthContent() {
       <div className="w-full max-w-md space-y-8">
         {/* Header Branding */}
         <div className="text-center space-y-3">
-          <div className="inline-flex w-12 h-12 rounded-2xl bg-linear-to-tr from-purple-600 to-indigo-500 items-center justify-center shadow-xl shadow-purple-500/20 mb-2">
-            <Sparkles className="w-6 h-6 text-white" />
+          <div className="flex justify-center mb-2">
+            <Image
+              src="/text-vault.png"
+              alt="Apply Away Logo"
+              width={180}
+              height={48}
+              priority
+              className="h-12 w-auto object-contain"
+            />
           </div>
           <h1 className="text-3xl font-extrabold font-outfit tracking-tight text-white">Welcome to Apply Away</h1>
           <p className="text-sm text-slate-400">{mode === "signin" ? "Sign in to access your personal AI‑powered opportunity vault." : "Create an account to start storing your opportunities."}</p>

@@ -12,11 +12,15 @@ interface CalendarRendererProps {
 }
 
 export default function CalendarRenderer({ events, onEventClick }: CalendarRendererProps) {
+  const plugins = [
+    (dayGridPlugin as any).default || dayGridPlugin,
+    (interactionPlugin as any).default || interactionPlugin,
+  ];
+
   return (
     <div className="fullcalendar-dark-theme">
       <FullCalendar
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        plugins={[dayGridPlugin as any, interactionPlugin as any]}
+        plugins={plugins}
         initialView="dayGridMonth"
         events={events}
         eventClick={onEventClick}
