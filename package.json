@@ -16,7 +16,7 @@
     "@auth/prisma-adapter": "^2.11.3",
     "@fullcalendar/daygrid": "^6.1.21",
     "@fullcalendar/interaction": "^6.1.21",
-    "@fullcalendar/react": "^7.0.2",
+    "@fullcalendar/react": "^6.1.21",
     "@google/genai": "^2.16.0",
     "@prisma/client": "^6.19.3",
     "bcryptjs": "^3.0.3",
