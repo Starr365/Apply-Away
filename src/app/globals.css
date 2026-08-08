@@ -116,6 +116,11 @@
   border: 1px solid rgba(51, 65, 85, 0.5);
 }
 
+.light .glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(226, 232, 240, 0.8);
+}
+
 .glass-card {
   background: rgba(30, 41, 59, 0.4);
   backdrop-filter: blur(12px);
@@ -124,11 +129,23 @@
   transition: all 0.2s ease-in-out;
 }
 
+.light .glass-card {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(226, 232, 240, 0.6);
+}
+
 .glass-card:hover {
   background: rgba(30, 41, 59, 0.6);
   border-color: rgba(139, 92, 246, 0.4);
   box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.15);
 }
+
+.light .glass-card:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.15);
+}
+
 
 /* FullCalendar Dark Theme Overrides */
 .fullcalendar-dark-theme .fc {

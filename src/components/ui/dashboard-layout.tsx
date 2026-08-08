@@ -14,7 +14,6 @@ import {
   LogOut,
   Menu,
   X,
-  ArrowLeft,
   Shield,
   Sun,
   Moon,
@@ -26,8 +25,6 @@ interface DashboardLayoutProps {
   session: Session | null;
   /** Footer subtitle text after the year (e.g. "Deadline Calendar") */
   footerLabel?: string;
-  /** Show "Back to Vault Dashboard" button */
-  showBackButton?: boolean;
   /** Optional max-width override for main content (default: "max-w-7xl") */
   maxWidth?: string;
 }
@@ -36,7 +33,6 @@ export function DashboardLayout({
   children,
   session,
   footerLabel,
-  showBackButton = false,
   maxWidth = "max-w-7xl",
 }: DashboardLayoutProps) {
   const pathname = usePathname();
@@ -176,21 +172,12 @@ export function DashboardLayout({
 
           {/* Navigation Links */}
           <nav className="p-4 space-y-1.5" aria-label="Sidebar Navigation">
-            {showBackButton && (
-              <Link
-                href="/dashboard"
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-xs font-medium text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors mb-3"
-              >
-                <ArrowLeft className="w-4 h-4 text-purple-600 dark:text-purple-400" aria-hidden="true" />
-                <span>Back to Dashboard</span>
-              </Link>
-            )}
-
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive =
-                pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
+                pathname === item.href ||
+                (item.href !== "/dashboard" && pathname.startsWith(item.href)) ||
+                (item.href === "/dashboard" && pathname.startsWith("/opportunities"));
 
               return (
                 <Link
@@ -272,15 +259,55 @@ export function DashboardLayout({
       {/* MAIN CONTENT AREA */}
       {/* ========================================================================= */}
       <div className="flex-1 flex flex-col md:pl-64 min-w-0 min-h-screen justify-between">
+        {/* Desktop top header */}
+        <header className="hidden md:flex h-16 border-b border-slate-200 dark:border-slate-800/80 bg-white/70 dark:bg-slate-950/70 backdrop-blur-md sticky top-0 z-30 px-8 items-center justify-between transition-colors duration-300">
+          <div className="flex items-center space-x-2">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+              Welcome back,
+            </span>
+            <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+              {session?.user?.name || "Apply Away User"}
+            </span>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={toggleTheme}
+              type="button"
+              className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:text-purple-600 dark:hover:text-white transition-colors cursor-pointer"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? (
+                <Sun className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Moon className="w-4 h-4 text-indigo-500" />
+              )}
+            </button>
+
+            <Link
+              href="/profile"
+              className="flex items-center space-x-2.5 p-1 px-2.5 rounded-xl border border-slate-200 dark:border-slate-800/80 hover:border-purple-300 dark:hover:border-slate-700 transition-all bg-slate-50 dark:bg-slate-900"
+            >
+              <div className="w-6 h-6 rounded-lg bg-linear-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-[10px] font-bold text-white uppercase">
+                {session?.user?.name ? session.user.name.charAt(0) : "U"}
+              </div>
+              <span className="text-[11px] font-semibold text-slate-800 dark:text-slate-200">
+                Profile Settings
+              </span>
+            </Link>
+          </div>
+        </header>
+
         <main id="main-content" className={`${maxWidth} mx-auto px-4 sm:px-6 py-8 flex-1 w-full`} role="main">
           {children}
         </main>
 
         {/* Footer */}
-        <footer className="border-t border-slate-200 dark:border-slate-800/60 py-6 bg-slate-100/50 dark:bg-slate-950/60" role="contentinfo">          <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
-          Apply Away &copy; {new Date().getFullYear()}
-          {footerLabel ? ` – ${footerLabel}` : " – Multi-Tenant Opportunity Vault"}
-        </div>
+        <footer className="border-t border-slate-200 dark:border-slate-800/60 py-6 bg-slate-100/50 dark:bg-slate-950/60" role="contentinfo">
+          <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+            Apply Away &copy; {new Date().getFullYear()}
+            {footerLabel ? ` – ${footerLabel}` : " – Multi-Tenant Opportunity Vault"}
+          </div>
         </footer>
       </div>
     </div>
