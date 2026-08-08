@@ -15,8 +15,8 @@ function MetricCardInner({
   label,
   value,
   icon: Icon,
-  iconColorClass = "text-purple-400",
-  valueColorClass = "text-slate-900 dark:text-white",
+  iconColorClass = "text-primary",
+  valueColorClass = "text-foreground",
   className,
 }: MetricCardProps) {
   return (
@@ -25,7 +25,7 @@ function MetricCardInner({
       role="status"
       aria-label={`${label}: ${value}`}
     >
-      <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span>{label}</span>
         <Icon className={cn("w-4 h-4", iconColorClass)} aria-hidden="true" />
       </div>

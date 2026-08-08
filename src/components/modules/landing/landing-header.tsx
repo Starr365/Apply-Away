@@ -71,15 +71,15 @@ export function LandingHeader() {
             aria-label="Toggle visual theme"
           >
             {theme === "dark" ? (
-              <Sun className="w-4 h-4 text-amber-400" />
+              <Sun className="w-4 h-4 text-amber-500" />
             ) : (
-              <Moon className="w-4 h-4 text-indigo-500" />
+              <Moon className="w-4 h-4 text-indigo-600" />
             )}
           </button>
 
           <Link
             href="/auth"
-            className="text-xs font-bold hover:text-purple-400 transition-colors text-foreground"
+            className="text-xs font-bold hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-foreground"
           >
             Sign In
           </Link>

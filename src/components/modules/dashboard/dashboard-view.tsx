@@ -60,29 +60,29 @@ export function DashboardView({
         >
           <Link
             href="/calendar"
-            className="h-11 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white text-sm font-semibold inline-flex items-center space-x-2 transition-all"
+            className="h-11 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-sm font-semibold inline-flex items-center space-x-2 transition-all"
             aria-label="View deadline calendar"
           >
-            <Clock className="w-4 h-4 text-purple-400" aria-hidden="true" />
+            <Clock className="w-4 h-4 text-purple-600 dark:text-purple-400" aria-hidden="true" />
             <span>Calendar View</span>
           </Link>
 
           <Link
             href="/reflection"
-            className="h-11 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white text-sm font-semibold inline-flex items-center space-x-2 transition-all"
+            className="h-11 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-sm font-semibold inline-flex items-center space-x-2 transition-all"
             aria-label="View reflection and analytics"
           >
-            <BarChart3 className="w-4 h-4 text-emerald-400" aria-hidden="true" />
+            <BarChart3 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
             <span>Reflection & Analytics</span>
           </Link>
 
           <button
             type="button"
             onClick={() => setIsAICaptureOpen(true)}
-            className="h-11 px-4 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 text-sm font-semibold inline-flex items-center space-x-2 transition-all cursor-pointer"
+            className="h-11 px-4 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30 text-sm font-semibold inline-flex items-center space-x-2 transition-all cursor-pointer"
             aria-label="Open AI quick capture"
           >
-            <Wand2 className="w-4 h-4 text-purple-400" aria-hidden="true" />
+            <Wand2 className="w-4 h-4 text-purple-600 dark:text-purple-400" aria-hidden="true" />
             <span>AI Quick Capture</span>
           </button>
 
@@ -101,16 +101,16 @@ export function DashboardView({
       {/* Summary Metrics Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <AnimatedContainer delay={60}>
-          <MetricCard label="Total Vault" value={stats.total} icon={Layers} iconColorClass="text-purple-400" />
+          <MetricCard label="Total Vault" value={stats.total} icon={Layers} iconColorClass="text-purple-650 dark:text-purple-400" />
         </AnimatedContainer>
         <AnimatedContainer delay={120}>
-          <MetricCard label="In Progress" value={stats.inProgress} icon={Sparkles} iconColorClass="text-sky-400" valueColorClass="text-sky-400" />
+          <MetricCard label="In Progress" value={stats.inProgress} icon={Sparkles} iconColorClass="text-sky-600 dark:text-sky-400" valueColorClass="text-sky-600 dark:text-sky-400" />
         </AnimatedContainer>
         <AnimatedContainer delay={180}>
-          <MetricCard label="Submitted" value={stats.submitted} icon={CheckCircle2} iconColorClass="text-purple-400" valueColorClass="text-purple-400" />
+          <MetricCard label="Submitted" value={stats.submitted} icon={CheckCircle2} iconColorClass="text-purple-605 dark:text-purple-400" valueColorClass="text-purple-605 dark:text-purple-400" />
         </AnimatedContainer>
         <AnimatedContainer delay={240}>
-          <MetricCard label="Due Soon" value={stats.dueSoon} icon={Clock} iconColorClass="text-amber-400" valueColorClass="text-amber-400" />
+          <MetricCard label="Due Soon" value={stats.dueSoon} icon={Clock} iconColorClass="text-amber-600 dark:text-amber-400" valueColorClass="text-amber-600 dark:text-amber-400" />
         </AnimatedContainer>
       </div>
 

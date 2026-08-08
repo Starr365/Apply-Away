@@ -44,7 +44,7 @@ export function LandingHero() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         {/* Left Info Column */}
         <AnimatedContainer delay={200} className="lg:col-span-5 space-y-6 text-center lg:text-left">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-[10px] font-bold text-purple-400 uppercase tracking-widest mx-auto lg:mx-0">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-widest mx-auto lg:mx-0">
             <div className="relative w-4 h-4">
               <Image src="/vault-logo.png" alt="Icon" fill sizes="16px" className="object-contain" />
             </div>
@@ -112,23 +112,23 @@ export function LandingHero() {
                   <div className="text-lg font-bold font-outfit text-foreground">18 Records</div>
                 </div>
                 <div className="p-3 rounded-xl bg-background/85 border border-border/60 space-y-1">
-                  <span className="text-[10px] text-sky-400 uppercase font-bold tracking-wider">In Progress</span>
-                  <div className="text-lg font-bold font-outfit text-sky-400">5 Active</div>
+                  <span className="text-[10px] text-sky-600 dark:text-sky-400 uppercase font-bold tracking-wider">In Progress</span>
+                  <div className="text-lg font-bold font-outfit text-sky-600 dark:text-sky-400">5 Active</div>
                 </div>
                 <div className="p-3 rounded-xl bg-background/85 border border-border/60 space-y-1">
-                  <span className="text-[10px] text-purple-400 uppercase font-bold tracking-wider">Due Soon</span>
-                  <div className="text-lg font-bold font-outfit text-purple-400">2 Weeks</div>
+                  <span className="text-[10px] text-purple-650 dark:text-purple-400 uppercase font-bold tracking-wider">Due Soon</span>
+                  <div className="text-lg font-bold font-outfit text-purple-650 dark:text-purple-400">2 Weeks</div>
                 </div>
               </div>
 
               {/* Extraction portal preview */}
               <div className="p-4 rounded-xl border border-purple-500/20 bg-purple-500/2 space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2 text-xs font-bold text-purple-400">
+                  <div className="flex items-center space-x-2 text-xs font-bold text-purple-600 dark:text-purple-400">
                     <Wand2 className="w-3.5 h-3.5 animate-pulse" />
                     <span>Interactive AI Capture Demo</span>
                   </div>
-                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 uppercase select-none">
+                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 uppercase select-none">
                     Try clicking below
                   </span>
                 </div>
@@ -153,13 +153,13 @@ export function LandingHero() {
                   <div className="p-3 rounded-lg bg-background border border-emerald-500/20 text-xs space-y-2 animate-in fade-in zoom-in-95 duration-200">
                     <div className="flex justify-between items-center">
                       <span className="font-bold text-foreground">{parsedData.title}</span>
-                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[9px] font-bold uppercase border border-emerald-500/20">
+                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold uppercase border border-emerald-500/20">
                         {parsedData.category}
                       </span>
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-[10px] text-muted-foreground">
-                      <div>Deadline: <strong className="text-slate-300">{parsedData.deadline}</strong></div>
-                      <div>Priority: <strong className="text-amber-400">{parsedData.priority}</strong></div>
+                      <div>Deadline: <strong className="text-slate-700 dark:text-slate-300">{parsedData.deadline}</strong></div>
+                      <div>Priority: <strong className="text-amber-600 dark:text-amber-400">{parsedData.priority}</strong></div>
                     </div>
                   </div>
                 ) : (
@@ -180,7 +180,7 @@ export function LandingHero() {
                       <div className="text-[10px] text-muted-foreground">Oxford University</div>
                     </div>
                   </div>
-                  <span className="px-2.5 py-0.5 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400 font-bold uppercase text-[9px] select-none">
+                  <span className="px-2.5 py-0.5 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 font-bold uppercase text-[9px] select-none">
                     HIGH PRIORITY
                   </span>
                 </div>

@@ -121,7 +121,7 @@ export function OpportunityDetailView({
       <div className="flex items-center justify-between">
         <Link
           href="/dashboard"
-          className="inline-flex items-center space-x-2 text-sm text-slate-400 hover:text-white transition-colors"
+          className="inline-flex items-center space-x-2 text-sm text-slate-550 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Vault Dashboard</span>
@@ -130,7 +130,7 @@ export function OpportunityDetailView({
         <button
           type="button"
           onClick={() => setIsEditModalOpen(true)}
-          className="h-10 px-4 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-semibold flex items-center space-x-2 transition-all cursor-pointer"
+          className="h-10 px-4 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30 text-xs font-semibold flex items-center space-x-2 transition-all cursor-pointer"
         >
           <Pencil className="w-3.5 h-3.5" />
           <span>Edit Opportunity</span>
@@ -141,11 +141,11 @@ export function OpportunityDetailView({
       <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
           <div className="space-y-2">
-            <div className="flex items-center space-x-2 text-xs text-purple-400 font-semibold">
+            <div className="flex items-center space-x-2 text-xs text-purple-650 dark:text-purple-400 font-semibold">
               <Building className="w-4 h-4" />
               <span>{opportunity.organization}</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold font-outfit text-white">
+            <h1 className="text-2xl sm:text-3xl font-extrabold font-outfit text-slate-900 dark:text-white">
               {opportunity.title}
             </h1>
           </div>
@@ -158,16 +158,16 @@ export function OpportunityDetailView({
         </div>
 
         {/* Links & Deadline Bar */}
-        <div className="border-t border-slate-800/80 pt-4 flex flex-wrap items-center justify-between gap-4 text-xs">
-          <div className="flex items-center space-x-2 text-slate-300">
+        <div className="border-t border-slate-200 dark:border-slate-800/80 pt-4 flex flex-wrap items-center justify-between gap-4 text-xs">
+          <div className="flex items-center space-x-2 text-slate-700 dark:text-slate-300">
             <Clock
               className={`w-4 h-4 ${
-                deadlineInfo.isOverdue ? "text-rose-400" : "text-amber-400"
+                deadlineInfo.isOverdue ? "text-rose-600 dark:text-rose-400" : "text-amber-500 dark:text-amber-400"
               }`}
             />
             <span className="font-medium">
               Deadline:{" "}
-              <strong className={deadlineInfo.isOverdue ? "text-rose-400" : "text-white"}>
+              <strong className={deadlineInfo.isOverdue ? "text-rose-600 dark:text-rose-400" : "text-slate-900 dark:text-white"}>
                 {formatDate(opportunity.deadline)} ({deadlineInfo.label})
               </strong>
             </span>
@@ -179,9 +179,9 @@ export function OpportunityDetailView({
                 href={opportunity.officialUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700/80 text-purple-300 hover:text-white transition-colors"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 text-purple-650 dark:text-purple-300 hover:text-purple-750 dark:hover:text-white transition-colors"
               >
-                <Globe className="w-3.5 h-3.5 text-purple-400" />
+                <Globe className="w-3.5 h-3.5 text-purple-650 dark:text-purple-400" />
                 <span>Official Site</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
@@ -203,14 +203,14 @@ export function OpportunityDetailView({
       </div>
 
       {/* Detail Tab Navigation Bar */}
-      <div className="flex rounded-2xl bg-slate-900/90 p-1.5 border border-slate-800 overflow-x-auto">
+      <div className="flex rounded-2xl bg-slate-100 dark:bg-slate-900/90 p-1.5 border border-slate-200 dark:border-slate-800 overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab("overview")}
           className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "overview"
               ? "bg-purple-600 text-white shadow-md"
-              : "text-slate-400 hover:text-slate-200"
+              : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
           }`}
         >
           <BookOpen className="w-3.5 h-3.5" />
@@ -223,7 +223,7 @@ export function OpportunityDetailView({
           className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "essays"
               ? "bg-purple-600 text-white shadow-md"
-              : "text-slate-400 hover:text-slate-200"
+              : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
           }`}
         >
           <FileText className="w-3.5 h-3.5" />
@@ -236,7 +236,7 @@ export function OpportunityDetailView({
           className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "checklist"
               ? "bg-purple-600 text-white shadow-md"
-              : "text-slate-400 hover:text-slate-200"
+              : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
           }`}
         >
           <ListCheck className="w-3.5 h-3.5" />
@@ -249,7 +249,7 @@ export function OpportunityDetailView({
           className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "notes"
               ? "bg-purple-600 text-white shadow-md"
-              : "text-slate-400 hover:text-slate-200"
+              : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
           }`}
         >
           <Pencil className="w-3.5 h-3.5" />
@@ -262,7 +262,7 @@ export function OpportunityDetailView({
           className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "timeline"
               ? "bg-purple-600 text-white shadow-md"
-              : "text-slate-400 hover:text-slate-200"
+              : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
           }`}
         >
           <History className="w-3.5 h-3.5" />
@@ -275,8 +275,8 @@ export function OpportunityDetailView({
         <div className="space-y-6">
           {/* Description Card */}
           <div className="glass-card p-6 rounded-3xl space-y-3">
-            <h3 className="text-base font-bold font-outfit text-white">Program Overview</h3>
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <h3 className="text-base font-bold font-outfit text-slate-900 dark:text-white">Program Overview</h3>
+            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
               {opportunity.fullDescription || opportunity.shortDescription || "No description provided."}
             </p>
           </div>
@@ -285,15 +285,15 @@ export function OpportunityDetailView({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Eligibility */}
             <div className="glass-card p-6 rounded-3xl space-y-3">
-              <div className="flex items-center space-x-2 text-purple-400 font-bold text-sm">
+              <div className="flex items-center space-x-2 text-purple-600 dark:text-purple-400 font-bold text-sm">
                 <BookOpen className="w-4 h-4" />
                 <span>Eligibility</span>
               </div>
               {opportunity.eligibility.length > 0 ? (
-                <ul className="space-y-2 text-xs text-slate-300">
+                <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
                   {opportunity.eligibility.map((item, idx) => (
                     <li key={idx} className="flex items-start space-x-2">
-                      <span className="text-purple-400">•</span>
+                      <span className="text-purple-600 dark:text-purple-400">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -305,15 +305,15 @@ export function OpportunityDetailView({
 
             {/* Requirements */}
             <div className="glass-card p-6 rounded-3xl space-y-3">
-              <div className="flex items-center space-x-2 text-indigo-400 font-bold text-sm">
+              <div className="flex items-center space-x-2 text-indigo-650 dark:text-indigo-400 font-bold text-sm">
                 <ListCheck className="w-4 h-4" />
                 <span>Requirements</span>
               </div>
               {opportunity.requirements.length > 0 ? (
-                <ul className="space-y-2 text-xs text-slate-300">
+                <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
                   {opportunity.requirements.map((item, idx) => (
                     <li key={idx} className="flex items-start space-x-2">
-                      <span className="text-indigo-400">•</span>
+                      <span className="text-indigo-650 dark:text-indigo-400">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -325,15 +325,15 @@ export function OpportunityDetailView({
 
             {/* Benefits */}
             <div className="glass-card p-6 rounded-3xl space-y-3">
-              <div className="flex items-center space-x-2 text-emerald-400 font-bold text-sm">
+              <div className="flex items-center space-x-2 text-emerald-650 dark:text-emerald-400 font-bold text-sm">
                 <Award className="w-4 h-4" />
                 <span>Financial Benefits</span>
               </div>
               {opportunity.benefits.length > 0 ? (
-                <ul className="space-y-2 text-xs text-slate-300">
+                <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
                   {opportunity.benefits.map((item, idx) => (
                     <li key={idx} className="flex items-start space-x-2">
-                      <span className="text-emerald-400">•</span>
+                      <span className="text-emerald-650 dark:text-emerald-400">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -351,9 +351,9 @@ export function OpportunityDetailView({
         <div className="space-y-6">
           {opportunity.essayQuestions.length === 0 ? (
             <div className="glass-panel p-12 rounded-3xl text-center space-y-3">
-              <FileText className="w-8 h-8 text-slate-500 mx-auto" />
-              <h4 className="text-base font-bold text-white">No Essay Prompts Found</h4>
-              <p className="text-xs text-slate-400">
+              <FileText className="w-8 h-8 text-slate-550 dark:text-slate-500 mx-auto" />
+              <h4 className="text-base font-bold text-slate-900 dark:text-white">No Essay Prompts Found</h4>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 This opportunity does not have saved essay questions. You can add them via the Edit modal.
               </p>
             </div>
@@ -362,20 +362,20 @@ export function OpportunityDetailView({
               <div key={essay.id || idx} className="glass-card p-6 rounded-3xl space-y-4">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <span className="text-xs font-bold text-purple-400">
+                    <span className="text-xs font-bold text-purple-600 dark:text-purple-400">
                       Essay Prompt #{idx + 1}
                     </span>
-                    <h4 className="text-sm font-bold text-white leading-snug">{essay.question}</h4>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">{essay.question}</h4>
                   </div>
                   {essay.wordLimit && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-medium">
+                    <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-550 dark:text-slate-400 border border-slate-200 dark:border-slate-700 text-xs font-medium">
                       Limit: {essay.wordLimit} words
                     </span>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-slate-400">Your Draft Response:</label>
+                  <label className="text-xs font-semibold text-slate-550 dark:text-slate-400">Your Draft Response:</label>
                   <textarea
                     rows={5}
                     value={essayDrafts[essay.id!] || ""}
@@ -383,7 +383,7 @@ export function OpportunityDetailView({
                       setEssayDrafts((prev) => ({ ...prev, [essay.id!]: e.target.value }))
                     }
                     placeholder="Write or refine your essay response draft here..."
-                    className="w-full p-4 rounded-2xl bg-slate-900/90 border border-slate-700/80 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none"
+                    className="w-full p-4 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none"
                   />
                   <div className="flex justify-end">
                     <button
@@ -407,8 +407,8 @@ export function OpportunityDetailView({
       {activeTab === "checklist" && (
         <div className="glass-card p-6 sm:p-8 rounded-3xl space-y-6">
           <div className="space-y-1">
-            <h3 className="text-lg font-bold font-outfit text-white">Application Checklist</h3>
-            <p className="text-xs text-slate-400">
+            <h3 className="text-lg font-bold font-outfit text-slate-900 dark:text-white">Application Checklist</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Track key preparation steps for {opportunity.title}.
             </p>
           </div>
@@ -422,8 +422,8 @@ export function OpportunityDetailView({
                   onClick={() => handleToggleChecklist(item.key)}
                   className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
                     isDone
-                      ? "bg-purple-500/10 border-purple-500/30 text-purple-200"
-                      : "bg-slate-900/60 border-slate-800 text-slate-300 hover:border-slate-700"
+                      ? "bg-purple-500/10 border-purple-500/30 text-purple-800 dark:text-purple-200"
+                      : "bg-white dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-350 dark:hover:border-slate-700"
                   }`}
                 >
                   <div className="flex items-center space-x-3">
@@ -431,12 +431,12 @@ export function OpportunityDetailView({
                       className={`w-5 h-5 rounded-lg border flex items-center justify-center ${
                         isDone
                           ? "bg-purple-600 border-purple-500 text-white"
-                          : "border-slate-600"
+                          : "border-slate-305 dark:border-slate-600"
                       }`}
                     >
                       {isDone && <CheckCircle2 className="w-3.5 h-3.5" />}
                     </div>
-                    <span className={`text-xs font-medium ${isDone ? "line-through opacity-80" : ""}`}>
+                    <span className={`text-xs font-medium ${isDone ? "line-through opacity-85" : ""}`}>
                       {item.label}
                     </span>
                   </div>
@@ -454,12 +454,12 @@ export function OpportunityDetailView({
       {activeTab === "notes" && (
         <div className="glass-card p-6 sm:p-8 rounded-3xl space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold font-outfit text-white">Personal Vault Notes</h3>
+            <h3 className="text-lg font-bold font-outfit text-slate-900 dark:text-white">Personal Vault Notes</h3>
             {notesSuccess && (
-              <span className="text-xs text-emerald-400 font-medium">Notes Saved Successfully!</span>
+              <span className="text-xs text-emerald-655 dark:text-emerald-400 font-medium">Notes Saved Successfully!</span>
             )}
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-505 dark:text-slate-400">
             Keep private application notes, reviewer contacts, or submission instructions.
           </p>
           <textarea
@@ -467,7 +467,7 @@ export function OpportunityDetailView({
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Type your personal notes here..."
-            className="w-full p-4 rounded-2xl bg-slate-900/90 border border-slate-700/80 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none"
+            className="w-full p-4 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none"
           />
           <div className="flex justify-end">
             <button
@@ -487,8 +487,8 @@ export function OpportunityDetailView({
       {activeTab === "timeline" && (
         <div className="glass-card p-6 sm:p-8 rounded-3xl space-y-6">
           <div className="space-y-1">
-            <h3 className="text-lg font-bold font-outfit text-white">Activity Log Timeline</h3>
-            <p className="text-xs text-slate-400">
+            <h3 className="text-lg font-bold font-outfit text-slate-900 dark:text-white">Activity Log Timeline</h3>
+            <p className="text-xs text-slate-505 dark:text-slate-400">
               Chronological audit trail of all historical updates and modifications.
             </p>
           </div>
@@ -498,15 +498,15 @@ export function OpportunityDetailView({
               No activity logs recorded yet for this opportunity.
             </p>
           ) : (
-            <div className="relative border-l border-slate-800 ml-3 space-y-6">
+            <div className="relative border-l border-slate-200 dark:border-slate-800 ml-3 space-y-6">
               {activityLogs.map((log) => (
                 <div key={log.id} className="relative pl-6 space-y-1">
-                  <div className="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-purple-500 border-2 border-slate-950" />
-                  <div className="text-xs font-semibold text-purple-300">
+                  <div className="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-purple-600 border-2 border-slate-50 dark:border-slate-950" />
+                  <div className="text-xs font-semibold text-purple-650 dark:text-purple-300">
                     {log.action.replace(/_/g, " ")}
                   </div>
-                  <p className="text-xs text-slate-300">{log.description}</p>
-                  <div className="text-[10px] text-slate-500">
+                  <p className="text-xs text-slate-700 dark:text-slate-300">{log.description}</p>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-405">
                     {new Date(log.createdAt).toLocaleString()}
                   </div>
                 </div>

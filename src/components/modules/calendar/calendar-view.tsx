@@ -70,10 +70,10 @@ export function CalendarView({ opportunities }: CalendarViewProps) {
   return (
     <div className="space-y-6">
       {/* Calendar Legend */}
-      <div className="glass-panel p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4 text-xs text-slate-300">
+      <div className="glass-panel p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4 text-xs text-slate-700 dark:text-slate-300">
         <div className="flex items-center space-x-2">
-          <CalendarIcon className="w-4 h-4 text-purple-400" />
-          <span className="font-bold text-white font-outfit text-sm">Deadline Calendar</span>
+          <CalendarIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+          <span className="font-bold text-slate-900 dark:text-white font-outfit text-sm">Deadline Calendar</span>
         </div>
 
         <div className="flex flex-wrap items-center gap-4">
@@ -97,29 +97,29 @@ export function CalendarView({ opportunities }: CalendarViewProps) {
       </div>
 
       {/* FullCalendar Widget Container */}
-      <div className="glass-panel p-4 sm:p-6 rounded-3xl overflow-hidden border border-slate-800/80 shadow-2xl">
+      <div className="glass-panel p-4 sm:p-6 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800/80 shadow-2xl">
         <CalendarRenderer events={calendarEvents} onEventClick={handleEventClick} />
       </div>
 
       {/* Quick View Opportunity Modal */}
       {selectedOpportunity && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="glass-panel w-full max-w-lg rounded-3xl p-6 space-y-5 border border-slate-800 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+          <div className="glass-panel w-full max-w-lg rounded-3xl p-6 space-y-5 border border-slate-200 dark:border-slate-800 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
             {/* Header */}
             <div className="flex items-start justify-between">
               <div className="space-y-1">
-                <div className="flex items-center space-x-1.5 text-xs text-purple-400 font-semibold">
+                <div className="flex items-center space-x-1.5 text-xs text-purple-600 dark:text-purple-400 font-semibold">
                   <Building className="w-3.5 h-3.5" />
                   <span>{selectedOpportunity.organization}</span>
                 </div>
-                <h3 className="text-lg font-bold font-outfit text-white">
+                <h3 className="text-lg font-bold font-outfit text-slate-900 dark:text-white">
                   {selectedOpportunity.title}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedOpportunity(null)}
-                className="w-8 h-8 rounded-lg bg-slate-900 hover:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -133,32 +133,32 @@ export function CalendarView({ opportunities }: CalendarViewProps) {
             </div>
 
             {/* Deadline info */}
-            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-xs text-slate-300">
+            <div className="p-3.5 rounded-xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-750 dark:text-slate-300">
               <div className="flex items-center space-x-2">
-                <Clock className="w-4 h-4 text-amber-400" />
+                <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                 <span>
                   Deadline: <strong>{formatDate(selectedOpportunity.deadline)}</strong>
                 </span>
               </div>
-              <span className="font-semibold text-purple-300">
+              <span className="font-semibold text-purple-600 dark:text-purple-300">
                 {getDaysRemaining(selectedOpportunity.deadline).label}
               </span>
             </div>
 
             {selectedOpportunity.shortDescription && (
-              <p className="text-xs text-slate-400 line-clamp-3">
+              <p className="text-xs text-slate-550 dark:text-slate-400 line-clamp-3">
                 {selectedOpportunity.shortDescription}
               </p>
             )}
 
             {/* Actions */}
-            <div className="border-t border-slate-800 pt-4 flex justify-between items-center">
+            <div className="border-t border-slate-200 dark:border-slate-800 pt-4 flex justify-between items-center">
               {selectedOpportunity.officialUrl ? (
                 <a
                   href={selectedOpportunity.officialUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-purple-400 hover:text-purple-300 flex items-center space-x-1"
+                  className="text-xs text-purple-600 hover:text-purple-750 dark:text-purple-400 dark:hover:text-purple-300 flex items-center space-x-1"
                 >
                   <span>Official Link</span>
                   <ExternalLink className="w-3 h-3" />

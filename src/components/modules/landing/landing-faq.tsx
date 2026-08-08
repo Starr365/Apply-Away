@@ -71,7 +71,7 @@ export function LandingFAQ() {
         
         {/* Header Block */}
         <AnimatedContainer delay={100} className="text-center space-y-3 max-w-xl mx-auto">
-          <div className="text-xs font-bold text-purple-400 uppercase tracking-widest select-none">
+          <div className="text-xs font-bold text-purple-650 dark:text-purple-400 uppercase tracking-widest select-none">
             Common Inquiries
           </div>
           <h2 className="text-3xl font-bold font-outfit text-foreground leading-tight">
@@ -95,11 +95,11 @@ export function LandingFAQ() {
                 <button
                   onClick={() => setOpenPrimary(isOpen ? null : idx)}
                   type="button"
-                  className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-slate-900/40 dark:hover:bg-slate-900/20 transition-colors cursor-pointer"
+                  className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-slate-100 dark:hover:bg-slate-900/20 transition-colors cursor-pointer"
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
-                    className={`w-4 h-4 text-purple-400 transition-transform duration-300 ${
+                    className={`w-4 h-4 text-purple-605 dark:text-purple-400 transition-transform duration-300 ${
                       isOpen ? "rotate-180" : ""
                     }`}
                   />
@@ -129,7 +129,7 @@ export function LandingFAQ() {
           >
             <span>{showMore ? "Show fewer questions" : "More questions"}</span>
             <ChevronDown
-              className={`w-3.5 h-3.5 text-purple-400 transition-transform duration-300 ${
+              className={`w-3.5 h-3.5 text-purple-605 dark:text-purple-400 transition-transform duration-300 ${
                 showMore ? "rotate-180" : ""
               }`}
             />
@@ -149,11 +149,11 @@ export function LandingFAQ() {
                   <button
                     onClick={() => setOpenSecondary(isOpen ? null : idx)}
                     type="button"
-                    className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-slate-900/40 dark:hover:bg-slate-900/20 transition-colors cursor-pointer"
+                    className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-slate-100 dark:hover:bg-slate-900/20 transition-colors cursor-pointer"
                   >
                     <span>{faq.q}</span>
                     <ChevronDown
-                      className={`w-4 h-4 text-purple-400 transition-transform duration-300 ${
+                      className={`w-4 h-4 text-purple-605 dark:text-purple-400 transition-transform duration-300 ${
                         isOpen ? "rotate-180" : ""
                       }`}
                     />

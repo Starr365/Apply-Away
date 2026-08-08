@@ -26,7 +26,7 @@ export function LandingComparison() {
     <section id="compare" className="py-24 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto space-y-16">
         <AnimatedContainer delay={100} className="text-center space-y-3 max-w-xl mx-auto">
-          <div className="text-xs font-bold text-purple-400 uppercase tracking-widest">Modern Workflows</div>
+          <div className="text-xs font-bold text-purple-650 dark:text-purple-400 uppercase tracking-widest">Modern Workflows</div>
           <h2 className="text-3xl font-bold font-outfit text-foreground">Manual Spreadsheets vs. Apply Away</h2>
           <p className="text-xs sm:text-sm text-muted-foreground">
             Why spreadsheet tracking fails active students and early-career professionals.
@@ -58,7 +58,7 @@ export function LandingComparison() {
                     </td>
                     <td className="p-4 border-l border-border/60 text-foreground">
                       <span className="inline-flex items-center space-x-1.5">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                         <span className="font-medium text-foreground">{item.with}</span>
                       </span>
                     </td>

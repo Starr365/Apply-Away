@@ -60,14 +60,14 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
       </div>
 
       {/* Desktop Data Table View (Hidden on Mobile) */}
-      <div className="hidden md:block glass-panel rounded-2xl overflow-hidden border border-slate-800/80">
+      <div className="hidden md:block glass-panel rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800/80">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-900/90 border-b border-slate-800/80 text-slate-400 uppercase font-semibold">
+            <thead className="bg-slate-50 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800/80 text-slate-500 dark:text-slate-400 uppercase font-semibold">
               <tr>
                 <th
                   onClick={() => handleSort("title")}
-                  className="py-3.5 px-4 cursor-pointer hover:text-white transition-colors"
+                  className="py-3.5 px-4 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
                   <div className="flex items-center space-x-1">
                     <span>Opportunity & Organization</span>
@@ -76,25 +76,25 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
                 </th>
                 <th
                   onClick={() => handleSort("category")}
-                  className="py-3.5 px-4 cursor-pointer hover:text-white transition-colors"
+                  className="py-3.5 px-4 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
                   Category
                 </th>
                 <th
                   onClick={() => handleSort("status")}
-                  className="py-3.5 px-4 cursor-pointer hover:text-white transition-colors"
+                  className="py-3.5 px-4 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
                   Status
                 </th>
                 <th
                   onClick={() => handleSort("priority")}
-                  className="py-3.5 px-4 cursor-pointer hover:text-white transition-colors"
+                  className="py-3.5 px-4 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
                   Priority
                 </th>
                 <th
                   onClick={() => handleSort("deadline")}
-                  className="py-3.5 px-4 cursor-pointer hover:text-white transition-colors"
+                  className="py-3.5 px-4 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
                   <div className="flex items-center space-x-1">
                     <span>Deadline</span>
@@ -104,15 +104,15 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
                 <th className="py-3.5 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
               {opportunities.map((opp) => {
                 const deadlineInfo = getDaysRemaining(opp.deadline);
                 return (
-                  <tr key={opp.id} className="hover:bg-slate-900/40 transition-colors">
+                  <tr key={opp.id} className="hover:bg-slate-100/50 dark:hover:bg-slate-900/40 transition-colors">
                     {/* Title & Organization */}
                     <td className="py-3.5 px-4">
-                      <div className="font-bold text-white text-sm line-clamp-1">{opp.title}</div>
-                      <div className="text-slate-400 text-xs">{opp.organization}</div>
+                      <div className="font-bold text-slate-900 dark:text-white text-sm line-clamp-1">{opp.title}</div>
+                      <div className="text-slate-550 dark:text-slate-400 text-xs">{opp.organization}</div>
                     </td>
 
                     {/* Category */}
@@ -132,12 +132,12 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
 
                     {/* Deadline */}
                     <td className="py-3.5 px-4">
-                      <div className="font-medium text-slate-200">
+                      <div className="font-medium text-slate-800 dark:text-slate-200">
                         {formatDate(opp.deadline)}
                       </div>
                       <div
                         className={`text-[11px] ${
-                          deadlineInfo.isOverdue ? "text-rose-400 font-semibold" : "text-slate-400"
+                          deadlineInfo.isOverdue ? "text-rose-500 dark:text-rose-400 font-semibold" : "text-slate-500 dark:text-slate-400"
                         }`}
                       >
                         {deadlineInfo.label}
@@ -152,7 +152,7 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
                             href={opp.officialUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                            className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                             title="Official Website"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
@@ -161,7 +161,7 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
                         <button
                           type="button"
                           onClick={() => onEdit(opp)}
-                          className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-purple-400 hover:text-purple-300 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors cursor-pointer"
                           title="Edit"
                         >
                           <Pencil className="w-3.5 h-3.5" />
@@ -169,7 +169,7 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
                         <button
                           type="button"
                           onClick={() => handleDelete(opp.id, opp.title)}
-                          className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-rose-400 hover:text-rose-300 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors cursor-pointer"
                           title="Delete"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
