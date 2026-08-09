@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { AnimatedContainer } from "@/components/ui/animated-container";
 import { COMMON_TIMEZONES } from "@/lib/constants";
 import { Globe, Shield, LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function ProfilePage() {
   const { data: session, update } = useSession();
@@ -118,15 +119,15 @@ export default function ProfilePage() {
                 <div className="text-sm font-semibold text-foreground">Sign Out</div>
                 <div className="text-xs text-muted-foreground">Safely log out of your current session.</div>
               </div>
-              <button
-                type="button"
+              <Button
+                variant="destructive"
+                size="sm"
                 onClick={() => signOut({ callbackUrl: "/auth" })}
-                className="h-10 px-4 rounded-xl bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/20 text-xs font-semibold flex items-center space-x-2 transition-all cursor-pointer"
+                leftIcon={<LogOut className="w-3.5 h-3.5 text-white" />}
                 aria-label="Sign out of your account"
               >
-                <LogOut className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>Sign Out</span>
-              </button>
+                Sign Out
+              </Button>
             </div>
           </div>
         </div>

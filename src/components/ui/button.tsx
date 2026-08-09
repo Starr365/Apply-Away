@@ -46,9 +46,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       // Ghost: Subdued background hover
       ghost:
         "bg-transparent text-foreground hover:bg-secondary hover:text-foreground",
-      // Destructive: High contrast red action
+      // Destructive: Bold, high-contrast red action
       destructive:
-        "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
+        "bg-red-500 hover:bg-red-700 text-white font-extrabold shadow-md shadow-red-600/30 border border-red-500/30",
     };
 
     // Size dimensions

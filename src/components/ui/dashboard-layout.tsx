@@ -19,6 +19,7 @@ import {
   Moon,
 } from "lucide-react";
 import type { Session } from "next-auth";
+import { Button } from "@/components/ui/button";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -240,14 +241,15 @@ export function DashboardLayout({
             </div>
           </Link>
 
-          <button
-            type="button"
+          <Button
+            variant="destructive"
+            size="md"
             onClick={handleSignOut}
-            className="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl bg-destructive/10 border border-destructive/20 hover:bg-destructive/20 text-destructive hover:text-destructive text-xs font-semibold transition-colors cursor-pointer"
+            leftIcon={<LogOut className="w-4 h-4 text-white" />}
+            className="w-full justify-center text-xs font-extrabold"
           >
-            <LogOut className="w-4 h-4 text-destructive" />
-            <span>Sign Out</span>
-          </button>
+            Sign Out
+          </Button>
 
           <div className="flex items-center justify-center space-x-1.5 text-[10px] text-muted-foreground pt-1">
             <Shield className="w-3 h-3 text-primary" />
