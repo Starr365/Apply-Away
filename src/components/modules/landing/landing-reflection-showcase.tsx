@@ -2,7 +2,7 @@
 
 import React from "react";
 import { AnimatedContainer } from "@/components/ui/animated-container";
-import { BookOpen, BarChart3, TrendingUp, Award, CheckCircle2 } from "lucide-react";
+import { BookOpen, BarChart3 } from "lucide-react";
 
 export function LandingReflectionShowcase() {
   return (
@@ -94,7 +94,7 @@ export function LandingReflectionShowcase() {
                     <span>Your August Reflection Journal</span>
                   </div>
                   <p className="text-xs text-foreground italic leading-relaxed">
-                    "You saved more fellowship opportunities this month and submitted more applications than last month."
+                    &quot;You saved more fellowship opportunities this month and submitted more applications than last month.&quot;
                   </p>
                 </div>
 

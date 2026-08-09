@@ -2,7 +2,7 @@
 
 import React from "react";
 import { AnimatedContainer } from "@/components/ui/animated-container";
-import { Calendar as CalendarIcon, Globe, Clock, ArrowRight } from "lucide-react";
+import { Globe, Clock, ArrowRight } from "lucide-react";
 
 export function LandingCalendarShowcase() {
   const demoEvents = [
@@ -22,7 +22,7 @@ export function LandingCalendarShowcase() {
             TIMEZONE-AWARE CALENDAR
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold font-outfit text-foreground tracking-tight">
-            Know what's due before it's due.
+            Know what&apos;s due before it&apos;s due.
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
             Your deadlines, finally in one place — automatically converted to your local notification timezone.

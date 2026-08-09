@@ -2,7 +2,7 @@
 
 import React from "react";
 import { AnimatedContainer } from "@/components/ui/animated-container";
-import { Wand2, ShieldAlert, CheckCircle, ExternalLink, Calendar, MapPin, Award } from "lucide-react";
+import { ShieldAlert, ExternalLink } from "lucide-react";
 
 export function LandingAIExtraction() {
   return (

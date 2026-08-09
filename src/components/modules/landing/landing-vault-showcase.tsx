@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { AnimatedContainer } from "@/components/ui/animated-container";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Layers, Clock, CheckCircle2, Bookmark } from "lucide-react";
+import { ArrowRight, Layers } from "lucide-react";
 
 export function LandingVaultShowcase() {
   const demoVaultRecords = [

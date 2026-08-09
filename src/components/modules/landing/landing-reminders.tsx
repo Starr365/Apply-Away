@@ -2,7 +2,7 @@
 
 import React from "react";
 import { AnimatedContainer } from "@/components/ui/animated-container";
-import { Bell, Mail, Smartphone, ArrowRight, ShieldCheck } from "lucide-react";
+import { Bell, Mail, ArrowRight } from "lucide-react";
 
 export function LandingReminders() {
   return (
@@ -14,7 +14,7 @@ export function LandingReminders() {
             SMART NOTIFICATIONS
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold font-outfit text-foreground tracking-tight">
-            A deadline shouldn't surprise you.
+            A deadline shouldn&apos;t surprise you.
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
             Multi-tier reminders ensure you have enough runway to write your essays and gather recommendations without last-minute panic.
@@ -74,7 +74,7 @@ export function LandingReminders() {
                   12 hours left to apply.
                 </div>
                 <div className="text-[11px] text-muted-foreground">
-                  Commonwealth Master's Scholarship · Oct 17 · 4:00 PM WAT
+                  Commonwealth Master&apos;s Scholarship · Oct 17 · 4:00 PM WAT
                 </div>
                 <div className="pt-2 flex justify-end">
                   <span className="text-[11px] font-bold text-amber-500 hover:underline flex items-center space-x-1 cursor-pointer">

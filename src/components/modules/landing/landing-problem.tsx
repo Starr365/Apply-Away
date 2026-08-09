@@ -2,7 +2,7 @@
 
 import React from "react";
 import { AnimatedContainer } from "@/components/ui/animated-container";
-import { ArrowDown, Layers, ShieldCheck, Check } from "lucide-react";
+import { ArrowDown, Layers, Check } from "lucide-react";
 
 export function LandingProblem() {
   const scatteredSources = [
@@ -25,7 +25,7 @@ export function LandingProblem() {
             THE APPLICATION CHAOS
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold font-outfit text-foreground tracking-tight">
-            You shouldn't need five apps to manage one application.
+            You shouldn&apos;t need five apps to manage one application.
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
             Opportunities arrive from everywhere. When deadlines are scattered across bookmarks, notes, and screenshots, critical details slip through the cracks.

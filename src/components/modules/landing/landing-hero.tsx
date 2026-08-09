@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Shield, Sparkles, CheckCircle2, Clock, Calendar } from "lucide-react";
+import { ArrowRight, Shield, Sparkles, CheckCircle2, Clock } from "lucide-react";
 import { AnimatedContainer } from "@/components/ui/animated-container";
 import { Button } from "@/components/ui/button";
 
@@ -11,8 +11,8 @@ export function LandingHero() {
   return (
     <section id="hero" className="relative pt-28 sm:pt-36 pb-20 overflow-hidden px-4 sm:px-6">
       {/* Background Ambient Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-[350px] h-[350px] bg-sky-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-87.5 h-87.5 bg-sky-500/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-12 sm:space-y-16 relative z-10">
         {/* Top Centered Hero Header */}
@@ -136,7 +136,7 @@ export function LandingHero() {
               </div>
 
               {/* Right Column: Real Stock Photo Integration (iStock Student Laptop Collection) */}
-              <div className="lg:col-span-5 relative rounded-2xl overflow-hidden min-h-[260px] border border-border group">
+              <div className="lg:col-span-5 relative rounded-2xl overflow-hidden min-h-65 border border-border group">
                 <Image
                   src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80"
                   alt="University students working on laptops and organizing application deadlines"

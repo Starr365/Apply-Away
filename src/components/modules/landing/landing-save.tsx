@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useSpring, animated } from "@react-spring/web";
 import { AnimatedContainer } from "@/components/ui/animated-container";
-import { Wand2, CheckCircle2, ArrowRight, Sparkles, Copy } from "lucide-react";
+import { Wand2, CheckCircle2, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function LandingSave() {
@@ -93,7 +93,7 @@ export function LandingSave() {
                           SCHOLARSHIP
                         </span>
                         <h4 className="text-base font-bold font-outfit text-foreground">
-                          Commonwealth Master's Scholarships 2026
+                          Commonwealth Master&apos;s Scholarships 2026
                         </h4>
                       </div>
                       <p className="text-xs text-muted-foreground mt-0.5">

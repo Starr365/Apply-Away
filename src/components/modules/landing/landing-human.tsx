@@ -13,7 +13,7 @@ export function LandingHuman() {
       <div className="max-w-7xl mx-auto space-y-16">
         <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Real Stock Photo: University students working on laptops in a library/study cafe */}
-          <AnimatedContainer delay={100} className="lg:col-span-6 relative rounded-3xl overflow-hidden min-h-[320px] sm:min-h-[400px] border border-border shadow-2xl group">
+          <AnimatedContainer delay={100} className="lg:col-span-6 relative rounded-3xl overflow-hidden min-h-80 sm:min-h-100 border border-border shadow-2xl group">
             <Image
               src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80"
               alt="Diverse university students collaborating with laptops in a university study library"
@@ -36,11 +36,11 @@ export function LandingHuman() {
             </span>
 
             <h2 className="text-3xl sm:text-4xl font-extrabold font-outfit text-foreground tracking-tight leading-snug">
-              For people who are always looking for what's next.
+              For people who are always looking for what&apos;s next.
             </h2>
 
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              Because the next opportunity shouldn't depend on how good you are at keeping 27 browser tabs open.
+              Because the next opportunity shouldn&apos;t depend on how good you are at keeping 27 browser tabs open.
             </p>
 
             <div className="pt-2">

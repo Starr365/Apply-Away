@@ -11,7 +11,7 @@ export function LandingCTA() {
   return (
     <section className="py-24 px-4 sm:px-6 relative overflow-hidden">
       {/* Ambient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-75 bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
       
       <AnimatedContainer
         delay={150}
