@@ -66,7 +66,7 @@ export default function ProfilePage() {
               <p className="text-sm text-muted-foreground">{session?.user?.email}</p>
               <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium mt-2">
                 <Shield className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>Multi-Tenant Encrypted Profile</span>
+                <span>Encrypted Vault Profile</span>
               </div>
             </div>
           </div>

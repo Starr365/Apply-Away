@@ -11,6 +11,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: process.env.NEXTAUTH_SECRET || "http://localhost:3000",
   session: {
     strategy: "jwt",
+    maxAge: 5 * 60, // 5 minutes lifetime
   },
   pages: {
     signIn: "/auth",
@@ -35,36 +36,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const email = String(credentials.email).toLowerCase().trim();
         const password = credentials.password ? String(credentials.password) : null;
 
-        // Find user in Prisma DB
-        let user = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
           where: { email },
         });
 
-        if (user) {
-          if (user.passwordHash && password) {
-            const isValid = await bcrypt.compare(password, user.passwordHash);
-            if (!isValid) return null;
-          } else if (user.passwordPlain) {
-            if (password !== user.passwordPlain) return null;
-          } else if (password) {
-            // User exists but has neither passwordHash nor passwordPlain (e.g. seeded user@applyaway.app)
-            const passwordHash = await bcrypt.hash(password, 12);
-            user = await prisma.user.update({
-              where: { id: user.id },
-              data: { passwordHash },
-            });
-          }
+        // Strict check: User MUST exist in DB (signed up first)
+        if (!user) {
+          return null;
+        }
+
+        if (user.passwordHash && password) {
+          const isValid = await bcrypt.compare(password, user.passwordHash);
+          if (!isValid) return null;
+        } else if (user.passwordPlain) {
+          if (password !== user.passwordPlain) return null;
         } else {
-          // User does not exist, auto-create user with hashed password
-          const passwordHash = password ? await bcrypt.hash(password, 12) : null;
-          user = await prisma.user.create({
-            data: {
-              email,
-              name: credentials.name ? String(credentials.name) : "Apply Away User",
-              passwordHash,
-              timezone: "Africa/Lagos",
-            },
-          });
+          return null;
         }
 
         return {
@@ -81,7 +68,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
-        // Fetch timezone from database if available
+        token.accessTokenExpires = Date.now() + 5 * 60 * 1000;
         const dbUser = await prisma.user.findUnique({
           where: { id: user.id },
           select: { timezone: true },
@@ -91,6 +78,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       if (trigger === "update" && session?.user?.timezone) {
         token.timezone = session.user.timezone;
+      }
+
+      // Transparent refresh: If token is expiring or expired, verify user status against DB
+      if (token.id && Date.now() > (token.accessTokenExpires as number || 0)) {
+        const activeUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { id: true, timezone: true },
+        });
+        if (activeUser) {
+          token.accessTokenExpires = Date.now() + 5 * 60 * 1000;
+          token.timezone = activeUser.timezone || "Africa/Lagos";
+        }
       }
 
       return token;

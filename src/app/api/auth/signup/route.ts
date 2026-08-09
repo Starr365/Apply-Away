@@ -39,8 +39,20 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // Send welcome email via EmailService
+    try {
+      const { EmailService } = await import("@/services/email.service");
+      const emailService = new EmailService();
+      await emailService.sendWelcomeEmail({
+        toEmail: normalizedEmail,
+        userName: user.name || "Apply Away User",
+      });
+    } catch (emailErr) {
+      console.warn("[SignUp] Failed to send welcome email:", emailErr);
+    }
+
     return NextResponse.json(
-      { message: "Account created successfully.", userId: user.id },
+      { message: "Account created successfully! Please sign in below.", userId: user.id },
       { status: 201 }
     );
   } catch (error) {

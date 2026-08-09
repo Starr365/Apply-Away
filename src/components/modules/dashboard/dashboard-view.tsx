@@ -11,6 +11,7 @@ import { AnimatedContainer } from "@/components/ui/animated-container";
 import { MetricCard } from "@/components/ui/metric-card";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { PageHeader } from "@/components/ui/page-header";
+import { Button } from "@/components/ui/button";
 import { Plus, Sparkles, CheckCircle2, Clock, Layers, Wand2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -67,25 +68,23 @@ export function DashboardView({
             <span>Calendar View</span>
           </Link>
 
-          <button
-            type="button"
+          <Button
+            variant="outline"
             onClick={() => setIsAICaptureOpen(true)}
-            className="h-11 px-4 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 text-sm font-semibold inline-flex items-center space-x-2 transition-all cursor-pointer"
+            leftIcon={<Wand2 className="w-4 h-4 text-primary" />}
             aria-label="Open AI quick capture"
           >
-            <Wand2 className="w-4 h-4 text-primary" aria-hidden="true" />
-            <span>AI Quick Capture</span>
-          </button>
+            AI Quick Capture
+          </Button>
 
-          <button
-            type="button"
+          <Button
+            variant="primary"
             onClick={handleCreateNew}
-            className="h-11 px-5 rounded-xl bg-primary hover:bg-primary/90 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 inline-flex items-center space-x-2 transition-all cursor-pointer"
+            leftIcon={<Plus className="w-4 h-4" />}
             aria-label="Add new opportunity"
           >
-            <Plus className="w-4 h-4" aria-hidden="true" />
-            <span>Add Opportunity</span>
-          </button>
+            Add Opportunity
+          </Button>
         </PageHeader>
       </AnimatedContainer>
 

@@ -13,6 +13,7 @@ import {
 } from "@/app/actions/opportunity.actions";
 import { X, Sparkles, Plus, Check } from "lucide-react";
 import { useToast } from "@/components/ui/toast-provider";
+import { Button } from "@/components/ui/button";
 
 interface OpportunityFormModalProps {
   isOpen: boolean;
@@ -291,21 +292,20 @@ function OpportunityFormContent({
 
           {/* Form Actions */}
           <div className="border-t border-border pt-4 flex justify-end space-x-3">
-            <button
-              type="button"
+            <Button
+              variant="secondary"
               onClick={onClose}
-              className="h-11 px-5 rounded-xl bg-secondary border border-border hover:bg-secondary/80 text-xs font-semibold text-foreground transition-colors cursor-pointer"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
-              disabled={isSubmitting}
-              className="h-11 px-6 rounded-xl bg-primary hover:bg-primary/90 text-xs font-bold text-primary-foreground shadow-lg shadow-primary/20 flex items-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
+              variant="primary"
+              isLoading={isSubmitting}
+              leftIcon={isEditing ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
             >
-              {isEditing ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-              <span>{isSubmitting ? "Saving..." : isEditing ? "Save Changes" : "Create Record"}</span>
-            </button>
+              {isEditing ? "Save Changes" : "Create Record"}
+            </Button>
           </div>
         </form>
       </div>

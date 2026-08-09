@@ -30,23 +30,23 @@ export function LandingHeader() {
         {/* Logo Branding */}
         <Link href="/" className="flex items-center space-x-3 select-none">
           {/* Mobile Icon */}
-          <div className="relative w-8 h-8 md:hidden">
+          <div className="relative w-10 h-10 shrink-0 md:hidden">
             <Image
               src="/vault-logo.png"
               alt="Apply Away Icon"
               fill
-              sizes="32px"
+              sizes="40px"
               priority
               className="object-contain"
             />
           </div>
           {/* Desktop Full Logo */}
-          <div className="relative h-8 w-36 hidden md:block">
+          <div className="relative h-10 w-44 shrink-0 hidden md:block">
             <Image
               src="/valut-text-logo.png"
               alt="Apply Away Logo"
               fill
-              sizes="144px"
+              sizes="176px"
               priority
               className="object-contain dark:invert transition-all"
             />

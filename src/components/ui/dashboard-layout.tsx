@@ -82,12 +82,12 @@ export function DashboardLayout({
       <header className="md:hidden border-b border-border bg-background/90 backdrop-blur-md sticky top-0 z-40 px-4 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Link href="/dashboard" className="flex items-center space-x-2">
-            <div className="relative w-8 h-8">
+            <div className="relative w-10 h-10 shrink-0">
               <Image
                 src="/vault-logo.png"
                 alt="Apply Away Logo"
                 fill
-                sizes="32px"
+                sizes="40px"
                 priority
                 className="object-contain"
               />
@@ -135,7 +135,7 @@ export function DashboardLayout({
       {/* SIDEBAR NAVIGATION (Desktop persistent + Mobile drawer) */}
       {/* ========================================================================= */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-card border-r border-border flex flex-col justify-between transition-transform duration-300 ease-in-out md:translate-x-0 ${mobileOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-background md:bg-card border-r border-border flex flex-col justify-between transition-transform duration-300 ease-in-out md:translate-x-0 ${mobileOpen ? "translate-x-0" : "-translate-x-full"
           }`}
       >
         {/* Top Header & Branding */}
@@ -146,12 +146,12 @@ export function DashboardLayout({
               onClick={() => setMobileOpen(false)}
               className="flex items-center space-x-2.5"
             >
-              <div className="relative w-8 h-8">
+              <div className="relative w-10 h-10 shrink-0">
                 <Image
                   src="/vault-logo.png"
                   alt="Apply Away Logo"
                   fill
-                  sizes="32px"
+                  sizes="40px"
                   priority
                   className="object-contain"
                 />
@@ -185,7 +185,7 @@ export function DashboardLayout({
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
                   className={`flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${isActive
-                    ? "bg-primary/10 border border-primary/30 text-primary font-semibold"
+                    ? "bg-primary/20 border border-primary text-primary font-bold shadow-xs"
                     : "text-muted-foreground hover:text-foreground hover:bg-secondary/50 border border-transparent"
                     }`}
                 >
@@ -201,12 +201,12 @@ export function DashboardLayout({
         </div>
 
         {/* Bottom Section: User Profile, Theme Toggle & Log Out */}
-        <div className="p-4 border-t border-border space-y-3 bg-card">
-          {/* Theme Toggle Button in Sidebar */}
+        <div className="p-4 border-t border-border space-y-3 bg-background md:bg-card">
+          {/* Theme Toggle Button in Sidebar (Mobile Only) */}
           <button
             onClick={toggleTheme}
             type="button"
-            className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl border border-border bg-secondary/50 text-xs font-semibold text-muted-foreground hover:bg-secondary transition-all cursor-pointer"
+            className="md:hidden w-full flex items-center justify-between px-3 py-2.5 rounded-xl border border-border bg-secondary/50 text-xs font-semibold text-muted-foreground hover:bg-secondary transition-all cursor-pointer"
           >
             <span className="flex items-center space-x-2">
               {theme === "dark" ? (
@@ -221,10 +221,11 @@ export function DashboardLayout({
             </span>
           </button>
 
+          {/* Account Profile Session (Mobile Only) */}
           <Link
             href="/profile"
             onClick={() => setMobileOpen(false)}
-            className="flex items-center space-x-3 p-2.5 rounded-xl bg-secondary/50 border border-border hover:border-primary/50 transition-all group"
+            className="md:hidden flex items-center space-x-3 p-2.5 rounded-xl bg-secondary/50 border border-border hover:border-primary/50 transition-all group"
           >
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-xs font-bold text-primary-foreground uppercase">
               {session?.user?.name ? session.user.name.charAt(0) : "U"}
@@ -250,7 +251,7 @@ export function DashboardLayout({
 
           <div className="flex items-center justify-center space-x-1.5 text-[10px] text-muted-foreground pt-1">
             <Shield className="w-3 h-3 text-primary" />
-            <span>Multi-Tenant Vault</span>
+            <span>Opportunity Vault</span>
           </div>
         </div>
       </aside>
@@ -306,7 +307,7 @@ export function DashboardLayout({
         <footer className="border-t border-border py-6 bg-secondary/30" role="contentinfo">
           <div className="max-w-7xl mx-auto px-4 text-center text-xs text-muted-foreground">
             Apply Away &copy; {new Date().getFullYear()}
-            {footerLabel ? ` – ${footerLabel}` : " – Multi-Tenant Opportunity Vault"}
+            {footerLabel ? ` – ${footerLabel}` : " – Opportunity Vault"}
           </div>
         </footer>
       </div>

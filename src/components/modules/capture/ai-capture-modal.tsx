@@ -189,14 +189,15 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
         {!extractedData && !isQuotaError && (
           <div className="space-y-5">
             {/* Input Method Tabs */}
-            <div className="flex rounded-xl bg-secondary p-1 border border-border">
+            <div className="flex rounded-xl bg-secondary/80 p-1.5 border border-border">
               <button
                 type="button"
                 onClick={() => setActiveTab("url")}
-                className={`flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "url"
-                    ? "bg-primary text-primary-foreground shadow-md"
+                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                  activeTab === "url"
+                    ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.01]"
                     : "text-muted-foreground hover:text-foreground"
-                  }`}
+                }`}
               >
                 <LinkIcon className="w-3.5 h-3.5" />
                 <span>Website URL</span>
@@ -204,10 +205,11 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
               <button
                 type="button"
                 onClick={() => setActiveTab("text")}
-                className={`flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "text"
-                    ? "bg-primary text-primary-foreground shadow-md"
+                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                  activeTab === "text"
+                    ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.01]"
                     : "text-muted-foreground hover:text-foreground"
-                  }`}
+                }`}
               >
                 <FileText className="w-3.5 h-3.5" />
                 <span>Copied Message / Text</span>
