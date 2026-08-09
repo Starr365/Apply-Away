@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { extractOpportunityAction } from "@/app/actions/ai-extraction.actions";
 import { createOpportunityAction } from "@/app/actions/opportunity.actions";
 import { ExtractedOpportunityData } from "@/services/interfaces/ai-extraction.service";
 import {
-  Sparkles,
+  Wand2,
   X,
   Link as LinkIcon,
   FileText,
@@ -28,6 +28,17 @@ interface AICaptureModalProps {
 }
 
 export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }: AICaptureModalProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   const [activeTab, setActiveTab] = useState<"url" | "text">("url");
   const [urlInput, setUrlInput] = useState("");
   const [textInput, setTextInput] = useState("");
@@ -134,7 +145,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
         <div className="flex items-center justify-between border-b border-border pb-4">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-md shadow-primary/20">
-              <Sparkles className="w-5 h-5" />
+              <Wand2 className="w-5 h-5" />
             </div>
             <div>
               <h2 className="text-xl font-bold font-outfit text-foreground">AI Opportunity Capture</h2>
@@ -257,7 +268,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4" />
+                    <Wand2 className="w-4 h-4" />
                     <span>Extract with AI</span>
                   </>
                 )}

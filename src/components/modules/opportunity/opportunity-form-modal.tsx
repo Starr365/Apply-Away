@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Opportunity,
   OpportunityCategory,
@@ -11,7 +11,7 @@ import {
   createOpportunityAction,
   updateOpportunityAction,
 } from "@/app/actions/opportunity.actions";
-import { X, Sparkles, Plus, Check } from "lucide-react";
+import { X, FolderPlus, FileEdit, Plus, Check } from "lucide-react";
 import { useToast } from "@/components/ui/toast-provider";
 import { Button } from "@/components/ui/button";
 
@@ -26,6 +26,17 @@ export function OpportunityFormModal({
   onClose,
   opportunityToEdit,
 }: OpportunityFormModalProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -120,7 +131,7 @@ function OpportunityFormContent({
         <div className="flex items-center justify-between border-b border-border pb-4">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-              <Sparkles className="w-5 h-5" />
+              {isEditing ? <FileEdit className="w-5 h-5" /> : <FolderPlus className="w-5 h-5" />}
             </div>
             <div>
               <h2 className="text-xl font-bold font-outfit text-foreground">
