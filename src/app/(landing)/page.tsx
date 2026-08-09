@@ -3,11 +3,9 @@
 import React from "react";
 import { LandingHeader } from "@/components/modules/landing/landing-header";
 import { LandingHero } from "@/components/modules/landing/landing-hero";
-import { LandingTrust } from "@/components/modules/landing/landing-trust";
-import { LandingHowItWorks } from "@/components/modules/landing/landing-how-it-works";
-import { LandingFeatures } from "@/components/modules/landing/landing-features";
-import { LandingShowcase } from "@/components/modules/landing/landing-showcase";
-import { LandingComparison } from "@/components/modules/landing/landing-comparison";
+import { LandingProblem } from "@/components/modules/landing/landing-problem";
+import { LandingFeaturesGrid } from "@/components/modules/landing/landing-features-grid";
+import { LandingHuman } from "@/components/modules/landing/landing-human";
 import { LandingFAQ } from "@/components/modules/landing/landing-faq";
 import { LandingCTA } from "@/components/modules/landing/landing-cta";
 import { LandingFooter } from "@/components/modules/landing/landing-footer";
@@ -15,15 +13,28 @@ import { LandingFooter } from "@/components/modules/landing/landing-footer";
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+      {/* Navigation Header */}
       <LandingHeader />
+
+      {/* Hero Section */}
       <LandingHero />
-      <LandingTrust />
-      <LandingHowItWorks />
-      <LandingFeatures />
-      <LandingShowcase />
-      <LandingComparison />
+
+      {/* Application Chaos Problem */}
+      <LandingProblem />
+
+      {/* Streamlined Opportunity Vault Ecosystem Grid */}
+      <LandingFeaturesGrid />
+
+      {/* Human Photography Section */}
+      <LandingHuman />
+
+      {/* FAQ Accordion */}
       <LandingFAQ />
+
+      {/* Final High-Impact CTA */}
       <LandingCTA />
+
+      {/* Rich Footer */}
       <LandingFooter />
     </div>
   );

@@ -17,7 +17,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("apply-away-theme") as Theme | null;
-    const detectedTheme = savedTheme === "light" ? "light" : "dark";
+    const detectedTheme: Theme = savedTheme === "light" ? "light" : "dark";
 
     // Set dark mode class on root immediately to prevent flash
     const root = document.documentElement;
@@ -29,8 +29,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       root.classList.remove("dark");
     }
 
-    setTheme(detectedTheme);
-    setMounted(true);
+    // Schedule state update in next frame to prevent synchronous setState linter warning
+    requestAnimationFrame(() => {
+      if (detectedTheme !== "dark") {
+        setTheme("light");
+      }
+      setMounted(true);
+    });
   }, []);
 
   useEffect(() => {

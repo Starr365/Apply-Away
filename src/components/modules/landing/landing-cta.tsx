@@ -5,41 +5,41 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { AnimatedContainer } from "@/components/ui/animated-container";
+import { Button } from "@/components/ui/button";
 
 export function LandingCTA() {
   return (
     <section className="py-24 px-4 sm:px-6 relative overflow-hidden">
-      {/* Colorful Glow Backgrounds */}
-      <div className="absolute inset-0 bg-linear-to-r from-purple-900/10 via-indigo-900/10 to-transparent pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-75 bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+      {/* Ambient Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-75 bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
       
       <AnimatedContainer
         delay={150}
-        className="max-w-4xl mx-auto bg-card/45 backdrop-blur-md border border-border/80 p-8 sm:p-16 rounded-3xl text-center space-y-6 relative z-10 shadow-2xl"
+        className="max-w-4xl mx-auto bg-card border border-border p-8 sm:p-14 rounded-3xl text-center space-y-6 relative z-10 shadow-2xl"
       >
-        <div className="inline-flex w-12 h-12 rounded-2xl bg-slate-900/40 border border-border/40 items-center justify-center shadow-lg select-none relative">
-          <Image src="/vault-logo.png" alt="Icon" fill sizes="24px" className="object-contain p-2.5" />
+        <div className="inline-flex w-12 h-12 rounded-2xl bg-card border border-border items-center justify-center shadow-lg select-none relative mx-auto">
+          <Image src="/vault-logo.png" alt="Apply Away Vault" fill sizes="32px" className="object-contain p-2" />
         </div>
         
-        <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-foreground">
-          Your next opportunity could change your life. <br />
-          <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-indigo-400 font-bold">
-            Start organizing today.
-          </span>
+        <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-foreground max-w-2xl mx-auto leading-tight">
+          Your next opportunity is probably already somewhere in your phone. <br />
+          <span className="text-primary font-bold">Don&apos;t lose it. Save it to Apply Away.</span>
         </h2>
-        
-        <p className="text-xs sm:text-sm text-muted-foreground max-w-lg mx-auto leading-relaxed">
-          Create your account today and experience structured AI opportunity organization. Free to get started, no credit card required.
-        </p>
 
-        <div className="pt-4 flex justify-center">
-          <Link
-            href="/auth"
-            className="h-12 px-8 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-sm font-bold text-white shadow-lg shadow-purple-600/30 flex items-center space-x-2 transition-all group"
-          >
-            <span>Get Started Free</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        <div className="pt-2 flex flex-col items-center justify-center space-y-3">
+          <Link href="/auth">
+            <Button
+              variant="primary"
+              size="lg"
+              rightIcon={<ArrowRight className="w-4 h-4" />}
+              className="font-extrabold text-slate-950 px-8"
+            >
+              Build My Opportunity Vault
+            </Button>
           </Link>
+          <span className="text-xs text-muted-foreground">
+            Free to start · Built for opportunity hunters
+          </span>
         </div>
       </AnimatedContainer>
     </section>
