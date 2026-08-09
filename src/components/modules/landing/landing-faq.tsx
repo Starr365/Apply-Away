@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { AnimatedContainer } from "@/components/ui/animated-container";
+import { Button } from "@/components/ui/button";
 
 // Primary FAQ List (8 Questions)
 const PRIMARY_FAQS = [
@@ -78,7 +79,7 @@ export function LandingFAQ() {
             Everything you need to know about Apply Away
           </h2>
           <p className="text-xs sm:text-sm text-muted-foreground select-none">
-            Have a question? We're here to help.
+            Have a question? We&apos;re here to help.
           </p>
         </AnimatedContainer>
 
@@ -90,23 +91,23 @@ export function LandingFAQ() {
               <AnimatedContainer
                 key={`primary-${idx}`}
                 delay={150 + idx * 50}
-                className="bg-card/45 backdrop-blur-md rounded-2xl overflow-hidden border border-border/80 transition-all duration-300"
+                className="bg-card rounded-2xl overflow-hidden border border-border transition-all duration-300 shadow-sm"
               >
                 <button
                   onClick={() => setOpenPrimary(isOpen ? null : idx)}
                   type="button"
-                  className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-slate-100 dark:hover:bg-slate-900/20 transition-colors cursor-pointer"
+                  className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-accent transition-colors cursor-pointer"
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
-                    className={`w-4 h-4 text-purple-605 dark:text-purple-400 transition-transform duration-300 ${
+                    className={`w-4 h-4 text-primary transition-transform duration-300 ${
                       isOpen ? "rotate-180" : ""
                     }`}
                   />
                 </button>
                 <div
                   className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                    isOpen ? "max-h-60 border-t border-border/50" : "max-h-0"
+                    isOpen ? "max-h-60 border-t border-border/60" : "max-h-0"
                   }`}
                 >
                   {isOpen && (
@@ -122,18 +123,20 @@ export function LandingFAQ() {
 
         {/* Show More Trigger Button */}
         <div className="text-center pt-2">
-          <button
+          <Button
+            variant="secondary"
+            size="md"
             onClick={() => setShowMore((prev) => !prev)}
-            type="button"
-            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl border border-border hover:border-purple-500/30 bg-card/40 hover:bg-card text-xs font-bold text-foreground transition-all cursor-pointer"
+            rightIcon={
+              <ChevronDown
+                className={`w-3.5 h-3.5 text-primary transition-transform duration-300 ${
+                  showMore ? "rotate-180" : ""
+                }`}
+              />
+            }
           >
-            <span>{showMore ? "Show fewer questions" : "More questions"}</span>
-            <ChevronDown
-              className={`w-3.5 h-3.5 text-purple-605 dark:text-purple-400 transition-transform duration-300 ${
-                showMore ? "rotate-180" : ""
-              }`}
-            />
-          </button>
+            {showMore ? "Show fewer questions" : "More questions"}
+          </Button>
         </div>
 
         {/* Secondary FAQs (Hidden by default) */}
@@ -144,23 +147,23 @@ export function LandingFAQ() {
               return (
                 <div
                   key={`secondary-${idx}`}
-                  className="bg-card/45 backdrop-blur-md rounded-2xl overflow-hidden border border-border/80 transition-all duration-300"
+                  className="bg-card rounded-2xl overflow-hidden border border-border transition-all duration-300 shadow-sm"
                 >
                   <button
                     onClick={() => setOpenSecondary(isOpen ? null : idx)}
                     type="button"
-                    className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-slate-100 dark:hover:bg-slate-900/20 transition-colors cursor-pointer"
+                    className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-accent transition-colors cursor-pointer"
                   >
                     <span>{faq.q}</span>
                     <ChevronDown
-                      className={`w-4 h-4 text-purple-605 dark:text-purple-400 transition-transform duration-300 ${
+                      className={`w-4 h-4 text-primary transition-transform duration-300 ${
                         isOpen ? "rotate-180" : ""
                       }`}
                     />
                   </button>
                   <div
                     className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                      isOpen ? "max-h-60 border-t border-border/50" : "max-h-0"
+                      isOpen ? "max-h-60 border-t border-border/60" : "max-h-0"
                     }`}
                   >
                     {isOpen && (

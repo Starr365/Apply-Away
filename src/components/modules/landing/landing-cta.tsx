@@ -23,7 +23,7 @@ export function LandingCTA() {
         
         <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-foreground max-w-2xl mx-auto leading-tight">
           Your next opportunity is probably already somewhere in your phone. <br />
-          <span className="text-primary font-bold">Don't lose it. Save it to Apply Away.</span>
+          <span className="text-primary font-bold">Don&apos;t lose it. Save it to Apply Away.</span>
         </h2>
 
         <div className="pt-2 flex flex-col items-center justify-center space-y-3">

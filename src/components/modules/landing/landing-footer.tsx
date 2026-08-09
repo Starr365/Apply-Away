@@ -7,7 +7,7 @@ import { Shield } from "lucide-react";
 export function LandingFooter() {
   return (
     <footer className="border-t border-border bg-card/60 py-12 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8 text-left">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-left">
         {/* Brand column */}
         <div className="space-y-3 md:col-span-2">
           <Link href="/" className="flex items-center space-x-3 select-none">
@@ -44,15 +44,6 @@ export function LandingFooter() {
             <li><Link href="/dashboard" className="hover:text-primary transition-colors">Opportunity Vault</Link></li>
             <li><Link href="/calendar" className="hover:text-primary transition-colors">Calendar</Link></li>
             <li><Link href="/reflection" className="hover:text-primary transition-colors">Reflection</Link></li>
-          </ul>
-        </div>
-
-        {/* Legal Column */}
-        <div className="space-y-3">
-          <div className="text-xs font-bold text-foreground uppercase tracking-wider select-none">Legal</div>
-          <ul className="space-y-2 text-xs text-muted-foreground">
-            <li><a href="#privacy" className="hover:text-primary transition-colors">Privacy Policy</a></li>
-            <li><a href="#terms" className="hover:text-primary transition-colors">Terms of Service</a></li>
           </ul>
         </div>
       </div>

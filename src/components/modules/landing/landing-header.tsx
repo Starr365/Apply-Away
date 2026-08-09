@@ -124,11 +124,10 @@ export function LandingHeader() {
             )}
           </button>
 
-          <Link
-            href="/auth"
-            className="text-xs font-semibold text-foreground hover:text-primary transition-colors px-2 py-1"
-          >
-            Log in
+          <Link href="/auth">
+            <Button variant="secondary" size="sm" className="bg-secondary/80 hover:bg-secondary border border-border text-foreground font-bold">
+              Log in
+            </Button>
           </Link>
 
           <Link href="/auth">

@@ -4,7 +4,6 @@ import React from "react";
 import { LandingHeader } from "@/components/modules/landing/landing-header";
 import { LandingHero } from "@/components/modules/landing/landing-hero";
 import { LandingProblem } from "@/components/modules/landing/landing-problem";
-import { LandingSave } from "@/components/modules/landing/landing-save";
 import { LandingFeaturesGrid } from "@/components/modules/landing/landing-features-grid";
 import { LandingHuman } from "@/components/modules/landing/landing-human";
 import { LandingFAQ } from "@/components/modules/landing/landing-faq";
@@ -22,9 +21,6 @@ export default function LandingPage() {
 
       {/* Application Chaos Problem */}
       <LandingProblem />
-
-      {/* Save Opportunities & AI Demo */}
-      <LandingSave />
 
       {/* Streamlined Opportunity Vault Ecosystem Grid */}
       <LandingFeaturesGrid />
