@@ -1,5 +1,26 @@
 @import "tailwindcss";
 
+@theme inline {
+  --color-primary: #38bdf8;
+  --color-primary-foreground: #0f172a;
+
+  --color-background: #0f172a;
+  --color-foreground: #e2e8f0;
+
+  --color-card: #1e293b;
+  --color-card-foreground: #e2e8f0;
+
+  --color-secondary: #334155;
+  --color-secondary-foreground: #e2e8f0;
+
+  --color-muted: #334155;
+  --color-muted-foreground: #94a3b8;
+
+  --color-border: #334155;
+  --color-input: #334155;
+  --color-ring: #38bdf8;
+}
+
 @layer base {
   :root {
     /* Brand: Prussian Blue (#0F172A) */
