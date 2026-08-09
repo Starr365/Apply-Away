@@ -45,7 +45,7 @@ export function LandingHeader() {
           : "bg-transparent border-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 sm:h-24 flex items-center justify-between">
         {/* Logo Branding */}
         <a
           href="#hero"
@@ -54,25 +54,25 @@ export function LandingHeader() {
           aria-label="Apply Away Home"
         >
           {/* Mobile Icon */}
-          <div className="relative w-9 h-9 shrink-0 md:hidden">
+          <div className="relative w-12 h-12 shrink-0 md:hidden">
             <Image
               src="/vault-logo.png"
               alt="Apply Away Icon"
               fill
-              sizes="36px"
+              sizes="48px"
               priority
-              className="object-contain"
+              className="object-contain filter drop-shadow-sm"
             />
           </div>
           {/* Desktop Full Logo */}
-          <div className="relative h-10 w-44 shrink-0 hidden md:block">
+          <div className="relative h-14 w-60 sm:h-16 sm:w-64 shrink-0 hidden md:block">
             <Image
               src="/valut-text-logo.png"
               alt="Apply Away Logo"
               fill
-              sizes="176px"
+              sizes="256px"
               priority
-              className="object-contain dark:invert transition-all"
+              className="object-contain dark:brightness-0 dark:invert transition-all filter drop-shadow-sm"
             />
           </div>
         </a>
