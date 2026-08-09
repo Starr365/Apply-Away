@@ -27,12 +27,12 @@ function EmptyStateInner({
       role="status"
       aria-label={title}
     >
-      <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+      <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
         <Icon className="w-8 h-8" aria-hidden="true" />
       </div>
       <div className="space-y-1.5 max-w-sm">
-        <h3 className="text-lg font-bold font-outfit text-white">{title}</h3>
-        <p className="text-sm text-slate-400">{description}</p>
+        <h3 className="text-lg font-bold font-outfit text-foreground">{title}</h3>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
       {action && <div className="pt-2">{action}</div>}
     </div>

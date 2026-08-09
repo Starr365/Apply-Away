@@ -106,7 +106,7 @@ export function DashboardLayout({
             {theme === "dark" ? (
               <Sun className="w-4 h-4 text-amber-500" />
             ) : (
-              <Moon className="w-4 h-4 text-indigo-600" />
+              <Moon className="w-4 h-4 text-primary" />
             )}
           </button>
 
@@ -212,7 +212,7 @@ export function DashboardLayout({
               {theme === "dark" ? (
                 <Sun className="w-4 h-4 text-amber-500" />
               ) : (
-                <Moon className="w-4 h-4 text-indigo-650" />
+                <Moon className="w-4 h-4 text-primary" />
               )}
               <span>{theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}</span>
             </span>
@@ -226,7 +226,7 @@ export function DashboardLayout({
             onClick={() => setMobileOpen(false)}
             className="flex items-center space-x-3 p-2.5 rounded-xl bg-secondary/50 border border-border hover:border-primary/50 transition-all group"
           >
-            <div className="w-8 h-8 rounded-lg bg-linear-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-xs font-bold text-white uppercase">
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-xs font-bold text-primary-foreground uppercase">
               {session?.user?.name ? session.user.name.charAt(0) : "U"}
             </div>
             <div className="flex-1 min-w-0">
@@ -242,14 +242,14 @@ export function DashboardLayout({
           <button
             type="button"
             onClick={handleSignOut}
-            className="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-600 dark:text-rose-450 hover:text-rose-700 dark:hover:text-rose-350 text-xs font-semibold transition-colors cursor-pointer"
+            className="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl bg-destructive/10 border border-destructive/20 hover:bg-destructive/20 text-destructive hover:text-destructive text-xs font-semibold transition-colors cursor-pointer"
           >
-            <LogOut className="w-4 h-4 text-rose-600 dark:text-rose-450" />
+            <LogOut className="w-4 h-4 text-destructive" />
             <span>Sign Out</span>
           </button>
 
           <div className="flex items-center justify-center space-x-1.5 text-[10px] text-muted-foreground pt-1">
-            <Shield className="w-3 h-3 text-emerald-600 dark:text-emerald-450" />
+            <Shield className="w-3 h-3 text-primary" />
             <span>Multi-Tenant Vault</span>
           </div>
         </div>
@@ -280,7 +280,7 @@ export function DashboardLayout({
               {theme === "dark" ? (
                 <Sun className="w-4 h-4 text-amber-500" />
               ) : (
-                <Moon className="w-4 h-4 text-indigo-600" />
+                <Moon className="w-4 h-4 text-primary" />
               )}
             </button>
 
@@ -288,7 +288,7 @@ export function DashboardLayout({
               href="/profile"
               className="flex items-center space-x-2.5 p-1 px-2.5 rounded-xl border border-border hover:border-primary transition-all bg-secondary"
             >
-              <div className="w-6 h-6 rounded-lg bg-linear-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-[10px] font-bold text-white uppercase">
+              <div className="w-6 h-6 rounded-lg bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground uppercase">
                 {session?.user?.name ? session.user.name.charAt(0) : "U"}
               </div>
               <span className="text-[11px] font-semibold text-foreground">

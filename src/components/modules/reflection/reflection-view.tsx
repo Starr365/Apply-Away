@@ -101,7 +101,7 @@ export function ReflectionView({
             label="Total Vault"
             value={stats.totalApplications}
             icon={BookOpen}
-            iconColorClass="text-purple-650 dark:text-purple-400"
+            iconColorClass="text-primary"
           />
         </AnimatedContainer>
         <AnimatedContainer delay={60}>
@@ -139,10 +139,10 @@ export function ReflectionView({
         <AnimatedContainer delay={200}>
           <div className="glass-panel p-6 rounded-3xl space-y-4">
             <div className="flex items-center space-x-2">
-              <BarChart3 className="w-5 h-5 text-purple-600 dark:text-purple-400" aria-hidden="true" />
-              <h3 className="text-base font-bold font-outfit text-slate-900 dark:text-white">Application Velocity</h3>
+              <BarChart3 className="w-5 h-5 text-primary" aria-hidden="true" />
+              <h3 className="text-base font-bold font-outfit text-foreground">Application Velocity</h3>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-muted-foreground">
               Monthly trend of new opportunities created vs. submitted applications over time.
             </p>
             <ErrorBoundary fallbackTitle="Chart Error" fallbackDescription="Unable to render the velocity chart.">
@@ -155,10 +155,10 @@ export function ReflectionView({
         <AnimatedContainer delay={260}>
           <div className="glass-panel p-6 rounded-3xl space-y-4">
             <div className="flex items-center space-x-2">
-              <PieIcon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
-              <h3 className="text-base font-bold font-outfit text-slate-900 dark:text-white">Category Distribution</h3>
+              <PieIcon className="w-5 h-5 text-primary" aria-hidden="true" />
+              <h3 className="text-base font-bold font-outfit text-foreground">Category Distribution</h3>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-muted-foreground">
               Breakdown of your opportunities across fellowships, grants, scholarships, and jobs.
             </p>
             <ErrorBoundary fallbackTitle="Chart Error" fallbackDescription="Unable to render the category chart.">
@@ -171,10 +171,10 @@ export function ReflectionView({
         <AnimatedContainer delay={320} className="lg:col-span-2">
           <div className="glass-panel p-6 rounded-3xl space-y-4">
             <div className="flex items-center space-x-2">
-              <TrendingUp className="w-5 h-5 text-amber-605 dark:text-amber-400" aria-hidden="true" />
-              <h3 className="text-base font-bold font-outfit text-slate-900 dark:text-white">Status Conversion Funnel</h3>
+              <TrendingUp className="w-5 h-5 text-amber-500" aria-hidden="true" />
+              <h3 className="text-base font-bold font-outfit text-foreground">Status Conversion Funnel</h3>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-muted-foreground">
               Application progression across pipeline stages (Not Started → In Progress → Submitted → Interview → Accepted).
             </p>
             <ErrorBoundary fallbackTitle="Chart Error" fallbackDescription="Unable to render the status chart.">
@@ -191,25 +191,25 @@ export function ReflectionView({
           <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-5">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div className="space-y-1">
-                <div className="flex items-center space-x-2 text-purple-650 dark:text-purple-400 font-bold text-sm">
+                <div className="flex items-center space-x-2 text-primary font-bold text-sm">
                   <BookOpen className="w-4 h-4" aria-hidden="true" />
                   <span>Monthly Reflection Journal</span>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
+                <p className="text-xs text-muted-foreground">
                   Log monthly insights, key learnings, networking notes, and goals for future applications.
                 </p>
               </div>
 
               {/* Month Selector */}
               <div className="flex items-center space-x-2">
-                <Calendar className="w-4 h-4 text-slate-500 dark:text-slate-400" aria-hidden="true" />
+                <Calendar className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
                 <label htmlFor="month-selector" className="sr-only">Select month</label>
                 <input
                   id="month-selector"
                   type="month"
                   value={selectedMonth}
                   onChange={(e) => handleMonthSelect(e.target.value)}
-                  className="h-10 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 cursor-pointer"
+                  className="h-10 px-3 rounded-xl bg-card border border-input text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
                 />
               </div>
             </div>
@@ -223,7 +223,7 @@ export function ReflectionView({
               value={reflectionText}
               onChange={(e) => setReflectionText(e.target.value)}
               placeholder={`Reflect on your career & application progress for ${selectedMonth}... (e.g. What went well this month? What can be improved?)`}
-              className="w-full p-4 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none"
+              className="w-full p-4 rounded-2xl bg-card border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 resize-none"
             />
 
             <div className="flex justify-end">
@@ -231,7 +231,7 @@ export function ReflectionView({
                 type="button"
                 onClick={handleSaveReflection}
                 disabled={isSaving}
-                className="h-11 px-6 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-purple-600/20 flex items-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
+                className="h-11 px-6 rounded-xl bg-primary hover:bg-primary/90 text-xs font-bold text-primary-foreground shadow-lg shadow-primary/20 flex items-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
                 aria-label={isSaving ? "Saving reflection" : `Save reflection for ${selectedMonth}`}
               >
                 <Save className="w-4 h-4" aria-hidden="true" />
@@ -244,22 +244,22 @@ export function ReflectionView({
         {/* Recent Activity Feed (1 Col) */}
         <AnimatedContainer delay={440}>
           <div className="glass-panel p-6 rounded-3xl space-y-4">
-            <div className="flex items-center space-x-2 text-slate-900 dark:text-white font-bold text-sm">
-              <History className="w-4 h-4 text-purple-650 dark:text-purple-400" aria-hidden="true" />
+            <div className="flex items-center space-x-2 text-foreground font-bold text-sm">
+              <History className="w-4 h-4 text-primary" aria-hidden="true" />
               <span>Recent Audit Feed</span>
             </div>
 
             {recentActivities.length === 0 ? (
-              <p className="text-xs text-slate-500 py-4" role="status">No recent activity recorded.</p>
+              <p className="text-xs text-muted-foreground py-4" role="status">No recent activity recorded.</p>
             ) : (
               <div className="space-y-3 max-h-80 overflow-y-auto pr-1" role="feed" aria-label="Recent activity log">
                 {recentActivities.map((act) => (
-                  <div key={act.id} className="p-3 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs space-y-1">
-                    <div className="font-semibold text-purple-600 dark:text-purple-300">
+                  <div key={act.id} className="p-3 rounded-xl bg-card border border-border text-xs space-y-1">
+                    <div className="font-semibold text-primary">
                       {act.action.replace(/_/g, " ")}
                     </div>
-                    <div className="text-slate-550 dark:text-slate-400 line-clamp-2">{act.description}</div>
-                    <div className="text-[10px] text-slate-500 dark:text-slate-405">
+                    <div className="text-muted-foreground line-clamp-2">{act.description}</div>
+                    <div className="text-[10px] text-muted-foreground">
                       {new Date(act.createdAt).toLocaleDateString()}
                     </div>
                   </div>
