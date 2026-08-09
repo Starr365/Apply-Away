@@ -197,8 +197,8 @@ function AuthContent() {
                       setSuccessMsg("");
                     }}
                     className={`relative z-10 px-5 py-2 rounded-xl text-xs font-extrabold transition-all duration-300 cursor-pointer ${mode === "signin"
-                        ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.02]"
-                        : "text-muted-foreground hover:text-foreground"
+                      ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.02]"
+                      : "text-muted-foreground hover:text-foreground"
                       }`}
                   >
                     Sign In
@@ -211,8 +211,8 @@ function AuthContent() {
                       setSuccessMsg("");
                     }}
                     className={`relative z-10 px-5 py-2 rounded-xl text-xs font-extrabold transition-all duration-300 cursor-pointer ${mode === "signup"
-                        ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.02]"
-                        : "text-muted-foreground hover:text-foreground"
+                      ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.02]"
+                      : "text-muted-foreground hover:text-foreground"
                       }`}
                   >
                     Sign Up
@@ -340,7 +340,7 @@ function AuthContent() {
                   rightIcon={<ArrowRight className="w-4 h-4" />}
                   className="w-full justify-center"
                 >
-                  {mode === "signin" ? "Enter Vault" : "Create Account & Get Welcome Email"}
+                  {mode === "signin" ? "Enter Vault" : "Create Account"}
                 </Button>
               </form>
             </animated.div>
