@@ -17,15 +17,20 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("apply-away-theme") as Theme | null;
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const detectedTheme = savedTheme || (prefersDark ? "dark" : "light");
+    const detectedTheme = savedTheme === "light" ? "light" : "dark";
 
-    setTimeout(() => {
-      if (detectedTheme !== "dark") {
-        setTheme(detectedTheme);
-      }
-      setMounted(true);
-    }, 0);
+    // Set dark mode class on root immediately to prevent flash
+    const root = document.documentElement;
+    if (detectedTheme === "dark") {
+      root.classList.add("dark");
+      root.classList.remove("light");
+    } else {
+      root.classList.add("light");
+      root.classList.remove("dark");
+    }
+
+    setTheme(detectedTheme);
+    setMounted(true);
   }, []);
 
   useEffect(() => {

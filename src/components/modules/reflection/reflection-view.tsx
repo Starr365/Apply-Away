@@ -30,7 +30,10 @@ import {
   PieChart as PieIcon,
   BarChart3,
   Calendar,
+  Edit3,
+  X,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface MonthlyReflectionItem {
   id: string;
@@ -63,24 +66,43 @@ export function ReflectionView({
   const toast = useToast();
   const currentMonthYear = new Date().toISOString().slice(0, 7); // e.g. "2026-08"
   const [selectedMonth, setSelectedMonth] = useState(currentMonthYear);
+  const [savedMap, setSavedMap] = useState<Record<string, MonthlyReflectionItem>>(reflectionsMap);
   const [reflectionText, setReflectionText] = useState(
     reflectionsMap[currentMonthYear]?.content || ""
   );
-
+  const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  const currentSavedContent = savedMap[selectedMonth]?.content || "";
 
   const handleMonthSelect = (month: string) => {
     setSelectedMonth(month);
-    setReflectionText(reflectionsMap[month]?.content || "");
+    const content = savedMap[month]?.content || "";
+    setReflectionText(content);
+    setIsEditing(false);
   };
 
   const handleSaveReflection = async () => {
+    if (!reflectionText.trim()) {
+      toast.error("Reflection text cannot be empty.");
+      return;
+    }
+
     setIsSaving(true);
 
     try {
       const res = await saveMonthlyReflectionAction(selectedMonth, reflectionText);
       if (res.success) {
         toast.success(`Reflection notes saved for ${selectedMonth}!`);
+        setSavedMap((prev) => ({
+          ...prev,
+          [selectedMonth]: {
+            id: res.data?.id || Date.now().toString(),
+            monthYear: selectedMonth,
+            content: reflectionText,
+          },
+        }));
+        setIsEditing(false);
       } else {
         toast.error(res.error || "Failed to save reflection.");
       }
@@ -214,30 +236,66 @@ export function ReflectionView({
               </div>
             </div>
 
-            <label htmlFor="reflection-textarea" className="sr-only">
-              Reflection notes for {selectedMonth}
-            </label>
-            <textarea
-              id="reflection-textarea"
-              rows={7}
-              value={reflectionText}
-              onChange={(e) => setReflectionText(e.target.value)}
-              placeholder={`Reflect on your career & application progress for ${selectedMonth}... (e.g. What went well this month? What can be improved?)`}
-              className="w-full p-4 rounded-2xl bg-card border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 resize-none"
-            />
+            {/* If reflection exists and user is NOT editing -> Show formatted text with Edit Reflection button */}
+            {currentSavedContent && !isEditing ? (
+              <div className="space-y-4">
+                <div className="p-5 rounded-2xl bg-card/80 border border-border text-xs sm:text-sm text-foreground leading-relaxed whitespace-pre-wrap font-sans shadow-inner">
+                  {currentSavedContent}
+                </div>
 
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={handleSaveReflection}
-                disabled={isSaving}
-                className="h-11 px-6 rounded-xl bg-primary hover:bg-primary/90 text-xs font-bold text-primary-foreground shadow-lg shadow-primary/20 flex items-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
-                aria-label={isSaving ? "Saving reflection" : `Save reflection for ${selectedMonth}`}
-              >
-                <Save className="w-4 h-4" aria-hidden="true" />
-                <span>{isSaving ? "Saving..." : `Save Reflection (${selectedMonth})`}</span>
-              </button>
-            </div>
+                <div className="flex justify-end">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setReflectionText(currentSavedContent);
+                      setIsEditing(true);
+                    }}
+                    leftIcon={<Edit3 className="w-4 h-4" />}
+                  >
+                    Edit Reflection
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              /* Edit Mode / Textarea input view */
+              <div className="space-y-4">
+                <label htmlFor="reflection-textarea" className="sr-only">
+                  Reflection notes for {selectedMonth}
+                </label>
+                <textarea
+                  id="reflection-textarea"
+                  rows={7}
+                  value={reflectionText}
+                  onChange={(e) => setReflectionText(e.target.value)}
+                  placeholder={`Reflect on your career & application progress for ${selectedMonth}... (e.g. What went well this month? What can be improved?)`}
+                  className="w-full p-4 rounded-2xl bg-card border border-input text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 resize-none"
+                />
+
+                <div className="flex justify-end space-x-3">
+                  {currentSavedContent && (
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        setReflectionText(currentSavedContent);
+                        setIsEditing(false);
+                      }}
+                      leftIcon={<X className="w-4 h-4" />}
+                    >
+                      Cancel
+                    </Button>
+                  )}
+
+                  <Button
+                    variant="primary"
+                    onClick={handleSaveReflection}
+                    isLoading={isSaving}
+                    leftIcon={<Save className="w-4 h-4" />}
+                  >
+                    Save Reflection ({selectedMonth})
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </AnimatedContainer>
 
