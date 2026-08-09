@@ -1,39 +1,75 @@
 @import "tailwindcss";
 
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+}
+
 @layer base {
   :root {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
+    /* Brand: Prussian Blue (#0F172A) */
+    --background: 222.2 47.4% 11.2%;
+    /* Brand: Alice Blue (#E2E8F0) */
+    --foreground: 214.3 31.8% 91.4%;
 
-    --card: 224 71% 7%;
-    --card-foreground: 213 31% 91%;
+    /* Brand: Deep Space Blue (#1E293B) */
+    --card: 215.4 25% 17.3%;
+    --card-foreground: 214.3 31.8% 91.4%;
 
-    --popover: 224 71% 7%;
-    --popover-foreground: 213 31% 91%;
+    --popover: 215.4 25% 17.3%;
+    --popover-foreground: 214.3 31.8% 91.4%;
 
-    --primary: 263 70% 50%;
-    --primary-foreground: 210 40% 98%;
+    /* Brand: Deep Sky Blue (#38BDF8) */
+    --primary: 198.6 92.8% 59.6%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 40% 98%;
+    /* Brand: Charcoal Blue (#334155) */
+    --secondary: 215.4 16.3% 27.1%;
+    --secondary-foreground: 214.3 31.8% 91.4%;
 
-    --muted: 215 27.9% 16.9%;
+    --muted: 215.4 16.3% 27.1%;
     --muted-foreground: 215.4 16.3% 65%;
 
-    --accent: 216 34% 17%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 215.4 25% 17.3%;
+    --accent-foreground: 214.3 31.8% 91.4%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 263 70% 50%;
+    /* Brand: Charcoal Blue (#334155) */
+    --border: 215.4 16.3% 27.1%;
+    --input: 215.4 16.3% 27.1%;
+    --ring: 198.6 92.8% 59.6%;
 
     --radius: 0.75rem;
 
     /* Category Badge Color Palette */
-    --badge-fellowship: 263 70% 50%;
+    --badge-fellowship: 198.6 92.8% 59.6%;
     --badge-scholarship: 142 71% 45%;
     --badge-internship: 199 89% 48%;
     --badge-job: 38 92% 50%;
@@ -43,30 +79,33 @@
   }
 
   .light {
-    --background: 210 40% 96%; /* Alice Blue light blue-grey */
-    --foreground: 224 71% 4%; /* Deep Prussian Blue */
+    /* Brand: Alice Blue (#E2E8F0) tinted background */
+    --background: 210 40% 96%;
+    /* Brand: Prussian Blue (#0F172A) */
+    --foreground: 222.2 47.4% 11.2%;
 
     --card: 210 40% 98%;
-    --card-foreground: 224 71% 4%;
+    --card-foreground: 222.2 47.4% 11.2%;
 
     --popover: 210 40% 98%;
-    --popover-foreground: 224 71% 4%;
+    --popover-foreground: 222.2 47.4% 11.2%;
 
-    --primary: 263 70% 50%;
-    --primary-foreground: 210 40% 98%;
+    /* Brand: Deep Sky Blue (#38BDF8) */
+    --primary: 198.6 92.8% 59.6%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
     --secondary: 210 40% 90%;
-    --secondary-foreground: 224 71% 4%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 90%;
     --muted-foreground: 215.4 16.3% 45%;
 
     --accent: 210 40% 90%;
-    --accent-foreground: 224 71% 4%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
     --border: 210 40% 86%;
     --input: 210 40% 86%;
-    --ring: 263 70% 50%;
+    --ring: 198.6 92.8% 59.6%;
   }
 }
 
@@ -87,7 +126,7 @@
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid #a855f7 !important;
+    outline: 2px solid hsl(var(--primary)) !important;
     outline-offset: 2px !important;
   }
 }
@@ -136,14 +175,14 @@
 
 .glass-card:hover {
   background: rgba(30, 41, 59, 0.6);
-  border-color: rgba(139, 92, 246, 0.4);
-  box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.15);
 }
 
 .light .glass-card:hover {
   background: rgba(255, 255, 255, 0.85);
-  border-color: rgba(139, 92, 246, 0.4);
-  box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.15);
 }
 
 
@@ -156,11 +195,11 @@
   --fc-button-bg-color: #0f172a;
   --fc-button-border-color: #334155;
   --fc-button-hover-bg-color: #1e293b;
-  --fc-button-hover-border-color: #8b5cf6;
-  --fc-button-active-bg-color: #8b5cf6;
-  --fc-button-active-border-color: #a855f7;
+  --fc-button-hover-border-color: #38bdf8;
+  --fc-button-active-bg-color: #38bdf8;
+  --fc-button-active-border-color: #7dd3fc;
   font-family: var(--font-sans), sans-serif;
-  color: #f8fafc;
+  color: #e2e8f0;
 }
 
 .fullcalendar-dark-theme .fc-theme-standard td,
@@ -175,19 +214,19 @@
   text-transform: uppercase;
   font-size: 0.7rem;
   font-weight: 700;
-  color: #94a3b8;
+  color: hsl(var(--muted-foreground));
   letter-spacing: 0.05em;
 }
 
 .fullcalendar-dark-theme .fc-daygrid-day-number {
-  color: #cbd5e1;
+  color: hsl(var(--foreground));
   font-size: 0.8rem;
   font-weight: 600;
   padding: 6px 8px;
 }
 
 .fullcalendar-dark-theme .fc-day-today {
-  background: rgba(139, 92, 246, 0.1) !important;
+  background: rgba(56, 189, 248, 0.1) !important;
 }
 
 .fullcalendar-dark-theme .fc-event {
@@ -208,7 +247,7 @@
   font-family: var(--font-outfit), sans-serif;
   font-size: 1.2rem;
   font-weight: 800;
-  color: #ffffff;
+  color: hsl(var(--foreground));
 }
 
 .fullcalendar-dark-theme .fc-button {

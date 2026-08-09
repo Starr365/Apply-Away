@@ -12,7 +12,7 @@ interface CategoryPieChartProps {
 }
 
 const COLORS = [
-  "#8b5cf6", // Purple (Fellowship)
+  "#38bdf8", // Deep Sky Blue (Fellowship / Primary)
   "#10b981", // Emerald (Scholarship)
   "#0284c7", // Sky (Internship)
   "#f59e0b", // Amber (Job)

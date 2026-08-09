@@ -121,7 +121,7 @@ export function OpportunityDetailView({
       <div className="flex items-center justify-between">
         <Link
           href="/dashboard"
-          className="inline-flex items-center space-x-2 text-sm text-slate-550 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+          className="inline-flex items-center space-x-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Vault Dashboard</span>
@@ -130,7 +130,7 @@ export function OpportunityDetailView({
         <button
           type="button"
           onClick={() => setIsEditModalOpen(true)}
-          className="h-10 px-4 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30 text-xs font-semibold flex items-center space-x-2 transition-all cursor-pointer"
+          className="h-10 px-4 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 text-xs font-semibold flex items-center space-x-2 transition-all cursor-pointer"
         >
           <Pencil className="w-3.5 h-3.5" />
           <span>Edit Opportunity</span>
@@ -141,11 +141,11 @@ export function OpportunityDetailView({
       <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
           <div className="space-y-2">
-            <div className="flex items-center space-x-2 text-xs text-purple-650 dark:text-purple-400 font-semibold">
+            <div className="flex items-center space-x-2 text-xs text-primary font-semibold">
               <Building className="w-4 h-4" />
               <span>{opportunity.organization}</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold font-outfit text-slate-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-extrabold font-outfit text-foreground">
               {opportunity.title}
             </h1>
           </div>
@@ -158,16 +158,16 @@ export function OpportunityDetailView({
         </div>
 
         {/* Links & Deadline Bar */}
-        <div className="border-t border-slate-200 dark:border-slate-800/80 pt-4 flex flex-wrap items-center justify-between gap-4 text-xs">
-          <div className="flex items-center space-x-2 text-slate-700 dark:text-slate-300">
+        <div className="border-t border-border pt-4 flex flex-wrap items-center justify-between gap-4 text-xs">
+          <div className="flex items-center space-x-2 text-foreground">
             <Clock
               className={`w-4 h-4 ${
-                deadlineInfo.isOverdue ? "text-rose-600 dark:text-rose-400" : "text-amber-500 dark:text-amber-400"
+                deadlineInfo.isOverdue ? "text-destructive" : "text-amber-500"
               }`}
             />
             <span className="font-medium">
               Deadline:{" "}
-              <strong className={deadlineInfo.isOverdue ? "text-rose-600 dark:text-rose-400" : "text-slate-900 dark:text-white"}>
+              <strong className={deadlineInfo.isOverdue ? "text-destructive" : "text-foreground"}>
                 {formatDate(opportunity.deadline)} ({deadlineInfo.label})
               </strong>
             </span>
@@ -179,9 +179,9 @@ export function OpportunityDetailView({
                 href={opportunity.officialUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 text-purple-650 dark:text-purple-300 hover:text-purple-750 dark:hover:text-white transition-colors"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-secondary border border-border text-primary hover:text-primary/80 transition-colors"
               >
-                <Globe className="w-3.5 h-3.5 text-purple-650 dark:text-purple-400" />
+                <Globe className="w-3.5 h-3.5 text-primary" />
                 <span>Official Site</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
@@ -192,7 +192,7 @@ export function OpportunityDetailView({
                 href={opportunity.applicationUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold shadow-md shadow-purple-600/20 transition-all"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md shadow-primary/20 transition-all"
               >
                 <span>Apply Portal</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -203,14 +203,14 @@ export function OpportunityDetailView({
       </div>
 
       {/* Detail Tab Navigation Bar */}
-      <div className="flex rounded-2xl bg-slate-100 dark:bg-slate-900/90 p-1.5 border border-slate-200 dark:border-slate-800 overflow-x-auto">
+      <div className="flex rounded-2xl bg-secondary p-1.5 border border-border overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab("overview")}
           className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "overview"
-              ? "bg-purple-600 text-white shadow-md"
-              : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+              ? "bg-primary text-primary-foreground shadow-md"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <BookOpen className="w-3.5 h-3.5" />
@@ -222,8 +222,8 @@ export function OpportunityDetailView({
           onClick={() => setActiveTab("essays")}
           className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "essays"
-              ? "bg-purple-600 text-white shadow-md"
-              : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+              ? "bg-primary text-primary-foreground shadow-md"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <FileText className="w-3.5 h-3.5" />
@@ -235,8 +235,8 @@ export function OpportunityDetailView({
           onClick={() => setActiveTab("checklist")}
           className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "checklist"
-              ? "bg-purple-600 text-white shadow-md"
-              : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+              ? "bg-primary text-primary-foreground shadow-md"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <ListCheck className="w-3.5 h-3.5" />
@@ -248,8 +248,8 @@ export function OpportunityDetailView({
           onClick={() => setActiveTab("notes")}
           className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "notes"
-              ? "bg-purple-600 text-white shadow-md"
-              : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+              ? "bg-primary text-primary-foreground shadow-md"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <Pencil className="w-3.5 h-3.5" />
@@ -261,8 +261,8 @@ export function OpportunityDetailView({
           onClick={() => setActiveTab("timeline")}
           className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             activeTab === "timeline"
-              ? "bg-purple-600 text-white shadow-md"
-              : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+              ? "bg-primary text-primary-foreground shadow-md"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <History className="w-3.5 h-3.5" />
@@ -275,8 +275,8 @@ export function OpportunityDetailView({
         <div className="space-y-6">
           {/* Description Card */}
           <div className="glass-card p-6 rounded-3xl space-y-3">
-            <h3 className="text-base font-bold font-outfit text-slate-900 dark:text-white">Program Overview</h3>
-            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+            <h3 className="text-base font-bold font-outfit text-foreground">Program Overview</h3>
+            <p className="text-sm text-foreground leading-relaxed">
               {opportunity.fullDescription || opportunity.shortDescription || "No description provided."}
             </p>
           </div>
@@ -285,61 +285,61 @@ export function OpportunityDetailView({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Eligibility */}
             <div className="glass-card p-6 rounded-3xl space-y-3">
-              <div className="flex items-center space-x-2 text-purple-600 dark:text-purple-400 font-bold text-sm">
+              <div className="flex items-center space-x-2 text-primary font-bold text-sm">
                 <BookOpen className="w-4 h-4" />
                 <span>Eligibility</span>
               </div>
               {opportunity.eligibility.length > 0 ? (
-                <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                <ul className="space-y-2 text-xs text-foreground">
                   {opportunity.eligibility.map((item, idx) => (
                     <li key={idx} className="flex items-start space-x-2">
-                      <span className="text-purple-600 dark:text-purple-400">•</span>
+                      <span className="text-primary">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-xs text-slate-500">No specific eligibility listed.</p>
+                <p className="text-xs text-muted-foreground">No specific eligibility listed.</p>
               )}
             </div>
 
             {/* Requirements */}
             <div className="glass-card p-6 rounded-3xl space-y-3">
-              <div className="flex items-center space-x-2 text-indigo-650 dark:text-indigo-400 font-bold text-sm">
+              <div className="flex items-center space-x-2 text-primary font-bold text-sm">
                 <ListCheck className="w-4 h-4" />
                 <span>Requirements</span>
               </div>
               {opportunity.requirements.length > 0 ? (
-                <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                <ul className="space-y-2 text-xs text-foreground">
                   {opportunity.requirements.map((item, idx) => (
                     <li key={idx} className="flex items-start space-x-2">
-                      <span className="text-indigo-650 dark:text-indigo-400">•</span>
+                      <span className="text-primary">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-xs text-slate-500">No specific requirements listed.</p>
+                <p className="text-xs text-muted-foreground">No specific requirements listed.</p>
               )}
             </div>
 
             {/* Benefits */}
             <div className="glass-card p-6 rounded-3xl space-y-3">
-              <div className="flex items-center space-x-2 text-emerald-650 dark:text-emerald-400 font-bold text-sm">
+              <div className="flex items-center space-x-2 text-primary font-bold text-sm">
                 <Award className="w-4 h-4" />
                 <span>Financial Benefits</span>
               </div>
               {opportunity.benefits.length > 0 ? (
-                <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                <ul className="space-y-2 text-xs text-foreground">
                   {opportunity.benefits.map((item, idx) => (
                     <li key={idx} className="flex items-start space-x-2">
-                      <span className="text-emerald-650 dark:text-emerald-400">•</span>
+                      <span className="text-primary">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-xs text-slate-500">No benefits listed.</p>
+                <p className="text-xs text-muted-foreground">No benefits listed.</p>
               )}
             </div>
           </div>
@@ -351,9 +351,9 @@ export function OpportunityDetailView({
         <div className="space-y-6">
           {opportunity.essayQuestions.length === 0 ? (
             <div className="glass-panel p-12 rounded-3xl text-center space-y-3">
-              <FileText className="w-8 h-8 text-slate-550 dark:text-slate-500 mx-auto" />
-              <h4 className="text-base font-bold text-slate-900 dark:text-white">No Essay Prompts Found</h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <FileText className="w-8 h-8 text-muted-foreground mx-auto" />
+              <h4 className="text-base font-bold text-foreground">No Essay Prompts Found</h4>
+              <p className="text-xs text-muted-foreground">
                 This opportunity does not have saved essay questions. You can add them via the Edit modal.
               </p>
             </div>
@@ -362,20 +362,20 @@ export function OpportunityDetailView({
               <div key={essay.id || idx} className="glass-card p-6 rounded-3xl space-y-4">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <span className="text-xs font-bold text-purple-600 dark:text-purple-400">
+                    <span className="text-xs font-bold text-primary">
                       Essay Prompt #{idx + 1}
                     </span>
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">{essay.question}</h4>
+                    <h4 className="text-sm font-bold text-foreground leading-snug">{essay.question}</h4>
                   </div>
                   {essay.wordLimit && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-550 dark:text-slate-400 border border-slate-200 dark:border-slate-700 text-xs font-medium">
+                    <span className="px-2.5 py-0.5 rounded-full bg-secondary text-muted-foreground border border-border text-xs font-medium">
                       Limit: {essay.wordLimit} words
                     </span>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-slate-550 dark:text-slate-400">Your Draft Response:</label>
+                  <label className="text-xs font-semibold text-muted-foreground">Your Draft Response:</label>
                   <textarea
                     rows={5}
                     value={essayDrafts[essay.id!] || ""}
@@ -383,14 +383,14 @@ export function OpportunityDetailView({
                       setEssayDrafts((prev) => ({ ...prev, [essay.id!]: e.target.value }))
                     }
                     placeholder="Write or refine your essay response draft here..."
-                    className="w-full p-4 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none"
+                    className="w-full p-4 rounded-2xl bg-card border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 resize-none"
                   />
                   <div className="flex justify-end">
                     <button
                       type="button"
                       onClick={() => handleSaveEssayDraft(essay.id!)}
                       disabled={savingEssayId === essay.id}
-                      className="h-9 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-semibold text-white flex items-center space-x-1.5 transition-all cursor-pointer disabled:opacity-50"
+                      className="h-9 px-4 rounded-xl bg-primary hover:bg-primary/90 text-xs font-semibold text-primary-foreground flex items-center space-x-1.5 transition-all cursor-pointer disabled:opacity-50"
                     >
                       <Save className="w-3.5 h-3.5" />
                       <span>{savingEssayId === essay.id ? "Saving..." : "Save Draft"}</span>
@@ -407,8 +407,8 @@ export function OpportunityDetailView({
       {activeTab === "checklist" && (
         <div className="glass-card p-6 sm:p-8 rounded-3xl space-y-6">
           <div className="space-y-1">
-            <h3 className="text-lg font-bold font-outfit text-slate-900 dark:text-white">Application Checklist</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <h3 className="text-lg font-bold font-outfit text-foreground">Application Checklist</h3>
+            <p className="text-xs text-muted-foreground">
               Track key preparation steps for {opportunity.title}.
             </p>
           </div>
@@ -422,16 +422,16 @@ export function OpportunityDetailView({
                   onClick={() => handleToggleChecklist(item.key)}
                   className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
                     isDone
-                      ? "bg-purple-500/10 border-purple-500/30 text-purple-800 dark:text-purple-200"
-                      : "bg-white dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-350 dark:hover:border-slate-700"
+                      ? "bg-primary/10 border-primary/30 text-primary"
+                      : "bg-card border-border text-foreground hover:border-primary/50"
                   }`}
                 >
                   <div className="flex items-center space-x-3">
                     <div
                       className={`w-5 h-5 rounded-lg border flex items-center justify-center ${
                         isDone
-                          ? "bg-purple-600 border-purple-500 text-white"
-                          : "border-slate-305 dark:border-slate-600"
+                          ? "bg-primary border-primary text-primary-foreground"
+                          : "border-border"
                       }`}
                     >
                       {isDone && <CheckCircle2 className="w-3.5 h-3.5" />}
@@ -454,12 +454,12 @@ export function OpportunityDetailView({
       {activeTab === "notes" && (
         <div className="glass-card p-6 sm:p-8 rounded-3xl space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold font-outfit text-slate-900 dark:text-white">Personal Vault Notes</h3>
+            <h3 className="text-lg font-bold font-outfit text-foreground">Personal Vault Notes</h3>
             {notesSuccess && (
-              <span className="text-xs text-emerald-655 dark:text-emerald-400 font-medium">Notes Saved Successfully!</span>
+              <span className="text-xs text-primary font-medium">Notes Saved Successfully!</span>
             )}
           </div>
-          <p className="text-xs text-slate-505 dark:text-slate-400">
+          <p className="text-xs text-muted-foreground">
             Keep private application notes, reviewer contacts, or submission instructions.
           </p>
           <textarea
@@ -467,14 +467,14 @@ export function OpportunityDetailView({
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Type your personal notes here..."
-            className="w-full p-4 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none"
+            className="w-full p-4 rounded-2xl bg-card border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 resize-none"
           />
           <div className="flex justify-end">
             <button
               type="button"
               onClick={handleSaveNotes}
               disabled={isSavingNotes}
-              className="h-11 px-6 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white flex items-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
+              className="h-11 px-6 rounded-xl bg-primary hover:bg-primary/90 text-xs font-bold text-primary-foreground flex items-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
               <span>{isSavingNotes ? "Saving Notes..." : "Save Personal Notes"}</span>
@@ -487,25 +487,25 @@ export function OpportunityDetailView({
       {activeTab === "timeline" && (
         <div className="glass-card p-6 sm:p-8 rounded-3xl space-y-6">
           <div className="space-y-1">
-            <h3 className="text-lg font-bold font-outfit text-slate-900 dark:text-white">Activity Log Timeline</h3>
-            <p className="text-xs text-slate-505 dark:text-slate-400">
+            <h3 className="text-lg font-bold font-outfit text-foreground">Activity Log Timeline</h3>
+            <p className="text-xs text-muted-foreground">
               Chronological audit trail of all historical updates and modifications.
             </p>
           </div>
 
           {activityLogs.length === 0 ? (
-            <p className="text-xs text-slate-500 text-center py-6">
+            <p className="text-xs text-muted-foreground text-center py-6">
               No activity logs recorded yet for this opportunity.
             </p>
           ) : (
-            <div className="relative border-l border-slate-200 dark:border-slate-800 ml-3 space-y-6">
+            <div className="relative border-l border-border ml-3 space-y-6">
               {activityLogs.map((log) => (
                 <div key={log.id} className="relative pl-6 space-y-1">
-                  <div className="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-purple-600 border-2 border-slate-50 dark:border-slate-950" />
-                  <div className="text-xs font-semibold text-purple-650 dark:text-purple-300">
+                  <div className="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-primary border-2 border-background" />
+                  <div className="text-xs font-semibold text-primary">
                     {log.action.replace(/_/g, " ")}
                   </div>
-                  <p className="text-xs text-slate-700 dark:text-slate-300">{log.description}</p>
+                  <p className="text-xs text-foreground">{log.description}</p>
                   <div className="text-[10px] text-slate-500 dark:text-slate-405">
                     {new Date(log.createdAt).toLocaleString()}
                   </div>

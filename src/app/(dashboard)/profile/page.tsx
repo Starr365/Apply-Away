@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { AnimatedContainer } from "@/components/ui/animated-container";
 import { COMMON_TIMEZONES } from "@/lib/constants";
 import { Globe, Shield, LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function ProfilePage() {
   const { data: session, update } = useSession();
@@ -33,7 +34,7 @@ export default function ProfilePage() {
 
   if (!session?.user) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-slate-400" role="status">
+      <div className="min-h-screen flex items-center justify-center text-muted-foreground" role="status">
         Loading user profile...
       </div>
     );
@@ -54,36 +55,36 @@ export default function ProfilePage() {
         <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
           <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
             <div
-              className="w-20 h-20 rounded-2xl bg-linear-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-2xl font-bold text-white shadow-xl shadow-purple-500/20"
+              className="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center text-2xl font-bold text-primary-foreground shadow-xl shadow-primary/20"
               aria-hidden="true"
             >
               {session?.user?.name?.charAt(0).toUpperCase() || "U"}
             </div>
             <div className="text-center sm:text-left space-y-1">
-              <h2 className="text-2xl font-bold font-outfit text-slate-900 dark:text-white">
+              <h2 className="text-2xl font-bold font-outfit text-foreground">
                 {session?.user?.name || "User Profile"}
               </h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400">{session?.user?.email}</p>
-              <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-xs font-medium mt-2">
+              <p className="text-sm text-muted-foreground">{session?.user?.email}</p>
+              <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium mt-2">
                 <Shield className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>Multi-Tenant Encrypted Profile</span>
+                <span>Encrypted Vault Profile</span>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-slate-200 dark:border-slate-800/80 pt-6 space-y-6">
+          <div className="border-t border-border pt-6 space-y-6">
             {/* Timezone Settings Section */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="timezone-select"
-                  className="text-sm font-semibold text-slate-800 dark:text-white flex items-center space-x-2"
+                  className="text-sm font-semibold text-foreground flex items-center space-x-2"
                 >
-                  <Globe className="w-4 h-4 text-purple-600 dark:text-purple-400" aria-hidden="true" />
+                  <Globe className="w-4 h-4 text-primary" aria-hidden="true" />
                   <span>Notification Timezone</span>
                 </label>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-muted-foreground">
                 Deadline reminders will be dispatched according to your selected local timezone.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -91,7 +92,7 @@ export default function ProfilePage() {
                   id="timezone-select"
                   value={selectedTimezone}
                   onChange={(e) => setSelectedTimezone(e.target.value)}
-                  className="flex-1 h-11 px-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                  className="flex-1 h-11 px-4 rounded-xl bg-card border border-input text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
                   aria-label="Select your timezone"
                 >
                   {COMMON_TIMEZONES.map((tz) => (
@@ -104,7 +105,7 @@ export default function ProfilePage() {
                   type="button"
                   onClick={handleTimezoneSave}
                   disabled={isSaving}
-                  className="h-11 px-6 rounded-xl bg-purple-600 hover:bg-purple-500 text-sm font-semibold text-white transition-all cursor-pointer disabled:opacity-50"
+                  className="h-11 px-6 rounded-xl bg-primary hover:bg-primary/90 text-sm font-semibold text-primary-foreground transition-all cursor-pointer disabled:opacity-50"
                   aria-label={isSaving ? "Saving timezone" : "Save timezone"}
                 >
                   {isSaving ? "Saving..." : "Save Timezone"}
@@ -113,20 +114,20 @@ export default function ProfilePage() {
             </div>
 
             {/* Account Management */}
-            <div className="border-t border-slate-200 dark:border-slate-800/80 pt-6 flex justify-between items-center">
+            <div className="border-t border-border pt-6 flex justify-between items-center">
               <div className="space-y-0.5">
-                <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">Sign Out</div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">Safely log out of your current session.</div>
+                <div className="text-sm font-semibold text-foreground">Sign Out</div>
+                <div className="text-xs text-muted-foreground">Safely log out of your current session.</div>
               </div>
-              <button
-                type="button"
+              <Button
+                variant="destructive"
+                size="sm"
                 onClick={() => signOut({ callbackUrl: "/auth" })}
-                className="h-10 px-4 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/20 text-xs font-semibold flex items-center space-x-2 transition-all cursor-pointer"
+                leftIcon={<LogOut className="w-3.5 h-3.5 text-white" />}
                 aria-label="Sign out of your account"
               >
-                <LogOut className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>Sign Out</span>
-              </button>
+                Sign Out
+              </Button>
             </div>
           </div>
         </div>

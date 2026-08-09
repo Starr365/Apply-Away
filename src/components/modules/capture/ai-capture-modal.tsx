@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { extractOpportunityAction } from "@/app/actions/ai-extraction.actions";
 import { createOpportunityAction } from "@/app/actions/opportunity.actions";
 import { ExtractedOpportunityData } from "@/services/interfaces/ai-extraction.service";
 import {
-  Sparkles,
+  Wand2,
   X,
   Link as LinkIcon,
   FileText,
@@ -28,6 +28,17 @@ interface AICaptureModalProps {
 }
 
 export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }: AICaptureModalProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   const [activeTab, setActiveTab] = useState<"url" | "text">("url");
   const [urlInput, setUrlInput] = useState("");
   const [textInput, setTextInput] = useState("");
@@ -128,17 +139,17 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
-      <div className="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-800 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md overflow-y-auto">
+      <div className="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto border border-border shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div className="flex items-center justify-between border-b border-border pb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-linear-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-purple-500/20">
-              <Sparkles className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-md shadow-primary/20">
+              <Wand2 className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-bold font-outfit text-slate-900 dark:text-white">AI Opportunity Capture</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <h2 className="text-xl font-bold font-outfit text-foreground">AI Opportunity Capture</h2>
+              <p className="text-xs text-muted-foreground">
                 Paste a website link or text message to extract structured data automatically.
               </p>
             </div>
@@ -146,7 +157,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-lg bg-secondary hover:bg-secondary/80 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -169,9 +180,9 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
               <button
                 type="button"
                 onClick={handleContinueManually}
-                className="w-full h-11 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 hover:bg-slate-200 dark:hover:bg-slate-800 text-xs font-semibold text-slate-750 dark:text-white flex items-center justify-center space-x-2 transition-colors cursor-pointer"
+                className="w-full h-11 rounded-xl bg-secondary border border-border hover:bg-secondary/80 text-xs font-semibold text-foreground flex items-center justify-center space-x-2 transition-colors cursor-pointer"
               >
-                <PenLine className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                <PenLine className="w-4 h-4 text-primary" />
                 <span>Continue manually</span>
               </button>
             )}
@@ -180,7 +191,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
 
         {/* General Error (non-quota) */}
         {errorMsg && !isQuotaError && (
-          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-600 dark:text-rose-300">
+          <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-xs text-destructive">
             {errorMsg}
           </div>
         )}
@@ -189,14 +200,15 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
         {!extractedData && !isQuotaError && (
           <div className="space-y-5">
             {/* Input Method Tabs */}
-            <div className="flex rounded-xl bg-slate-100 dark:bg-slate-900/90 p-1 border border-slate-200 dark:border-slate-800">
+            <div className="flex rounded-xl bg-secondary/80 p-1.5 border border-border">
               <button
                 type="button"
                 onClick={() => setActiveTab("url")}
-                className={`flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "url"
-                    ? "bg-purple-600 text-white shadow-md"
-                    : "text-slate-500 hover:text-slate-855 dark:text-slate-400 dark:hover:text-slate-200"
-                  }`}
+                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                  activeTab === "url"
+                    ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.01]"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
               >
                 <LinkIcon className="w-3.5 h-3.5" />
                 <span>Website URL</span>
@@ -204,10 +216,11 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
               <button
                 type="button"
                 onClick={() => setActiveTab("text")}
-                className={`flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "text"
-                    ? "bg-purple-600 text-white shadow-md"
-                    : "text-slate-500 hover:text-slate-855 dark:text-slate-400 dark:hover:text-slate-200"
-                  }`}
+                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                  activeTab === "text"
+                    ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.01]"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
               >
                 <FileText className="w-3.5 h-3.5" />
                 <span>Copied Message / Text</span>
@@ -217,19 +230,19 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
             <form onSubmit={handleExtract} className="space-y-4">
               {activeTab === "url" ? (
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Opportunity Website URL</label>
+                  <label className="text-xs font-semibold text-foreground">Opportunity Website URL</label>
                   <input
                     type="url"
                     required
                     value={urlInput}
                     onChange={(e) => setUrlInput(e.target.value)}
                     placeholder="https://www.mandelawashingtonfellowship.org/apply..."
-                    className="w-full h-12 px-4 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                    className="w-full h-12 px-4 rounded-xl bg-card border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
                   />
                 </div>
               ) : (
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label className="text-xs font-semibold text-foreground">
                     Paste WhatsApp, LinkedIn, or Email Content
                   </label>
                   <textarea
@@ -238,7 +251,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
                     value={textInput}
                     onChange={(e) => setTextInput(e.target.value)}
                     placeholder="Paste full opportunity text message here..."
-                    className="w-full p-4 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none"
+                    className="w-full p-4 rounded-xl bg-card border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 resize-none"
                   />
                 </div>
               )}
@@ -246,7 +259,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
               <button
                 type="submit"
                 disabled={isExtracting}
-                className="w-full h-12 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-sm font-bold text-white shadow-lg shadow-purple-600/25 flex items-center justify-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
+                className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25 flex items-center justify-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
               >
                 {isExtracting ? (
                   <>
@@ -255,7 +268,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4" />
+                    <Wand2 className="w-4 h-4" />
                     <span>Extract with AI</span>
                   </>
                 )}
@@ -282,31 +295,31 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
 
             {/* Structured Card Preview */}
             <div className="glass-card p-5 rounded-2xl space-y-4 text-xs">
-              <div className="flex items-start justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+              <div className="flex items-start justify-between border-b border-border pb-3">
                 <div className="space-y-1">
-                  <div className="flex items-center space-x-1.5 text-purple-600 dark:text-purple-400 font-semibold">
+                  <div className="flex items-center space-x-1.5 text-primary font-semibold">
                     <Building className="w-3.5 h-3.5" />
                     <span>{extractedData.organization}</span>
                   </div>
-                  <h3 className="text-base font-bold font-outfit text-slate-900 dark:text-white">
+                  <h3 className="text-base font-bold font-outfit text-foreground">
                     {extractedData.title}
                   </h3>
                 </div>
-                <span className="px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-300 border border-purple-500/20 font-semibold">
+                <span className="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold">
                   {extractedData.category}
                 </span>
               </div>
 
               {extractedData.shortDescription && (
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{extractedData.shortDescription}</p>
+                <p className="text-foreground leading-relaxed">{extractedData.shortDescription}</p>
               )}
 
-              <div className="grid grid-cols-2 gap-3 pt-2 text-slate-500 dark:text-slate-400">
+              <div className="grid grid-cols-2 gap-3 pt-2 text-muted-foreground">
                 <div className="flex items-center space-x-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+                  <Calendar className="w-3.5 h-3.5 text-amber-500" />
                   <span>
                     Deadline:{" "}
-                    <strong className="text-slate-900 dark:text-white">
+                    <strong className="text-foreground">
                       {extractedData.deadline
                         ? new Date(extractedData.deadline).toLocaleDateString()
                         : "N/A"}
@@ -314,17 +327,17 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
                   </span>
                 </div>
                 <div className="flex items-center space-x-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
                   <span>
-                    Prompts: <strong className="text-slate-900 dark:text-white">{extractedData.essayQuestions.length}</strong>
+                    Prompts: <strong className="text-foreground">{extractedData.essayQuestions.length}</strong>
                   </span>
                 </div>
               </div>
 
               {extractedData.essayQuestions.length > 0 && (
-                <div className="border-t border-slate-200 dark:border-slate-800/80 pt-3 space-y-1">
-                  <span className="font-semibold text-slate-800 dark:text-slate-300">Extracted Prompts:</span>
-                  <ul className="list-disc list-inside text-slate-550 dark:text-slate-400 space-y-0.5">
+                <div className="border-t border-border pt-3 space-y-1">
+                  <span className="font-semibold text-foreground">Extracted Prompts:</span>
+                  <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
                     {extractedData.essayQuestions.map((q, idx) => (
                       <li key={idx} className="line-clamp-1">
                          {q}
@@ -336,11 +349,11 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
             </div>
 
             {/* Modal Actions */}
-            <div className="border-t border-slate-200 dark:border-slate-800 pt-4 flex justify-between items-center">
+            <div className="border-t border-border pt-4 flex justify-between items-center">
               <button
                 type="button"
                 onClick={handleResetModal}
-                className="h-11 px-4 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                className="h-11 px-4 rounded-xl bg-secondary border border-border text-xs font-semibold text-foreground hover:bg-secondary/80 transition-colors cursor-pointer"
               >
                 Back to Input
               </button>
@@ -349,7 +362,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
                 type="button"
                 onClick={handleSaveToVault}
                 disabled={isSaving}
-                className="h-11 px-6 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-purple-600/20 flex items-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
+                className="h-11 px-6 rounded-xl bg-primary hover:bg-primary/90 text-xs font-bold text-primary-foreground shadow-lg shadow-primary/20 flex items-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
               >
                 {isSaving ? (
                   <>

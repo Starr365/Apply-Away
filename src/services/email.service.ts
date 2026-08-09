@@ -108,4 +108,66 @@ export class EmailService {
 
     return await retryWithBackoff(sendFn, { maxRetries: 3, delayMs: 1000 });
   }
+
+  async sendWelcomeEmail(params: { toEmail: string; userName: string }): Promise<boolean> {
+    const { toEmail, userName } = params;
+
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; background-color: #0f172a; color: #e2e8f0; padding: 24px; border-radius: 16px;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155;">
+          <div style="text-align: center; margin-bottom: 24px;">
+            <h1 style="color: #38bdf8; font-size: 26px; margin: 0; font-weight: bold;">Apply Away</h1>
+            <p style="color: #94a3b8; font-size: 14px; margin-top: 4px;">Welcome to Your Centralized Opportunity Vault</p>
+          </div>
+
+          <div style="background-color: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 24px; text-align: center;">
+            <h2 style="color: #38bdf8; font-size: 18px; margin: 0;">🎉 Welcome Onboard, ${userName || "Opportunity Seeker"}!</h2>
+          </div>
+
+          <p style="color: #e2e8f0; font-size: 14px; line-height: 1.6;">
+            Your Apply Away account has been created successfully. You can now centralize, track, and manage all your career, scholarship, fellowship, and grant applications in one place.
+          </p>
+
+          <div style="background-color: #0f172a; border-radius: 12px; padding: 20px; margin: 24px 0; border: 1px solid #334155;">
+            <p style="margin: 0 0 8px 0; color: #38bdf8; font-size: 13px; font-weight: bold;">🚀 What you can do next:</p>
+            <ul style="margin: 0; padding-left: 20px; color: #94a3b8; font-size: 13px; line-height: 1.6;">
+              <li>Use <strong>AI Quick Capture</strong> to save opportunities from URLs or copied text</li>
+              <li>Track deadline reminders localized to your timezone</li>
+              <li>Draft essay prompts and log application reflections</li>
+            </ul>
+          </div>
+
+          <div style="text-align: center; margin-top: 28px;">
+            <a href="${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/auth" style="background-color: #38bdf8; color: #0f172a; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block;">Sign In to Your Vault</a>
+          </div>
+
+          <hr style="border: 0; border-top: 1px solid #334155; margin: 32px 0 16px 0;" />
+          <p style="color: #64748b; font-size: 11px; text-align: center;">
+            Apply Away &copy; ${new Date().getFullYear()} – Opportunity Vault System
+          </p>
+        </div>
+      </div>
+    `;
+
+    const sendFn = async () => {
+      if (!this.transporter) {
+        console.log(
+          `[EmailService MOCK MODE] Welcome email sent to ${toEmail} for "${userName}"`
+        );
+        return true;
+      }
+
+      await this.transporter.sendMail({
+        from: process.env.SMTP_FROM || '"Apply Away" <welcome@applyaway.app>',
+        to: toEmail,
+        subject: `🎉 Welcome to Apply Away, ${userName}!`,
+        html: htmlContent,
+      });
+
+      console.log(`[EmailService SUCCESS] Welcome email sent to ${toEmail}`);
+      return true;
+    };
+
+    return await retryWithBackoff(sendFn, { maxRetries: 3, delayMs: 1000 });
+  }
 }

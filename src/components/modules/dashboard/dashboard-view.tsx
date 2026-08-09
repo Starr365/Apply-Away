@@ -11,6 +11,7 @@ import { AnimatedContainer } from "@/components/ui/animated-container";
 import { MetricCard } from "@/components/ui/metric-card";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { PageHeader } from "@/components/ui/page-header";
+import { Button } from "@/components/ui/button";
 import { Plus, Sparkles, CheckCircle2, Clock, Layers, Wand2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -60,45 +61,43 @@ export function DashboardView({
         >
           <Link
             href="/calendar"
-            className="h-11 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-sm font-semibold inline-flex items-center space-x-2 transition-all"
+            className="h-11 px-4 rounded-xl bg-secondary hover:bg-secondary/80 border border-border text-foreground hover:text-foreground text-sm font-semibold inline-flex items-center space-x-2 transition-all"
             aria-label="View deadline calendar"
           >
-            <Clock className="w-4 h-4 text-purple-600 dark:text-purple-400" aria-hidden="true" />
+            <Clock className="w-4 h-4 text-primary" aria-hidden="true" />
             <span>Calendar View</span>
           </Link>
 
-          <button
-            type="button"
+          <Button
+            variant="outline"
             onClick={() => setIsAICaptureOpen(true)}
-            className="h-11 px-4 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30 text-sm font-semibold inline-flex items-center space-x-2 transition-all cursor-pointer"
+            leftIcon={<Wand2 className="w-4 h-4 text-primary" />}
             aria-label="Open AI quick capture"
           >
-            <Wand2 className="w-4 h-4 text-purple-600 dark:text-purple-400" aria-hidden="true" />
-            <span>AI Quick Capture</span>
-          </button>
+            AI Quick Capture
+          </Button>
 
-          <button
-            type="button"
+          <Button
+            variant="primary"
             onClick={handleCreateNew}
-            className="h-11 px-5 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-sm font-semibold text-white shadow-lg shadow-purple-600/20 inline-flex items-center space-x-2 transition-all cursor-pointer"
+            leftIcon={<Plus className="w-4 h-4" />}
             aria-label="Add new opportunity"
           >
-            <Plus className="w-4 h-4" aria-hidden="true" />
-            <span>Add Opportunity</span>
-          </button>
+            Add Opportunity
+          </Button>
         </PageHeader>
       </AnimatedContainer>
 
       {/* Summary Metrics Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <AnimatedContainer delay={60}>
-          <MetricCard label="Total Vault" value={stats.total} icon={Layers} iconColorClass="text-purple-650 dark:text-purple-400" />
+          <MetricCard label="Total Vault" value={stats.total} icon={Layers} iconColorClass="text-primary" />
         </AnimatedContainer>
         <AnimatedContainer delay={120}>
           <MetricCard label="In Progress" value={stats.inProgress} icon={Sparkles} iconColorClass="text-sky-600 dark:text-sky-400" valueColorClass="text-sky-600 dark:text-sky-400" />
         </AnimatedContainer>
         <AnimatedContainer delay={180}>
-          <MetricCard label="Submitted" value={stats.submitted} icon={CheckCircle2} iconColorClass="text-purple-605 dark:text-purple-400" valueColorClass="text-purple-605 dark:text-purple-400" />
+          <MetricCard label="Submitted" value={stats.submitted} icon={CheckCircle2} iconColorClass="text-primary" valueColorClass="text-primary" />
         </AnimatedContainer>
         <AnimatedContainer delay={240}>
           <MetricCard label="Due Soon" value={stats.dueSoon} icon={Clock} iconColorClass="text-amber-600 dark:text-amber-400" valueColorClass="text-amber-600 dark:text-amber-400" />

@@ -82,7 +82,7 @@ export function LandingHero() {
 
           <div className="flex items-center justify-center lg:justify-start space-x-2 text-[11px] text-muted-foreground select-none">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>Multi-Tenant Vault Database Isolation</span>
+            <span>Encrypted Vault Data Isolation</span>
           </div>
         </AnimatedContainer>
 

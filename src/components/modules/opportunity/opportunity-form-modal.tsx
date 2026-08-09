@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Opportunity,
   OpportunityCategory,
@@ -11,8 +11,9 @@ import {
   createOpportunityAction,
   updateOpportunityAction,
 } from "@/app/actions/opportunity.actions";
-import { X, Sparkles, Plus, Check } from "lucide-react";
+import { X, FolderPlus, FileEdit, Plus, Check } from "lucide-react";
 import { useToast } from "@/components/ui/toast-provider";
+import { Button } from "@/components/ui/button";
 
 interface OpportunityFormModalProps {
   isOpen: boolean;
@@ -25,6 +26,17 @@ export function OpportunityFormModal({
   onClose,
   opportunityToEdit,
 }: OpportunityFormModalProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -113,19 +125,19 @@ function OpportunityFormContent({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
-      <div className="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-800 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md overflow-y-auto">
+      <div className="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto border border-border shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div className="flex items-center justify-between border-b border-border pb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400">
-              <Sparkles className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+              {isEditing ? <FileEdit className="w-5 h-5" /> : <FolderPlus className="w-5 h-5" />}
             </div>
             <div>
-              <h2 className="text-xl font-bold font-outfit text-slate-900 dark:text-white">
+              <h2 className="text-xl font-bold font-outfit text-foreground">
                 {isEditing ? "Edit Opportunity" : "Create New Opportunity"}
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-muted-foreground">
                 {isEditing
                   ? "Update opportunity details in your vault."
                   : "Add a new opportunity manually to your centralized vault."}
@@ -135,54 +147,54 @@ function OpportunityFormContent({
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-lg bg-secondary hover:bg-secondary/80 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {errorMsg && (
-          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-600 dark:text-rose-300">
+          <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-xs text-destructive">
             {errorMsg}
           </div>
         )}
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs text-slate-600 dark:text-slate-300">
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs text-card-foreground">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Title */}
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="font-semibold text-slate-700 dark:text-slate-200">Opportunity Title *</label>
+              <label className="font-semibold text-foreground">Opportunity Title *</label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Mandela Washington Fellowship 2027"
-                className="w-full h-11 px-4 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full h-11 px-4 rounded-xl bg-card border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
               />
             </div>
 
             {/* Organization */}
             <div className="space-y-1.5">
-              <label className="font-semibold text-slate-700 dark:text-slate-200">Organization / Host *</label>
+              <label className="font-semibold text-foreground">Organization / Host *</label>
               <input
                 type="text"
                 required
                 value={organization}
                 onChange={(e) => setOrganization(e.target.value)}
                 placeholder="e.g. U.S. Department of State"
-                className="w-full h-11 px-4 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full h-11 px-4 rounded-xl bg-card border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
               />
             </div>
 
             {/* Category */}
             <div className="space-y-1.5">
-              <label className="font-semibold text-slate-700 dark:text-slate-200">Category *</label>
+              <label className="font-semibold text-foreground">Category *</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as OpportunityCategory)}
-                className="w-full h-11 px-4 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 cursor-pointer"
+                className="w-full h-11 px-4 rounded-xl bg-card border border-input text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
               >
                 <option value="FELLOWSHIP">Fellowship</option>
                 <option value="SCHOLARSHIP">Scholarship</option>
@@ -200,22 +212,22 @@ function OpportunityFormContent({
 
             {/* Deadline */}
             <div className="space-y-1.5">
-              <label className="font-semibold text-slate-700 dark:text-slate-200">Application Deadline</label>
+              <label className="font-semibold text-foreground">Application Deadline</label>
               <input
                 type="date"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full h-11 px-4 rounded-xl bg-card border border-input text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
               />
             </div>
 
             {/* Status */}
             <div className="space-y-1.5">
-              <label className="font-semibold text-slate-700 dark:text-slate-200">Current Status</label>
+              <label className="font-semibold text-foreground">Current Status</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as OpportunityStatus)}
-                className="w-full h-11 px-4 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 cursor-pointer"
+                className="w-full h-11 px-4 rounded-xl bg-card border border-input text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
               >
                 <option value="NOT_STARTED">Not Started</option>
                 <option value="IN_PROGRESS">In Progress</option>
@@ -228,11 +240,11 @@ function OpportunityFormContent({
 
             {/* Priority */}
             <div className="space-y-1.5">
-              <label className="font-semibold text-slate-700 dark:text-slate-200">Priority Level</label>
+              <label className="font-semibold text-foreground">Priority Level</label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as OpportunityPriority)}
-                className="w-full h-11 px-4 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 cursor-pointer"
+                className="w-full h-11 px-4 rounded-xl bg-card border border-input text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
               >
                 <option value="HIGH">High Priority</option>
                 <option value="MEDIUM">Medium Priority</option>
@@ -242,70 +254,69 @@ function OpportunityFormContent({
 
             {/* Official Website URL */}
             <div className="space-y-1.5">
-              <label className="font-semibold text-slate-700 dark:text-slate-200">Official Website URL</label>
+              <label className="font-semibold text-foreground">Official Website URL</label>
               <input
                 type="url"
                 value={officialUrl}
                 onChange={(e) => setOfficialUrl(e.target.value)}
                 placeholder="https://..."
-                className="w-full h-11 px-4 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full h-11 px-4 rounded-xl bg-card border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
               />
             </div>
 
             {/* Direct Application Portal Link */}
             <div className="space-y-1.5">
-              <label className="font-semibold text-slate-700 dark:text-slate-200">Direct Application Portal Link</label>
+              <label className="font-semibold text-foreground">Direct Application Portal Link</label>
               <input
                 type="url"
                 value={applicationUrl}
                 onChange={(e) => setApplicationUrl(e.target.value)}
                 placeholder="https://apply..."
-                className="w-full h-11 px-4 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full h-11 px-4 rounded-xl bg-card border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
               />
             </div>
 
             {/* Short Description */}
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="font-semibold text-slate-700 dark:text-slate-200">Short Description</label>
+              <label className="font-semibold text-foreground">Short Description</label>
               <textarea
                 rows={2}
                 value={shortDescription}
                 onChange={(e) => setShortDescription(e.target.value)}
                 placeholder="Brief summary of requirements, benefits, or goals..."
-                className="w-full p-3 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none"
+                className="w-full p-3 rounded-xl bg-card border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 resize-none"
               />
             </div>
 
             {/* Personal Notes */}
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="font-semibold text-slate-700 dark:text-slate-200">Personal Notes</label>
+              <label className="font-semibold text-foreground">Personal Notes</label>
               <textarea
                 rows={2}
                 value={personalNotes}
                 onChange={(e) => setPersonalNotes(e.target.value)}
                 placeholder="Private application notes, reminders, or contact details..."
-                className="w-full p-3 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none"
+                className="w-full p-3 rounded-xl bg-card border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 resize-none"
               />
             </div>
           </div>
 
           {/* Form Actions */}
-          <div className="border-t border-slate-200 dark:border-slate-800 pt-4 flex justify-end space-x-3">
-            <button
-              type="button"
+          <div className="border-t border-border pt-4 flex justify-end space-x-3">
+            <Button
+              variant="secondary"
               onClick={onClose}
-              className="h-11 px-5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 hover:bg-slate-200 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
-              disabled={isSubmitting}
-              className="h-11 px-6 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-purple-600/20 flex items-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
+              variant="primary"
+              isLoading={isSubmitting}
+              leftIcon={isEditing ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
             >
-              {isEditing ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-              <span>{isSubmitting ? "Saving..." : isEditing ? "Save Changes" : "Create Record"}</span>
-            </button>
+              {isEditing ? "Save Changes" : "Create Record"}
+            </Button>
           </div>
         </form>
       </div>

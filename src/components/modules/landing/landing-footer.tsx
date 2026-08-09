@@ -12,12 +12,12 @@ export function LandingFooter() {
         {/* Logo Brand column */}
         <div className="space-y-4 col-span-1 md:col-span-2">
           <Link href="/" className="flex items-center space-x-3 select-none">
-            <div className="relative h-7 w-28">
+            <div className="relative h-10 w-40 shrink-0">
               <Image
                 src="/text-vault.png"
                 alt="Apply Away Logo"
                 fill
-                sizes="112px"
+                sizes="160px"
                 className="object-contain dark:invert transition-all"
               />
             </div>
@@ -41,7 +41,7 @@ export function LandingFooter() {
         <div className="space-y-3">
           <div className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider select-none">Vault Security</div>
           <ul className="space-y-2 text-[11px] text-muted-foreground">
-            <li><span className="flex items-center space-x-1.5"><Lock className="w-3 h-3 text-purple-605 dark:text-purple-400" /> <span>Multi-Tenant DB</span></span></li>
+            <li><span className="flex items-center space-x-1.5"><Lock className="w-3 h-3 text-primary" /> <span>Encrypted Vault DB</span></span></li>
             <li><span className="flex items-center space-x-1.5"><ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> <span>Session Encrypted</span></span></li>
           </ul>
         </div>
