@@ -71,14 +71,14 @@ export function LandingFAQ() {
         
         {/* Header Block */}
         <AnimatedContainer delay={100} className="text-center space-y-3 max-w-xl mx-auto">
-          <div className="text-xs font-bold text-purple-650 dark:text-purple-400 uppercase tracking-widest select-none">
-            Common Inquiries
+          <div className="text-xs font-bold text-primary uppercase tracking-widest select-none">
+            FREQUENTLY ASKED QUESTIONS
           </div>
           <h2 className="text-3xl font-bold font-outfit text-foreground leading-tight">
-            Before your next application, you might be wondering…
+            Everything you need to know about Apply Away
           </h2>
           <p className="text-xs sm:text-sm text-muted-foreground select-none">
-            Got questions? We&apos;ve got answers.
+            Have a question? We're here to help.
           </p>
         </AnimatedContainer>
 
