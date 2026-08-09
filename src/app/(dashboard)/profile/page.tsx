@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { updateUserTimezone } from "@/app/actions/user.actions";
 import { useToast } from "@/components/ui/toast-provider";
 import { PageHeader } from "@/components/ui/page-header";
@@ -12,6 +13,7 @@ import { Button } from "@/components/ui/button";
 
 export default function ProfilePage() {
   const { data: session, update } = useSession();
+  const router = useRouter();
   const toast = useToast();
   const [selectedTimezone, setSelectedTimezone] = useState(
     session?.user?.timezone || "Africa/Lagos"
@@ -122,7 +124,10 @@ export default function ProfilePage() {
               <Button
                 variant="destructive"
                 size="sm"
-                onClick={() => signOut({ callbackUrl: "/auth" })}
+                onClick={async () => {
+                  await signOut({ callbackUrl: "/auth", redirect: true });
+                  router.push("/auth");
+                }}
                 leftIcon={<LogOut className="w-3.5 h-3.5 text-white" />}
                 aria-label="Sign out of your account"
               >

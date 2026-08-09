@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useTheme } from "@/components/providers/theme-provider";
 import {
@@ -37,6 +37,7 @@ export function DashboardLayout({
   maxWidth = "max-w-7xl",
 }: DashboardLayoutProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -64,7 +65,8 @@ export function DashboardLayout({
   ];
 
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: "/auth" });
+    await signOut({ callbackUrl: "/auth", redirect: true });
+    router.push("/auth");
   };
 
   return (
