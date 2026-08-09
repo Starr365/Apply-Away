@@ -3,10 +3,8 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { AnimatedContainer } from "@/components/ui/animated-container";
-import { Button } from "@/components/ui/button";
 
-// Primary FAQ List (8 Questions)
-const PRIMARY_FAQS = [
+const FAQS = [
   {
     q: "What is Apply Away?",
     a: "Apply Away is your personal opportunity management workspace. It helps you save scholarships, fellowships, internships, grants, jobs, conferences, research programs, and other opportunities in one place. Instead of keeping application links across WhatsApp, bookmarks, notes, screenshots, and random documents, Apply Away helps you organize everything, track deadlines, and stay on top of your applications.",
@@ -36,24 +34,12 @@ const PRIMARY_FAQS = [
     a: "Yes. Each opportunity can have a status that reflects where you are in the application process, such as Not Started → Preparing → Drafting → Reviewing → Submitted → Interview → Accepted / Rejected. You can also add personal notes and view the audit history log for each opportunity.",
   },
   {
-    q: "Is my application data private?",
-    a: "Your opportunities and application data are associated strictly with your account. Other users cannot access your opportunities, notes, activity logs, reflections, or application information. Apply Away is designed with user-level data isolation from the beginning so that each user's data remains separate.",
-  },
-];
-
-// Secondary FAQ List (4 Questions)
-const SECONDARY_FAQS = [
-  {
-    q: "Can I see all my deadlines on a calendar?",
-    a: "Yes. The Calendar View gives you a visual overview of your upcoming opportunity deadlines. You can quickly identify busy periods, open an opportunity directly from the calendar, and plan your applications before deadlines become urgent.",
-  },
-  {
-    q: "What is the Reflection Dashboard?",
-    a: "The Reflection Dashboard helps you look back at your application journey. You can visually see opportunities saved, applications submitted, wins, rejections, opportunity categories, and monthly activity trends, as well as write a monthly reflection about what worked and what you can do better.",
-  },
-  {
     q: "Can I edit information extracted by the AI?",
     a: "Absolutely. AI extraction is designed to save you time—not make decisions for you. You can review, correct, add, or remove any information before or after saving an opportunity.",
+  },
+  {
+    q: "Is my application data private?",
+    a: "Your opportunities and application data are associated strictly with your account. Other users cannot access your opportunities, notes, activity logs, reflections, or application information. Apply Away is designed with user-level data isolation from the beginning so that each user's data remains separate.",
   },
   {
     q: "Is Apply Away free?",
@@ -62,14 +48,11 @@ const SECONDARY_FAQS = [
 ];
 
 export function LandingFAQ() {
-  const [openPrimary, setOpenPrimary] = useState<number | null>(null);
-  const [openSecondary, setOpenSecondary] = useState<number | null>(null);
-  const [showMore, setShowMore] = useState(false);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
     <section id="faq" className="py-24 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto space-y-16">
-        
         {/* Header Block */}
         <AnimatedContainer delay={100} className="text-center space-y-3 max-w-xl mx-auto">
           <div className="text-xs font-bold text-primary uppercase tracking-widest select-none">
@@ -83,32 +66,30 @@ export function LandingFAQ() {
           </p>
         </AnimatedContainer>
 
-        {/* Primary FAQs */}
+        {/* FAQs Accordions */}
         <div className="space-y-4">
-          {PRIMARY_FAQS.map((faq, idx) => {
-            const isOpen = openPrimary === idx;
+          {FAQS.map((faq, idx) => {
+            const isOpen = openIndex === idx;
             return (
               <AnimatedContainer
-                key={`primary-${idx}`}
-                delay={150 + idx * 50}
+                key={idx}
+                delay={150 + idx * 40}
                 className="bg-card rounded-2xl overflow-hidden border border-border transition-all duration-300 shadow-sm"
               >
                 <button
-                  onClick={() => setOpenPrimary(isOpen ? null : idx)}
+                  onClick={() => setOpenIndex(isOpen ? null : idx)}
                   type="button"
                   className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-accent transition-colors cursor-pointer"
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
-                    className={`w-4 h-4 text-primary transition-transform duration-300 ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
+                    className={`w-4 h-4 text-primary transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
                 <div
-                  className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                    isOpen ? "max-h-60 border-t border-border/60" : "max-h-0"
-                  }`}
+                  className={`transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? "max-h-60 border-t border-border/60" : "max-h-0"
+                    }`}
                 >
                   {isOpen && (
                     <p className="p-5 text-xs text-muted-foreground leading-relaxed text-left">
@@ -120,64 +101,6 @@ export function LandingFAQ() {
             );
           })}
         </div>
-
-        {/* Show More Trigger Button */}
-        <div className="text-center pt-2">
-          <Button
-            variant="secondary"
-            size="md"
-            onClick={() => setShowMore((prev) => !prev)}
-            rightIcon={
-              <ChevronDown
-                className={`w-3.5 h-3.5 text-primary transition-transform duration-300 ${
-                  showMore ? "rotate-180" : ""
-                }`}
-              />
-            }
-          >
-            {showMore ? "Show fewer questions" : "More questions"}
-          </Button>
-        </div>
-
-        {/* Secondary FAQs (Hidden by default) */}
-        {showMore && (
-          <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-300">
-            {SECONDARY_FAQS.map((faq, idx) => {
-              const isOpen = openSecondary === idx;
-              return (
-                <div
-                  key={`secondary-${idx}`}
-                  className="bg-card rounded-2xl overflow-hidden border border-border transition-all duration-300 shadow-sm"
-                >
-                  <button
-                    onClick={() => setOpenSecondary(isOpen ? null : idx)}
-                    type="button"
-                    className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-accent transition-colors cursor-pointer"
-                  >
-                    <span>{faq.q}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 text-primary transition-transform duration-300 ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                  <div
-                    className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                      isOpen ? "max-h-60 border-t border-border/60" : "max-h-0"
-                    }`}
-                  >
-                    {isOpen && (
-                      <p className="p-5 text-xs text-muted-foreground leading-relaxed text-left">
-                        {faq.a}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
       </div>
     </section>
   );
