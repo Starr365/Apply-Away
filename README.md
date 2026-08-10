@@ -12,10 +12,12 @@ High-achieving applicants often discover opportunities scattered across WhatsApp
 ### The Solution
 **Apply Away** acts as a centralized "second brain" for your career and academic applications:
 - **Instant AI Extraction**: Simply paste a web link or text message—our AI automatically extracts the title, host organization, application deadlines, requirements, benefits, and essay prompts into your vault.
-- **Duplicate Prevention**: Warns you if you try to add an opportunity you are already tracking.
+- **Interactive Dashboard & Metric Cards**: Click summary stat cards (*Total Vault, In Progress, Submitted, Due Soon*) to filter vault opportunities instantly.
+- **Brand-Styled Interactive Badges**: Change status (*Not Started, In Progress, Submitted, Interview, Accepted, Rejected*) and priority (*High, Medium, Low*) directly on custom-styled badge popovers.
+- **Profile Avatar Storage**: Upload and manage custom profile avatar images, stored in PostgreSQL via Prisma.
 - **Smart Deadline Calendar & Reminders**: Visualizes upcoming deadlines on an interactive calendar and dispatches timely email alerts in your local timezone (`Africa/Lagos`, `America/New_York`, etc.) so you never miss a submission window.
-- **Essay & Preparation Tracker**: Provides dedicated drafting space for every essay prompt, interactive document checklists (Resume, Transcripts, Recommendations), and personal vault notes.
-- **Reflection & Growth Dashboard**: Visualizes your application progress over time with charts, tracks acceptance rates, and logs monthly reflection notes.
+- **Essay & Preparation Tracker**: Dedicated drafting space for essay prompts, interactive document checklists (Resume, Transcripts, Recommendations), and personal vault notes.
+- **Reflection & Growth Dashboard**: Visualizes application progress over time with charts, tracks status conversion rates, and logs monthly reflection notes.
 
 ---
 
