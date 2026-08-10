@@ -54,14 +54,14 @@ export function LandingFAQ() {
     <section id="faq" className="py-24 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto space-y-16">
         {/* Header Block */}
-        <AnimatedContainer delay={100} className="text-center space-y-3 max-w-xl mx-auto">
-          <div className="text-xs font-bold text-primary uppercase tracking-widest select-none">
+        <AnimatedContainer delay={100} className="text-center space-y-3 max-w-2xl mx-auto">
+          <div className="text-xs sm:text-sm font-bold text-primary uppercase tracking-widest select-none">
             FREQUENTLY ASKED QUESTIONS
           </div>
-          <h2 className="text-3xl font-bold font-outfit text-foreground leading-tight">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold font-outfit text-foreground leading-tight">
             Everything you need to know about Apply Away
           </h2>
-          <p className="text-xs sm:text-sm text-muted-foreground select-none">
+          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground select-none">
             Have a question? We&apos;re here to help.
           </p>
         </AnimatedContainer>
@@ -79,7 +79,7 @@ export function LandingFAQ() {
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
                   type="button"
-                  className="w-full p-5 flex items-center justify-between text-left font-bold font-outfit text-sm text-foreground hover:bg-accent transition-colors cursor-pointer"
+                  className="w-full p-5 sm:p-6 flex items-center justify-between text-left font-bold font-outfit text-base sm:text-lg text-foreground hover:bg-accent transition-colors cursor-pointer"
                 >
                   <span>{faq.q}</span>
                   <ChevronDown

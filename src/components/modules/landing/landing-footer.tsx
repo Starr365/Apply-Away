@@ -11,13 +11,13 @@ export function LandingFooter() {
         {/* Brand column */}
         <div className="space-y-3 md:col-span-2">
           <Link href="/" className="flex items-center space-x-3 select-none">
-            <div className="relative h-10 w-40 shrink-0">
+            <div className="relative h-16 w-60 sm:h-20 sm:w-72 shrink-0">
               <Image
                 src="/text-vault.png"
                 alt="Apply Away Logo"
                 fill
-                sizes="160px"
-                className="object-contain dark:invert transition-all"
+                sizes="288px"
+                className="object-contain dark:brightness-0 dark:invert transition-all filter drop-shadow-sm"
               />
             </div>
           </Link>

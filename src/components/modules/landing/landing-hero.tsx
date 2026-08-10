@@ -16,18 +16,18 @@ export function LandingHero() {
 
       <div className="max-w-7xl mx-auto space-y-12 sm:space-y-16 relative z-10">
         {/* Top Centered Hero Header */}
-        <AnimatedContainer delay={100} className="max-w-3xl mx-auto text-center space-y-6">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary tracking-wide uppercase mx-auto select-none">
-            <Sparkles className="w-3.5 h-3.5 text-primary" />
+        <AnimatedContainer delay={100} className="max-w-4xl mx-auto text-center space-y-6">
+          <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs sm:text-sm font-bold text-primary tracking-wide uppercase mx-auto select-none">
+            <Sparkles className="w-4 h-4 text-primary" />
             <span>YOUR OPPORTUNITIES, FINALLY ORGANIZED</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-outfit text-foreground leading-[1.1]">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight font-outfit text-foreground leading-[1.1]">
             Stop losing opportunities. <br />
             <span className="text-primary">Start applying with intention.</span>
           </h1>
 
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+          <p className="text-base sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
             Apply Away is your personal opportunity vault for scholarships, fellowships, internships, grants, jobs, conferences, and more. Save an opportunity, let AI organize the details, and never lose track of a deadline again.
           </p>
 
@@ -57,7 +57,7 @@ export function LandingHero() {
         </AnimatedContainer>
 
         {/* Product Showcase Exhibition: Apple-Style Product Preview + Real Stock Photo */}
-        <AnimatedContainer delay={300} className="relative max-w-5xl mx-auto">
+        <AnimatedContainer delay={300} className="relative max-w-6xl mx-auto">
           <div className="rounded-3xl border border-border/80 bg-card/80 backdrop-blur-xl shadow-2xl p-4 sm:p-8 space-y-6 overflow-hidden">
             {/* Header window control bar */}
             <div className="flex items-center justify-between border-b border-border/60 pb-4">

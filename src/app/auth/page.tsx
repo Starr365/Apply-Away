@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/components/ui/toast-provider";
@@ -34,13 +35,10 @@ function AuthContent() {
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Animated tab transition using react-spring
+  // Animated entrance using react-spring
   const formSpring = useSpring({
-    opacity: 1,
-    transform: "translateY(0px)",
+    to: { opacity: 1, transform: "translateY(0px)" },
     from: { opacity: 0, transform: "translateY(12px)" },
-    reset: true,
-    key: mode,
     config: { tension: 280, friction: 22 },
   });
 
@@ -136,14 +134,16 @@ function AuthContent() {
 
           <div className="space-y-3">
             <div className="flex justify-center lg:justify-start">
-              <Image
-                src="/text-vault.png"
-                alt="Apply Away Logo"
-                width={280}
-                height={72}
-                priority
-                className="h-16 sm:h-20 w-auto max-w-full object-contain dark:invert shrink-0"
-              />
+              <Link href="/" className="inline-block hover:opacity-90 transition-opacity">
+                <Image
+                  src="/text-vault.png"
+                  alt="Apply Away Logo"
+                  width={280}
+                  height={72}
+                  priority
+                  className="h-16 sm:h-20 w-auto max-w-full object-contain dark:invert shrink-0 cursor-pointer"
+                />
+              </Link>
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold font-outfit tracking-tight text-foreground leading-tight">
               Manage all opportunities from one central vault.
@@ -173,22 +173,22 @@ function AuthContent() {
         {/* Right Column: Auth Container Card */}
         <div className="lg:col-span-5">
           <div className="glass-panel p-6 sm:p-10 rounded-3xl space-y-6 shadow-2xl border border-border">
-            {/* Header & High-Contrast Tab Selector */}
-            <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-4 gap-4">
-                <div>
-                  <h2 className="text-xl font-bold font-outfit text-foreground">
+            {/* Header & High-Contrast Centered Tab Selector */}
+            <div className="space-y-4 text-center">
+              <div className="flex flex-col items-center justify-center border-b border-border pb-5 space-y-4">
+                <div className="space-y-1">
+                  <h2 className="text-xl font-bold font-outfit text-foreground text-center">
                     {mode === "signin" ? "Sign In to Vault" : "Create Account"}
                   </h2>
-                  <p className="text-xs text-muted-foreground mt-0.5">
+                  <p className="text-xs text-muted-foreground text-center max-w-sm mx-auto">
                     {mode === "signin"
                       ? "Enter your credentials to access your saved opportunities."
                       : "Register to get a welcome email and start storing opportunities."}
                   </p>
                 </div>
 
-                {/* Tab Selector with High-Contrast Deep Sky Blue Active Pill */}
-                <div className="flex rounded-2xl bg-secondary/80 p-1.5 border border-border/80 relative shadow-inner shrink-0">
+                {/* Tab Selector Pill Centered on All Screens */}
+                <div className="flex justify-center mx-auto rounded-2xl bg-secondary/80 p-1.5 border border-border/80 relative shadow-inner shrink-0">
                   <button
                     type="button"
                     onClick={() => {
@@ -196,7 +196,7 @@ function AuthContent() {
                       setErrorMsg("");
                       setSuccessMsg("");
                     }}
-                    className={`relative z-10 px-5 py-2 rounded-xl text-xs font-extrabold transition-all duration-300 cursor-pointer ${mode === "signin"
+                    className={`relative z-10 px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-300 cursor-pointer ${mode === "signin"
                       ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.02]"
                       : "text-muted-foreground hover:text-foreground"
                       }`}
@@ -210,7 +210,7 @@ function AuthContent() {
                       setErrorMsg("");
                       setSuccessMsg("");
                     }}
-                    className={`relative z-10 px-5 py-2 rounded-xl text-xs font-extrabold transition-all duration-300 cursor-pointer ${mode === "signup"
+                    className={`relative z-10 px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-300 cursor-pointer ${mode === "signup"
                       ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.02]"
                       : "text-muted-foreground hover:text-foreground"
                       }`}

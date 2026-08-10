@@ -17,11 +17,11 @@ export function LandingCTA() {
         delay={150}
         className="max-w-4xl mx-auto bg-card border border-border p-8 sm:p-14 rounded-3xl text-center space-y-6 relative z-10 shadow-2xl"
       >
-        <div className="inline-flex w-12 h-12 rounded-2xl bg-card border border-border items-center justify-center shadow-lg select-none relative mx-auto">
-          <Image src="/vault-logo.png" alt="Apply Away Vault" fill sizes="32px" className="object-contain p-2" />
+        <div className="inline-flex w-20 h-20 rounded-3xl bg-card border border-border items-center justify-center shadow-xl select-none relative mx-auto">
+          <Image src="/vault-logo.png" alt="Apply Away Vault" fill sizes="64px" className="object-contain p-3" />
         </div>
         
-        <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-foreground max-w-2xl mx-auto leading-tight">
+        <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-outfit text-foreground max-w-3xl mx-auto leading-tight">
           Your next opportunity is probably already somewhere in your phone. <br />
           <span className="text-primary font-bold">Don&apos;t lose it. Save it to Apply Away.</span>
         </h2>
