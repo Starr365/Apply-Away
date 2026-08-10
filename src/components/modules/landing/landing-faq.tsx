@@ -58,10 +58,10 @@ export function LandingFAQ() {
           <div className="text-xs sm:text-sm font-bold text-primary uppercase tracking-widest select-none">
             FREQUENTLY ASKED QUESTIONS
           </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold font-outfit text-foreground leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-bold font-outfit text-foreground leading-tight">
             Everything you need to know about Apply Away
           </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground select-none">
+          <p className="text-sm sm:text-base text-muted-foreground select-none">
             Have a question? We&apos;re here to help.
           </p>
         </AnimatedContainer>
@@ -92,7 +92,7 @@ export function LandingFAQ() {
                     }`}
                 >
                   {isOpen && (
-                    <p className="p-5 text-xs text-muted-foreground leading-relaxed text-left">
+                    <p className="p-5 text-xs sm:text-base text-muted-foreground leading-relaxed text-left">
                       {faq.a}
                     </p>
                   )}

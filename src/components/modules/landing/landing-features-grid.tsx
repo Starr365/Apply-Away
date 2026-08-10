@@ -349,10 +349,10 @@ export function LandingFeaturesGrid() {
           <span className="text-xs sm:text-sm font-bold text-primary uppercase tracking-widest">
             THE OPPORTUNITY VAULT ECOSYSTEM
           </span>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-outfit text-foreground tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-extrabold font-outfit text-foreground tracking-tight leading-tight">
             Everything you need in one unified vault.
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
             Click or hover any feature card below to open an interactive full-screen detail preview.
           </p>
         </AnimatedContainer>
@@ -389,17 +389,17 @@ export function LandingFeaturesGrid() {
                       </div>
                     </div>
 
-                    <div className="flex items-center space-x-2 text-foreground font-bold text-base font-outfit pt-1">
+                    <div className="flex items-center space-x-2.5 text-foreground font-bold text-base sm:text-xl font-outfit pt-1">
                       <IconComp className="w-5 h-5 text-primary shrink-0" />
                       <span>{feat.title}</span>
                     </div>
 
-                    <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                    <p className="text-xs sm:text-base text-muted-foreground leading-relaxed">
                       {feat.description}
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-border/40 flex items-center justify-between text-xs text-primary font-semibold">
+                  <div className="pt-3 border-t border-border/40 flex items-center justify-between text-xs sm:text-sm text-primary font-bold">
                     <span>Explore Feature</span>
                     <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
                   </div>
