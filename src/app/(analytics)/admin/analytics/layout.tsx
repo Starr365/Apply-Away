@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { requireOwnerAdmin } from "@/lib/auth-admin";
-import Link from "next/link";
-import { Shield, ArrowLeft, BarChart3 } from "lucide-react";
+
 
 export const metadata: Metadata = {
   title: "Owner Cockpit Analytics – Apply Away",
