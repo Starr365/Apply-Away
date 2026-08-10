@@ -18,7 +18,7 @@ const outfit = Outfit({
   display: "swap",
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://applyaway.mmesomanzeribe.me";
+const baseUrl: string = process.env.NEXT_PUBLIC_APP_URL || "https://applyaway.mmesomanzeribe.me";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),

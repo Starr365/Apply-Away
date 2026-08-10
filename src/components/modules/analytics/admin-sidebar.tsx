@@ -117,7 +117,7 @@ export function AdminSidebar({ activeTab, onSelectTab }: AdminSidebarProps) {
           {/* Brand Header */}
           <div className="flex items-center justify-between px-2 pt-2">
             <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-primary to-sky-500 flex items-center justify-center text-white shadow-md shadow-primary/20">
+              <div className="w-9 h-9 rounded-2xl bg-linear-to-br from-primary to-sky-500 flex items-center justify-center text-white shadow-md shadow-primary/20">
                 <BarChart3 className="w-5 h-5" />
               </div>
               <div>
