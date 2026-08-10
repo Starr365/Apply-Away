@@ -96,6 +96,7 @@ export class EmailService {
       <div style="font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 24px; border-radius: 16px;">
         <div style="max-width: 600px; margin: 0 auto; background-color: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155;">
           <div style="text-align: center; margin-bottom: 24px;">
+            <img src="https://applyaway.mmesomanzeribe.me/vault-logo.png" alt="Apply Away Logo" width="48" height="48" style="margin-bottom: 8px; border-radius: 12px;" />
             <h1 style="color: #38bdf8; font-size: 24px; margin: 0;">Apply Away</h1>
             <p style="color: #94a3b8; font-size: 14px; margin-top: 4px;">Opportunity Vault Deadline Alert</p>
           </div>
@@ -173,6 +174,7 @@ export class EmailService {
       <div style="font-family: Arial, sans-serif; background-color: #0f172a; color: #e2e8f0; padding: 24px; border-radius: 16px;">
         <div style="max-width: 600px; margin: 0 auto; background-color: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155;">
           <div style="text-align: center; margin-bottom: 24px;">
+            <img src="https://applyaway.mmesomanzeribe.me/vault-logo.png" alt="Apply Away Logo" width="56" height="56" style="margin-bottom: 8px; border-radius: 14px;" />
             <h1 style="color: #38bdf8; font-size: 26px; margin: 0; font-weight: bold;">Apply Away</h1>
             <p style="color: #94a3b8; font-size: 14px; margin-top: 4px;">Welcome to Your Centralized Opportunity Vault</p>
           </div>

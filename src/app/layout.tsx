@@ -18,11 +18,61 @@ const outfit = Outfit({
   display: "swap",
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://applyaway.mmesomanzeribe.me";
+
 export const metadata: Metadata = {
-  title: "Apply Away – AI-Powered Personal Opportunity Vault",
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: "Apply Away – AI-Powered Personal Opportunity Vault",
+    template: "%s | Apply Away",
+  },
   description:
-    "Collect, organize, track, and manage fellowships, scholarships, grants, and career opportunities in one centralized AI-powered vault.",
+    "Centralize, organize, track, and manage scholarships, fellowships, grants, and career opportunities in one modern AI-powered vault with deadline alerts.",
+  keywords: [
+    "Opportunity Vault",
+    "Scholarship Tracker",
+    "Fellowship Management",
+    "Grant Tracker",
+    "AI Quick Capture",
+    "Deadline Reminders",
+    "Career Opportunities",
+  ],
+  authors: [{ name: "Apply Away Team", url: baseUrl }],
+  creator: "Apply Away",
+  publisher: "Apply Away",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/vault-logo.png" },
+      { url: "/vault-logo.png", type: "image/png" },
+    ],
+    shortcut: ["/vault-logo.png"],
+    apple: [{ url: "/vault-logo.png" }],
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: baseUrl,
+    title: "Apply Away – AI-Powered Personal Opportunity Vault",
+    description:
+      "Centralize, organize, track, and manage scholarships, fellowships, grants, and career opportunities in one modern AI-powered vault with deadline alerts.",
+    siteName: "Apply Away",
+    images: [
+      {
+        url: "/vault-logo.png",
+        width: 512,
+        height: 512,
+        alt: "Apply Away Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Apply Away – AI-Powered Personal Opportunity Vault",
+    description:
+      "Centralize, organize, track, and manage scholarships, fellowships, grants, and career opportunities in one modern AI-powered vault.",
+    images: ["/vault-logo.png"],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -42,8 +92,31 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Apply Away",
+    "url": baseUrl,
+    "logo": `${baseUrl}/vault-logo.png`,
+    "description":
+      "Centralize, organize, track, and manage scholarships, fellowships, grants, and career opportunities in one modern AI-powered vault with deadline alerts.",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+    },
+  };
+
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         suppressHydrationWarning
         className="font-sans antialiased bg-background text-foreground selection:bg-purple-500 selection:text-white min-h-screen flex flex-col transition-colors duration-300"
