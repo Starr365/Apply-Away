@@ -73,30 +73,57 @@ function calculateChange(current: number, previous: number): MetricWithCompariso
   };
 }
 
+// Helper interface for typed prisma delegate
+interface AnalyticsEventDelegate {
+  count: (args?: { where?: Record<string, unknown> }) => Promise<number>;
+  findMany: (args?: {
+    where?: Record<string, unknown>;
+    select?: Record<string, boolean>;
+    orderBy?: Record<string, string>;
+    take?: number;
+  }) => Promise<any[]>;
+  groupBy: (args: {
+    by: string[];
+    where?: Record<string, unknown>;
+    _count?: Record<string, boolean>;
+  }) => Promise<any[]>;
+}
+
+function getAnalyticsDb(): AnalyticsEventDelegate | null {
+  const db = prisma as unknown as { analyticsEvent?: AnalyticsEventDelegate };
+  return db.analyticsEvent || null;
+}
+
 export class AdminAnalyticsService {
   /**
    * Primary KPI Cards: Visitors, Sign-ups, Activated Users, Opportunities Saved
    */
   async getPrimaryKPIs(range: DateRange) {
+    const analyticsDb = getAnalyticsDb();
+
     // Current period counts
     const [currentVisitors, currentSignups, currentActivated, currentSaved] = await Promise.all([
-      prisma.analyticsEvent.count({
-        where: {
-          eventName: "page_view",
-          createdAt: { gte: range.startDate, lte: range.endDate },
-        },
-      }),
+      analyticsDb
+        ? analyticsDb.count({
+            where: {
+              eventName: "page_view",
+              createdAt: { gte: range.startDate, lte: range.endDate },
+            },
+          })
+        : Promise.resolve(0),
       prisma.user.count({
         where: {
           createdAt: { gte: range.startDate, lte: range.endDate },
         },
       }),
-      prisma.opportunity.groupBy({
-        by: ["userId"],
-        where: {
-          createdAt: { gte: range.startDate, lte: range.endDate },
-        },
-      }).then((res) => res.length),
+      prisma.opportunity
+        .groupBy({
+          by: ["userId"],
+          where: {
+            createdAt: { gte: range.startDate, lte: range.endDate },
+          },
+        })
+        .then((res: unknown[]) => res.length),
       prisma.opportunity.count({
         where: {
           createdAt: { gte: range.startDate, lte: range.endDate },
@@ -106,23 +133,27 @@ export class AdminAnalyticsService {
 
     // Previous period counts
     const [prevVisitors, prevSignups, prevActivated, prevSaved] = await Promise.all([
-      prisma.analyticsEvent.count({
-        where: {
-          eventName: "page_view",
-          createdAt: { gte: range.prevStartDate, lte: range.prevEndDate },
-        },
-      }),
+      analyticsDb
+        ? analyticsDb.count({
+            where: {
+              eventName: "page_view",
+              createdAt: { gte: range.prevStartDate, lte: range.prevEndDate },
+            },
+          })
+        : Promise.resolve(0),
       prisma.user.count({
         where: {
           createdAt: { gte: range.prevStartDate, lte: range.prevEndDate },
         },
       }),
-      prisma.opportunity.groupBy({
-        by: ["userId"],
-        where: {
-          createdAt: { gte: range.prevStartDate, lte: range.prevEndDate },
-        },
-      }).then((res) => res.length),
+      prisma.opportunity
+        .groupBy({
+          by: ["userId"],
+          where: {
+            createdAt: { gte: range.prevStartDate, lte: range.prevEndDate },
+          },
+        })
+        .then((res: unknown[]) => res.length),
       prisma.opportunity.count({
         where: {
           createdAt: { gte: range.prevStartDate, lte: range.prevEndDate },
@@ -142,23 +173,27 @@ export class AdminAnalyticsService {
    * Traffic Analytics line chart dataset
    */
   async getTrafficAnalytics(range: DateRange) {
-    const events = await prisma.analyticsEvent.findMany({
-      where: {
-        eventName: "page_view",
-        createdAt: { gte: range.startDate, lte: range.endDate },
-      },
-      select: {
-        createdAt: true,
-        sessionId: true,
-        userId: true,
-      },
-      orderBy: { createdAt: "asc" },
-    });
+    const analyticsDb = getAnalyticsDb();
+    const events = analyticsDb
+      ? await analyticsDb.findMany({
+          where: {
+            eventName: "page_view",
+            createdAt: { gte: range.startDate, lte: range.endDate },
+          },
+          select: {
+            createdAt: true,
+            sessionId: true,
+            userId: true,
+          },
+          orderBy: { createdAt: "asc" },
+        })
+      : [];
 
     const datesMap: Record<string, { total: number; newVisitors: number; returningVisitors: number }> = {};
 
-    events.forEach((ev) => {
-      const dayKey = ev.createdAt.toISOString().split("T")[0];
+    events.forEach((ev: { createdAt: Date | string; userId?: string | null }) => {
+      const createdDate = typeof ev.createdAt === "string" ? new Date(ev.createdAt) : ev.createdAt;
+      const dayKey = createdDate.toISOString().split("T")[0];
       if (!datesMap[dayKey]) {
         datesMap[dayKey] = { total: 0, newVisitors: 0, returningVisitors: 0 };
       }
@@ -182,21 +217,26 @@ export class AdminAnalyticsService {
    * Traffic Sources & Conversion Table
    */
   async getTrafficSources(range: DateRange) {
-    const pageViews = await prisma.analyticsEvent.findMany({
-      where: {
-        eventName: "page_view",
-        createdAt: { gte: range.startDate, lte: range.endDate },
-      },
-      select: { source: true, sessionId: true },
-    });
+    const analyticsDb = getAnalyticsDb();
+    const pageViews = analyticsDb
+      ? await analyticsDb.findMany({
+          where: {
+            eventName: "page_view",
+            createdAt: { gte: range.startDate, lte: range.endDate },
+          },
+          select: { source: true, sessionId: true },
+        })
+      : [];
 
-    const signups = await prisma.analyticsEvent.findMany({
-      where: {
-        eventName: "sign_up",
-        createdAt: { gte: range.startDate, lte: range.endDate },
-      },
-      select: { source: true },
-    });
+    const signups = analyticsDb
+      ? await analyticsDb.findMany({
+          where: {
+            eventName: "sign_up",
+            createdAt: { gte: range.startDate, lte: range.endDate },
+          },
+          select: { source: true },
+        })
+      : [];
 
     const sourcesMap: Record<string, { visitors: number; signups: number }> = {
       Direct: { visitors: 0, signups: 0 },
@@ -217,12 +257,12 @@ export class AdminAnalyticsService {
       return "Other";
     };
 
-    pageViews.forEach((pv) => {
+    pageViews.forEach((pv: { source?: string | null }) => {
       const srcName = normalizeSource(pv.source);
       sourcesMap[srcName].visitors += 1;
     });
 
-    signups.forEach((su) => {
+    signups.forEach((su: { source?: string | null }) => {
       const srcName = normalizeSource(su.source);
       sourcesMap[srcName].signups += 1;
     });
@@ -240,34 +280,39 @@ export class AdminAnalyticsService {
    * UTM Campaign Tracking
    */
   async getUtmCampaigns(range: DateRange) {
-    const campaigns = await prisma.analyticsEvent.groupBy({
-      by: ["campaign", "source"],
-      where: {
-        campaign: { not: null },
-        createdAt: { gte: range.startDate, lte: range.endDate },
-      },
-      _count: { id: true },
-    });
+    const analyticsDb = getAnalyticsDb();
+    const campaigns = analyticsDb
+      ? await analyticsDb.groupBy({
+          by: ["campaign", "source"],
+          where: {
+            campaign: { not: null },
+            createdAt: { gte: range.startDate, lte: range.endDate },
+          },
+          _count: { id: true },
+        })
+      : [];
 
     const results = await Promise.all(
-      campaigns.map(async (c) => {
+      campaigns.map(async (c: { campaign?: string | null; source?: string | null }) => {
         const campaignName = c.campaign || "Unassigned";
-        const [visitors, signups] = await Promise.all([
-          prisma.analyticsEvent.count({
-            where: {
-              campaign: c.campaign,
-              eventName: "page_view",
-              createdAt: { gte: range.startDate, lte: range.endDate },
-            },
-          }),
-          prisma.analyticsEvent.count({
-            where: {
-              campaign: c.campaign,
-              eventName: "sign_up",
-              createdAt: { gte: range.startDate, lte: range.endDate },
-            },
-          }),
-        ]);
+        const [visitors, signups] = analyticsDb
+          ? await Promise.all([
+              analyticsDb.count({
+                where: {
+                  campaign: c.campaign,
+                  eventName: "page_view",
+                  createdAt: { gte: range.startDate, lte: range.endDate },
+                },
+              }),
+              analyticsDb.count({
+                where: {
+                  campaign: c.campaign,
+                  eventName: "sign_up",
+                  createdAt: { gte: range.startDate, lte: range.endDate },
+                },
+              }),
+            ])
+          : [0, 0];
 
         return {
           campaign: campaignName,
@@ -279,31 +324,38 @@ export class AdminAnalyticsService {
       })
     );
 
-    return results.sort((a, b) => b.visitors - a.visitors);
+    return results.sort(
+      (a: { visitors: number }, b: { visitors: number }) => b.visitors - a.visitors
+    );
   }
 
   /**
    * Signup & Product Activation Funnel
    */
   async getSignupFunnel(range: DateRange) {
+    const analyticsDb = getAnalyticsDb();
     const [visitors, signups, activatedUsers] = await Promise.all([
-      prisma.analyticsEvent.count({
-        where: {
-          eventName: "page_view",
-          createdAt: { gte: range.startDate, lte: range.endDate },
-        },
-      }),
+      analyticsDb
+        ? analyticsDb.count({
+            where: {
+              eventName: "page_view",
+              createdAt: { gte: range.startDate, lte: range.endDate },
+            },
+          })
+        : Promise.resolve(0),
       prisma.user.count({
         where: {
           createdAt: { gte: range.startDate, lte: range.endDate },
         },
       }),
-      prisma.opportunity.groupBy({
-        by: ["userId"],
-        where: {
-          createdAt: { gte: range.startDate, lte: range.endDate },
-        },
-      }).then((res) => res.length),
+      prisma.opportunity
+        .groupBy({
+          by: ["userId"],
+          where: {
+            createdAt: { gte: range.startDate, lte: range.endDate },
+          },
+        })
+        .then((res: unknown[]) => res.length),
     ]);
 
     const visitorToSignup = visitors > 0 ? Math.round((signups / visitors) * 1000) / 10 : 0;
@@ -322,22 +374,25 @@ export class AdminAnalyticsService {
    * Core Product Usage Event Distribution
    */
   async getProductUsage(range: DateRange) {
-    const events = await prisma.analyticsEvent.groupBy({
-      by: ["eventName"],
-      where: {
-        eventName: {
-          in: [
-            "opportunity_saved",
-            "ai_extraction_used",
-            "opportunity_viewed",
-            "calendar_viewed",
-            "status_updated",
-          ],
-        },
-        createdAt: { gte: range.startDate, lte: range.endDate },
-      },
-      _count: { id: true },
-    });
+    const analyticsDb = getAnalyticsDb();
+    const events = analyticsDb
+      ? await analyticsDb.groupBy({
+          by: ["eventName"],
+          where: {
+            eventName: {
+              in: [
+                "opportunity_saved",
+                "ai_extraction_used",
+                "opportunity_viewed",
+                "calendar_viewed",
+                "status_updated",
+              ],
+            },
+            createdAt: { gte: range.startDate, lte: range.endDate },
+          },
+          _count: { id: true },
+        })
+      : [];
 
     const labelMap: Record<string, string> = {
       opportunity_saved: "Opportunities Saved",
@@ -347,9 +402,9 @@ export class AdminAnalyticsService {
       status_updated: "Status Updates",
     };
 
-    return events.map((e) => ({
+    return events.map((e: { eventName: string; _count?: { id: number } }) => ({
       event: labelMap[e.eventName] || e.eventName,
-      count: e._count.id,
+      count: e._count?.id || 0,
     }));
   }
 
@@ -427,16 +482,19 @@ export class AdminAnalyticsService {
    * Recent Activity Log (Privacy-safe owner feed)
    */
   async getRecentActivity() {
-    const logs = await prisma.analyticsEvent.findMany({
-      take: 10,
-      orderBy: { createdAt: "desc" },
-      select: {
-        id: true,
-        eventName: true,
-        createdAt: true,
-        source: true,
-      },
-    });
+    const analyticsDb = getAnalyticsDb();
+    const logs = analyticsDb
+      ? await analyticsDb.findMany({
+          take: 10,
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            eventName: true,
+            createdAt: true,
+            source: true,
+          },
+        })
+      : [];
 
     const eventLabelMap: Record<string, string> = {
       page_view: "Website Page View",
@@ -449,7 +507,7 @@ export class AdminAnalyticsService {
       status_updated: "Opportunity Status Changed",
     };
 
-    return logs.map((log) => ({
+    return logs.map((log: { id: string; eventName: string; createdAt: Date | string; source?: string | null }) => ({
       id: log.id,
       event: eventLabelMap[log.eventName] || log.eventName,
       timestamp: log.createdAt,

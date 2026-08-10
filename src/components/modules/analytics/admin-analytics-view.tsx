@@ -18,7 +18,8 @@ import { ShieldCheck, RefreshCw } from "lucide-react";
 import { useToast } from "@/components/ui/toast-provider";
 
 interface AdminAnalyticsViewProps {
-  initialData: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  initialData: Record<string, any>;
   initialRange: DateRangeKey;
 }
 
