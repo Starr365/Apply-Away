@@ -54,6 +54,18 @@ export async function extractOpportunityAction(params: {
       extractedData.officialUrl || extractedData.applicationUrl
     );
 
+    // Track analytics event: ai_extraction_used
+    const { trackEvent } = await import("@/lib/analytics");
+    await trackEvent({
+      eventName: "ai_extraction_used",
+      userId: session.user.id,
+      metadata: {
+        inputType: url ? "url" : "text",
+        category: extractedData.category,
+        isDuplicate: dupCheck.isDuplicate,
+      },
+    });
+
     return {
       success: true,
       data: extractedData,

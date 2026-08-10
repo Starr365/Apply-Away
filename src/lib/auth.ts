@@ -64,6 +64,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  events: {
+    async signIn({ user }) {
+      if (user?.id) {
+        const { trackEvent } = await import("@/lib/analytics");
+        await trackEvent({
+          eventName: "login",
+          userId: user.id,
+        });
+      }
+    },
+  },
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       if (user) {

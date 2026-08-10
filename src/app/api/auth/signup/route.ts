@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { trackEvent } from "@/lib/analytics";
 
 export async function POST(req: NextRequest) {
   try {
@@ -37,6 +38,13 @@ export async function POST(req: NextRequest) {
         passwordHash,
         timezone: "Africa/Lagos",
       },
+    });
+
+    // Track analytics sign_up event (centralized trackEvent)
+    await trackEvent({
+      eventName: "sign_up",
+      userId: user.id,
+      metadata: { email: normalizedEmail },
     });
 
     // Send welcome email via EmailService

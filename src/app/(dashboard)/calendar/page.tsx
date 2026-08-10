@@ -17,6 +17,14 @@ export default async function CalendarPage() {
     sortOrder: "asc",
   });
 
+  // Track analytics event: calendar_viewed
+  const { trackEvent } = await import("@/lib/analytics");
+  await trackEvent({
+    eventName: "calendar_viewed",
+    userId,
+    metadata: { count: opportunities.length },
+  });
+
   return (
     <div className="space-y-6">
       <PageHeader
