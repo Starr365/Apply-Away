@@ -62,6 +62,18 @@ export async function createOpportunityAction(formData: unknown) {
       },
     });
 
+    // Track analytics event: opportunity_saved
+    const { trackEvent } = await import("@/lib/analytics");
+    await trackEvent({
+      eventName: "opportunity_saved",
+      userId: session.user.id,
+      metadata: {
+        opportunityId: opportunity.id,
+        category: opportunity.category,
+        organization: opportunity.organization,
+      },
+    });
+
     revalidatePath("/dashboard");
     return { success: true, data: opportunity };
   } catch (err) {
@@ -176,6 +188,17 @@ export async function updateOpportunityStatusAction(
         opportunityId: opportunity.id,
         action: "STATUS_CHANGED",
         description: `Changed status to "${parsedStatus.data.replace(/_/g, " ")}".`,
+      },
+    });
+
+    // Track analytics event: status_updated
+    const { trackEvent } = await import("@/lib/analytics");
+    await trackEvent({
+      eventName: "status_updated",
+      userId: session.user.id,
+      metadata: {
+        opportunityId: opportunity.id,
+        newStatus: parsedStatus.data,
       },
     });
 

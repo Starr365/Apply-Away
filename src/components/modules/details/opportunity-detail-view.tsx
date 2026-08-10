@@ -4,8 +4,6 @@ import { useState } from "react";
 import { Opportunity, ActivityLog, OpportunityStatus, OpportunityPriority } from "@/domain/opportunity.types";
 import {
   CategoryBadge,
-  StatusBadge,
-  PriorityBadge,
   InteractiveStatusBadge,
   InteractivePriorityBadge,
 } from "@/components/ui/badge";
@@ -197,9 +195,8 @@ export function OpportunityDetailView({
         <div className="border-t border-border pt-4 flex flex-wrap items-center justify-between gap-4 text-xs">
           <div className="flex items-center space-x-2 text-foreground">
             <Clock
-              className={`w-4 h-4 ${
-                deadlineInfo.isOverdue ? "text-destructive" : "text-amber-500"
-              }`}
+              className={`w-4 h-4 ${deadlineInfo.isOverdue ? "text-destructive" : "text-amber-500"
+                }`}
             />
             <span className="font-medium">
               Deadline:{" "}
@@ -243,11 +240,10 @@ export function OpportunityDetailView({
         <button
           type="button"
           onClick={() => setActiveTab("overview")}
-          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-            activeTab === "overview"
+          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "overview"
               ? "bg-primary text-primary-foreground shadow-md"
               : "text-muted-foreground hover:text-foreground"
-          }`}
+            }`}
         >
           <BookOpen className="w-3.5 h-3.5" />
           <span>Overview</span>
@@ -256,11 +252,10 @@ export function OpportunityDetailView({
         <button
           type="button"
           onClick={() => setActiveTab("essays")}
-          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-            activeTab === "essays"
+          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "essays"
               ? "bg-primary text-primary-foreground shadow-md"
               : "text-muted-foreground hover:text-foreground"
-          }`}
+            }`}
         >
           <FileText className="w-3.5 h-3.5" />
           <span>Essay Prompts ({opportunity.essayQuestions.length})</span>
@@ -269,11 +264,10 @@ export function OpportunityDetailView({
         <button
           type="button"
           onClick={() => setActiveTab("checklist")}
-          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-            activeTab === "checklist"
+          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "checklist"
               ? "bg-primary text-primary-foreground shadow-md"
               : "text-muted-foreground hover:text-foreground"
-          }`}
+            }`}
         >
           <ListCheck className="w-3.5 h-3.5" />
           <span>Checklist</span>
@@ -282,11 +276,10 @@ export function OpportunityDetailView({
         <button
           type="button"
           onClick={() => setActiveTab("notes")}
-          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-            activeTab === "notes"
+          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "notes"
               ? "bg-primary text-primary-foreground shadow-md"
               : "text-muted-foreground hover:text-foreground"
-          }`}
+            }`}
         >
           <Pencil className="w-3.5 h-3.5" />
           <span>Notes</span>
@@ -295,11 +288,10 @@ export function OpportunityDetailView({
         <button
           type="button"
           onClick={() => setActiveTab("timeline")}
-          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-            activeTab === "timeline"
+          className={`flex-1 min-w-27.5 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "timeline"
               ? "bg-primary text-primary-foreground shadow-md"
               : "text-muted-foreground hover:text-foreground"
-          }`}
+            }`}
         >
           <History className="w-3.5 h-3.5" />
           <span>Activity Log</span>
@@ -456,19 +448,17 @@ export function OpportunityDetailView({
                 <div
                   key={item.key}
                   onClick={() => handleToggleChecklist(item.key)}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
-                    isDone
+                  className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${isDone
                       ? "bg-primary/10 border-primary/30 text-primary"
                       : "bg-card border-border text-foreground hover:border-primary/50"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center space-x-3">
                     <div
-                      className={`w-5 h-5 rounded-lg border flex items-center justify-center ${
-                        isDone
+                      className={`w-5 h-5 rounded-lg border flex items-center justify-center ${isDone
                           ? "bg-primary border-primary text-primary-foreground"
                           : "border-border"
-                      }`}
+                        }`}
                     >
                       {isDone && <CheckCircle2 className="w-3.5 h-3.5" />}
                     </div>

@@ -211,3 +211,22 @@ model MonthlyReflection {
   @@index([userId])
   @@map("monthly_reflections")
 }
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  eventName String
+  userId    String?
+  sessionId String?
+  source    String?
+  medium    String?
+  campaign  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([eventName])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([campaign])
+  @@index([sessionId])
+  @@map("analytics_events")
+}

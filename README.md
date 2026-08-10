@@ -14,8 +14,8 @@ High-achieving applicants often discover opportunities scattered across WhatsApp
 - **Instant AI Extraction**: Simply paste a web link or text message—our AI automatically extracts the title, host organization, application deadlines, requirements, benefits, and essay prompts into your vault.
 - **Duplicate Prevention**: Warns you if you try to add an opportunity you are already tracking.
 - **Smart Deadline Calendar & Reminders**: Visualizes upcoming deadlines on an interactive calendar and dispatches timely email alerts in your local timezone (`Africa/Lagos`, `America/New_York`, etc.) so you never miss a submission window.
-- **Essay & Preparation Tracker**: Provides dedicated drafting space for every essay prompt, interactive document checklists (Resume, Transcripts, Recommendations), and personal vault notes.
-- **Reflection & Growth Dashboard**: Visualizes your application progress over time with charts, tracks acceptance rates, and logs monthly reflection notes.
+- **Essay & Preparation Tracker**: Dedicated drafting space for essay prompts, interactive document checklists (Resume, Transcripts, Recommendations), and personal vault notes.
+- **Reflection & Growth Dashboard**: Visualizes application progress over time with charts, tracks status conversion rates, and logs monthly reflection notes.
 
 ---
 

@@ -46,6 +46,18 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
     orderBy: { createdAt: "desc" },
   });
 
+  // Track analytics event: opportunity_viewed
+  const { trackEvent } = await import("@/lib/analytics");
+  await trackEvent({
+    eventName: "opportunity_viewed",
+    userId,
+    metadata: {
+      opportunityId: opportunity.id,
+      category: opportunity.category,
+      status: opportunity.status,
+    },
+  });
+
   return (
     <OpportunityDetailView
       opportunity={opportunity}
