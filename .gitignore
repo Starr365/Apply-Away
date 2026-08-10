@@ -51,3 +51,5 @@ final prompt.md
 *.pdf
 
 
+# local scratch scripts
+scripts/

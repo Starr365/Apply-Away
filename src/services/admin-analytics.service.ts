@@ -189,9 +189,10 @@ export class AdminAnalyticsService {
       })
       : [];
 
+    type RawAnalyticsEvent = { createdAt: Date | string; userId?: string | null; eventName?: string; _count?: { id: number }; id?: string; source?: string | null };
     const datesMap: Record<string, { total: number; newVisitors: number; returningVisitors: number }> = {};
 
-    (events as any[]).forEach((ev: { createdAt: Date | string; userId?: string | null }) => {
+    (events as unknown as RawAnalyticsEvent[]).forEach((ev) => {
       const createdDate = typeof ev.createdAt === "string" ? new Date(ev.createdAt) : ev.createdAt;
       const dayKey = createdDate.toISOString().split("T")[0];
       if (!datesMap[dayKey]) {
@@ -402,7 +403,7 @@ export class AdminAnalyticsService {
       status_updated: "Status Updates",
     };
 
-    return (events as any[]).map((e: { eventName: string; _count?: { id: number } }) => ({
+    return (events as unknown as Array<{ eventName: string; _count?: { id: number } }>).map((e) => ({
       event: labelMap[e.eventName] || e.eventName,
       count: e._count?.id || 0,
     }));
@@ -507,7 +508,7 @@ export class AdminAnalyticsService {
       status_updated: "Opportunity Status Changed",
     };
 
-    return (logs as any[]).map((log: { id: string; eventName: string; createdAt: Date | string; source?: string | null }) => ({
+    return (logs as unknown as Array<{ id: string; eventName: string; createdAt: Date | string; source?: string | null }>).map((log) => ({
       id: log.id,
       event: eventLabelMap[log.eventName] || log.eventName,
       timestamp: log.createdAt,
