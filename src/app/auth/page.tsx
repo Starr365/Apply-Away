@@ -34,13 +34,10 @@ function AuthContent() {
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Animated tab transition using react-spring
+  // Animated entrance using react-spring
   const formSpring = useSpring({
-    opacity: 1,
-    transform: "translateY(0px)",
+    to: { opacity: 1, transform: "translateY(0px)" },
     from: { opacity: 0, transform: "translateY(12px)" },
-    reset: true,
-    key: mode,
     config: { tension: 280, friction: 22 },
   });
 
