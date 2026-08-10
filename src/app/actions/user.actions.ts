@@ -25,3 +25,21 @@ export async function updateUserTimezone(newTimezone: string) {
 
   return { success: true, timezone: newTimezone };
 }
+
+export async function updateUserAvatar(imageUrl: string | null) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    throw new Error("Unauthorized. Please sign in.");
+  }
+
+  await prisma.user.update({
+    where: { id: session.user.id },
+    data: { image: imageUrl },
+  });
+
+  revalidatePath("/profile");
+  revalidatePath("/dashboard");
+
+  return { success: true, image: imageUrl };
+}

@@ -79,7 +79,7 @@ export function LandingFAQ() {
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
                   type="button"
-                  className="w-full p-5 sm:p-6 flex items-center justify-between text-left font-bold font-outfit text-base sm:text-lg text-foreground hover:bg-accent transition-colors cursor-pointer"
+                  className="w-full py-4 px-6 flex items-center justify-between text-left font-bold font-outfit text-base sm:text-lg text-foreground hover:bg-accent transition-colors cursor-pointer"
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
