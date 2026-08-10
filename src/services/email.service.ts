@@ -14,8 +14,16 @@ export interface SendReminderEmailParams {
 
 export class EmailService {
   private transporter: nodemailer.Transporter | null = null;
+  private resendApiKey: string | null = null;
+  private defaultFrom: string;
 
   constructor() {
+    this.resendApiKey = process.env.RESEND_API_KEY || null;
+    this.defaultFrom =
+      process.env.EMAIL_FROM ||
+      process.env.SMTP_FROM ||
+      '"Apply Away" <notifications@applyaway.mmesomanzeribe.me>';
+
     const smtpHost = process.env.SMTP_HOST;
     const smtpPort = parseInt(process.env.SMTP_PORT || "587", 10);
     const smtpUser = process.env.SMTP_USER;
@@ -34,6 +42,44 @@ export class EmailService {
     }
   }
 
+  private async sendViaResendApi(params: {
+    from: string;
+    to: string;
+    subject: string;
+    html: string;
+  }): Promise<boolean> {
+    if (!this.resendApiKey) return false;
+
+    try {
+      const response = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.resendApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: params.from,
+          to: [params.to],
+          subject: params.subject,
+          html: params.html,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(`[EmailService RESEND API SUCCESS] Sent email to ${params.to}, id: ${data.id}`);
+        return true;
+      } else {
+        console.error(`[EmailService RESEND API ERROR]`, data);
+        return false;
+      }
+    } catch (err) {
+      console.error("[EmailService RESEND API EXCEPTION]", err);
+      return false;
+    }
+  }
+
   async sendReminderEmail(params: SendReminderEmailParams): Promise<boolean> {
     const {
       toEmail,
@@ -47,10 +93,10 @@ export class EmailService {
     } = params;
 
     const htmlContent = `
-      <div style="font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 24px; borderRadius: 16px;">
+      <div style="font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 24px; border-radius: 16px;">
         <div style="max-width: 600px; margin: 0 auto; background-color: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155;">
           <div style="text-align: center; margin-bottom: 24px;">
-            <h1 style="color: #a855f7; font-size: 24px; margin: 0;">Apply Away</h1>
+            <h1 style="color: #38bdf8; font-size: 24px; margin: 0;">Apply Away</h1>
             <p style="color: #94a3b8; font-size: 14px; margin-top: 4px;">Opportunity Vault Deadline Alert</p>
           </div>
 
@@ -63,7 +109,7 @@ export class EmailService {
           <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6;">
             This is an automated reminder that your application deadline for 
             <strong style="color: #ffffff;">${opportunityTitle}</strong> at 
-            <strong style="color: #a855f7;">${organization}</strong> is approaching!
+            <strong style="color: #38bdf8;">${organization}</strong> is approaching!
           </p>
 
           <div style="background-color: #0f172a; border-radius: 12px; padding: 16px; margin: 24px 0; border: 1px solid #334155;">
@@ -74,7 +120,7 @@ export class EmailService {
           ${
             opportunityUrl
               ? `<div style="text-align: center; margin-top: 24px;">
-                  <a href="${opportunityUrl}" style="background-color: #9333ea; color: #ffffff; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block;">View Opportunity Details</a>
+                  <a href="${opportunityUrl}" style="background-color: #38bdf8; color: #0f172a; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block;">View Opportunity Details</a>
                 </div>`
               : ""
           }
@@ -88,21 +134,32 @@ export class EmailService {
     `;
 
     const sendFn = async () => {
-      if (!this.transporter) {
-        console.log(
-          `[EmailService MOCK MODE] Reminder "${reminderTypeLabel}" sent to ${toEmail} for "${opportunityTitle}"`
-        );
+      const from = this.defaultFrom;
+
+      if (this.resendApiKey) {
+        const ok = await this.sendViaResendApi({
+          from,
+          to: toEmail,
+          subject: `⏰ Deadline Alert: ${opportunityTitle} (${reminderTypeLabel})`,
+          html: htmlContent,
+        });
+        if (ok) return true;
+      }
+
+      if (this.transporter) {
+        await this.transporter.sendMail({
+          from,
+          to: toEmail,
+          subject: `⏰ Deadline Alert: ${opportunityTitle} (${reminderTypeLabel})`,
+          html: htmlContent,
+        });
+        console.log(`[EmailService SMTP SUCCESS] Email sent to ${toEmail} for "${opportunityTitle}"`);
         return true;
       }
 
-      await this.transporter.sendMail({
-        from: process.env.SMTP_FROM || '"Apply Away" <reminders@applyaway.app>',
-        to: toEmail,
-        subject: `⏰ Deadline Alert: ${opportunityTitle} (${reminderTypeLabel})`,
-        html: htmlContent,
-      });
-
-      console.log(`[EmailService SUCCESS] Email sent to ${toEmail} for "${opportunityTitle}"`);
+      console.log(
+        `[EmailService MOCK MODE] Reminder "${reminderTypeLabel}" sent to ${toEmail} for "${opportunityTitle}"`
+      );
       return true;
     };
 
@@ -150,21 +207,32 @@ export class EmailService {
     `;
 
     const sendFn = async () => {
-      if (!this.transporter) {
-        console.log(
-          `[EmailService MOCK MODE] Welcome email sent to ${toEmail} for "${userName}"`
-        );
+      const from = this.defaultFrom;
+
+      if (this.resendApiKey) {
+        const ok = await this.sendViaResendApi({
+          from,
+          to: toEmail,
+          subject: `🎉 Welcome to Apply Away, ${userName}!`,
+          html: htmlContent,
+        });
+        if (ok) return true;
+      }
+
+      if (this.transporter) {
+        await this.transporter.sendMail({
+          from,
+          to: toEmail,
+          subject: `🎉 Welcome to Apply Away, ${userName}!`,
+          html: htmlContent,
+        });
+        console.log(`[EmailService SMTP SUCCESS] Welcome email sent to ${toEmail}`);
         return true;
       }
 
-      await this.transporter.sendMail({
-        from: process.env.SMTP_FROM || '"Apply Away" <welcome@applyaway.app>',
-        to: toEmail,
-        subject: `🎉 Welcome to Apply Away, ${userName}!`,
-        html: htmlContent,
-      });
-
-      console.log(`[EmailService SUCCESS] Welcome email sent to ${toEmail}`);
+      console.log(
+        `[EmailService MOCK MODE] Welcome email sent to ${toEmail} for "${userName}"`
+      );
       return true;
     };
 

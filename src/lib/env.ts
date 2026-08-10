@@ -29,7 +29,7 @@ const envSchema = z.object({
 
   // Email Service Configuration
   RESEND_API_KEY: z.string().optional(),
-  EMAIL_FROM: z.string().email("EMAIL_FROM must be a valid email").default("notifications@applyaway.app"),
+  EMAIL_FROM: z.string().min(1).default("notifications@applyaway.mmesomanzeribe.me"),
 
   // Timezone Configuration
   DEFAULT_TIMEZONE: z.string().default("Africa/Lagos"),
@@ -55,7 +55,7 @@ export function getEnv() {
       GEMINI_API_KEY: process.env.GEMINI_API_KEY,
       GEMINI_MODEL: process.env.GEMINI_MODEL || "gemini-3.6-flash",
       RESEND_API_KEY: process.env.RESEND_API_KEY,
-      EMAIL_FROM: process.env.EMAIL_FROM || "notifications@applyaway.app",
+      EMAIL_FROM: process.env.EMAIL_FROM || "notifications@applyaway.mmesomanzeribe.me",
       DEFAULT_TIMEZONE: process.env.DEFAULT_TIMEZONE || "Africa/Lagos",
       NODE_ENV: process.env.NODE_ENV || "development",
     });
