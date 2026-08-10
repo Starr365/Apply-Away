@@ -129,20 +129,15 @@ function OpportunityFormContent({
       <div className="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto border border-border shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border pb-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-              {isEditing ? <FileEdit className="w-5 h-5" /> : <FolderPlus className="w-5 h-5" />}
-            </div>
-            <div>
-              <h2 className="text-xl font-bold font-outfit text-foreground">
-                {isEditing ? "Edit Opportunity" : "Create New Opportunity"}
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                {isEditing
-                  ? "Update opportunity details in your vault."
-                  : "Add a new opportunity manually to your centralized vault."}
-              </p>
-            </div>
+          <div>
+            <h2 className="text-xl font-bold font-outfit text-foreground">
+              {isEditing ? "Edit Opportunity" : "Create New Opportunity"}
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              {isEditing
+                ? "Update opportunity details in your vault."
+                : "Fill in the details below to add a new opportunity to your vault."}
+            </p>
           </div>
           <button
             type="button"

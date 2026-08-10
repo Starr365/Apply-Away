@@ -24,10 +24,10 @@ export function LandingProblem() {
           <span className="text-xs sm:text-sm font-bold text-primary uppercase tracking-widest">
             THE APPLICATION CHAOS
           </span>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-outfit text-foreground tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-extrabold font-outfit text-foreground tracking-tight leading-tight">
             You shouldn&apos;t need five apps to manage one application.
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
             Opportunities arrive from everywhere. When deadlines are scattered across bookmarks, notes, and screenshots, critical details slip through the cracks.
           </p>
         </AnimatedContainer>

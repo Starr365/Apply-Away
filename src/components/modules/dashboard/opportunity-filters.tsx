@@ -69,7 +69,7 @@ export function OpportunityFilters() {
         <select
           value={category}
           onChange={(e) => handleFilterChange("category", e.target.value)}
-          className="h-11 px-3 rounded-xl bg-card border border-input text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
+          className="h-11 px-4 sm:px-5 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
         >
           <option value="">All Categories</option>
           <option value="FELLOWSHIP">Fellowship</option>
@@ -89,7 +89,7 @@ export function OpportunityFilters() {
         <select
           value={status}
           onChange={(e) => handleFilterChange("status", e.target.value)}
-          className="h-11 px-3 rounded-xl bg-card border border-input text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
+          className="h-11 px-4 sm:px-5 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
         >
           <option value="">All Statuses</option>
           <option value="NOT_STARTED">Not Started</option>
@@ -104,7 +104,7 @@ export function OpportunityFilters() {
         <select
           value={priority}
           onChange={(e) => handleFilterChange("priority", e.target.value)}
-          className="h-11 px-3 rounded-xl bg-card border border-input text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
+          className="h-11 px-4 sm:px-5 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
         >
           <option value="">All Priorities</option>
           <option value="HIGH">High</option>

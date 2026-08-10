@@ -22,12 +22,12 @@ export function LandingHero() {
             <span>YOUR OPPORTUNITIES, FINALLY ORGANIZED</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight font-outfit text-foreground leading-[1.1]">
+          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight font-outfit text-foreground leading-[1.1]">
             Stop losing opportunities. <br />
             <span className="text-primary">Start applying with intention.</span>
           </h1>
 
-          <p className="text-base sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <p className="text-base sm:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
             Apply Away is your personal opportunity vault for scholarships, fellowships, internships, grants, jobs, conferences, and more. Save an opportunity, let AI organize the details, and never lose track of a deadline again.
           </p>
 

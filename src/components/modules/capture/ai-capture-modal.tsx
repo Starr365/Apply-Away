@@ -143,16 +143,11 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
       <div className="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto border border-border shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border pb-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-md shadow-primary/20">
-              <Wand2 className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold font-outfit text-foreground">AI Opportunity Capture</h2>
-              <p className="text-xs text-muted-foreground">
-                Paste a website link or text message to extract structured data automatically.
-              </p>
-            </div>
+          <div>
+            <h2 className="text-xl font-bold font-outfit text-foreground">AI Opportunity Capture</h2>
+            <p className="text-xs text-muted-foreground">
+              Paste a website link or text message to extract structured data automatically.
+            </p>
           </div>
           <button
             type="button"
@@ -259,18 +254,15 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
               <button
                 type="submit"
                 disabled={isExtracting}
-                className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25 flex items-center justify-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
+                className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25 flex items-center justify-center transition-all cursor-pointer disabled:opacity-50"
               >
                 {isExtracting ? (
-                  <>
+                  <div className="flex items-center space-x-2">
                     <Loader2 className="w-4 h-4 animate-spin text-white" />
                     <span>Extracting Structured Opportunity...</span>
-                  </>
+                  </div>
                 ) : (
-                  <>
-                    <Wand2 className="w-4 h-4" />
-                    <span>Extract with AI</span>
-                  </>
+                  <span>Extract with AI</span>
                 )}
               </button>
             </form>

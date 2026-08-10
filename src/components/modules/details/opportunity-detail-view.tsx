@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Opportunity, ActivityLog } from "@/domain/opportunity.types";
+import { Opportunity, ActivityLog, OpportunityStatus, OpportunityPriority } from "@/domain/opportunity.types";
 import { CategoryBadge, StatusBadge, PriorityBadge } from "@/components/ui/badge";
 import { formatDate, getDaysRemaining } from "@/lib/utils";
 import { updateEssayDraftAction, updatePersonalNotesAction } from "@/app/actions/detail.actions";
+import { updateOpportunityStatusAction, updateOpportunityPriorityAction } from "@/app/actions/opportunity.actions";
 import {
   ArrowLeft,
   Building,
@@ -38,10 +39,33 @@ export function OpportunityDetailView({
     "overview" | "essays" | "checklist" | "notes" | "timeline"
   >("overview");
 
+  const [currentStatus, setCurrentStatus] = useState<OpportunityStatus>(opportunity.status);
+  const [currentPriority, setCurrentPriority] = useState<OpportunityPriority>(opportunity.priority);
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [notes, setNotes] = useState(opportunity.personalNotes || "");
   const [isSavingNotes, setIsSavingNotes] = useState(false);
   const [notesSuccess, setNotesSuccess] = useState(false);
+
+  const handleStatusChange = async (st: OpportunityStatus) => {
+    setCurrentStatus(st);
+    const res = await updateOpportunityStatusAction(opportunity.id, st);
+    if (res.success) {
+      toast.success(`Status updated to ${st.replace(/_/g, " ")}`);
+    } else {
+      toast.error(res.error || "Failed to update status.");
+    }
+  };
+
+  const handlePriorityChange = async (pr: OpportunityPriority) => {
+    setCurrentPriority(pr);
+    const res = await updateOpportunityPriorityAction(opportunity.id, pr);
+    if (res.success) {
+      toast.success(`Priority updated to ${pr}`);
+    } else {
+      toast.error(res.error || "Failed to update priority.");
+    }
+  };
 
   // Essay drafts state map
   const [essayDrafts, setEssayDrafts] = useState<Record<string, string>>(() => {
@@ -150,10 +174,41 @@ export function OpportunityDetailView({
             </h1>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-3">
             <CategoryBadge category={opportunity.category} />
-            <StatusBadge status={opportunity.status} />
-            <PriorityBadge priority={opportunity.priority} />
+            
+            {/* Interactive Status Selector */}
+            <div className="flex items-center space-x-1 bg-card border border-border rounded-xl px-2 py-1">
+              <StatusBadge status={currentStatus} />
+              <select
+                value={currentStatus}
+                onChange={(e) => handleStatusChange(e.target.value as OpportunityStatus)}
+                className="bg-transparent text-xs font-semibold text-foreground focus:outline-none cursor-pointer border-none pl-1"
+                aria-label="Change Opportunity Status"
+              >
+                <option value="NOT_STARTED">Not Started</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="SUBMITTED">Submitted</option>
+                <option value="INTERVIEW">Interview</option>
+                <option value="ACCEPTED">Accepted</option>
+                <option value="REJECTED">Rejected</option>
+              </select>
+            </div>
+
+            {/* Interactive Priority Selector */}
+            <div className="flex items-center space-x-1 bg-card border border-border rounded-xl px-2 py-1">
+              <PriorityBadge priority={currentPriority} />
+              <select
+                value={currentPriority}
+                onChange={(e) => handlePriorityChange(e.target.value as OpportunityPriority)}
+                className="bg-transparent text-xs font-semibold text-foreground focus:outline-none cursor-pointer border-none pl-1"
+                aria-label="Change Opportunity Priority"
+              >
+                <option value="HIGH">High Priority</option>
+                <option value="MEDIUM">Medium Priority</option>
+                <option value="LOW">Low Priority</option>
+              </select>
+            </div>
           </div>
         </div>
 
