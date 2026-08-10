@@ -20,14 +20,14 @@ export function LandingProblem() {
     <section id="how-it-works" className="py-24 bg-card/40 border-y border-border/60 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Problem Header */}
-        <AnimatedContainer delay={100} className="max-w-3xl mx-auto text-center space-y-4">
-          <span className="text-xs font-bold text-primary uppercase tracking-widest">
+        <AnimatedContainer delay={100} className="max-w-4xl mx-auto text-center space-y-4">
+          <span className="text-xs sm:text-sm font-bold text-primary uppercase tracking-widest">
             THE APPLICATION CHAOS
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold font-outfit text-foreground tracking-tight">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-outfit text-foreground tracking-tight leading-tight">
             You shouldn&apos;t need five apps to manage one application.
           </h2>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
             Opportunities arrive from everywhere. When deadlines are scattered across bookmarks, notes, and screenshots, critical details slip through the cracks.
           </p>
         </AnimatedContainer>

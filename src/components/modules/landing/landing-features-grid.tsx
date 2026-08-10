@@ -345,14 +345,14 @@ export function LandingFeaturesGrid() {
     <section id="features" className="py-20 px-4 sm:px-6 relative overflow-hidden">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Section Header */}
-        <AnimatedContainer delay={100} className="max-w-3xl mx-auto text-center space-y-4">
-          <span className="text-xs font-bold text-primary uppercase tracking-widest">
+        <AnimatedContainer delay={100} className="max-w-4xl mx-auto text-center space-y-4">
+          <span className="text-xs sm:text-sm font-bold text-primary uppercase tracking-widest">
             THE OPPORTUNITY VAULT ECOSYSTEM
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold font-outfit text-foreground tracking-tight">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-outfit text-foreground tracking-tight leading-tight">
             Everything you need in one unified vault.
           </h2>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
             Click or hover any feature card below to open an interactive full-screen detail preview.
           </p>
         </AnimatedContainer>

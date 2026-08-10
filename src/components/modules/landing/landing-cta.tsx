@@ -21,7 +21,7 @@ export function LandingCTA() {
           <Image src="/vault-logo.png" alt="Apply Away Vault" fill sizes="64px" className="object-contain p-3" />
         </div>
         
-        <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-foreground max-w-2xl mx-auto leading-tight">
+        <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-outfit text-foreground max-w-3xl mx-auto leading-tight">
           Your next opportunity is probably already somewhere in your phone. <br />
           <span className="text-primary font-bold">Don&apos;t lose it. Save it to Apply Away.</span>
         </h2>
