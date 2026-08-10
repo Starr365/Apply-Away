@@ -30,12 +30,8 @@ const FAQS = [
     a: "Apply Away handles the conversion for you automatically. The original deadline and timezone are preserved, while the deadline is displayed in your preferred local timezone. This prevents one of the worst application mistakes: thinking you still have time when the opportunity has already closed.",
   },
   {
-    q: "Can I track my applications and progress?",
-    a: "Yes. Each opportunity can have a status that reflects where you are in the application process, such as Not Started → Preparing → Drafting → Reviewing → Submitted → Interview → Accepted / Rejected. You can also add personal notes and view the audit history log for each opportunity.",
-  },
-  {
     q: "Can I edit information extracted by the AI?",
-    a: "Absolutely. AI extraction is designed to save you time—not make decisions for you. You can review, correct, add, or remove any information before or after saving an opportunity.",
+    a: "Absolutely. AI extraction is designed to save you time; not make decisions for you. You can review, correct, add, or remove any information before or after saving an opportunity.",
   },
   {
     q: "Is my application data private?",

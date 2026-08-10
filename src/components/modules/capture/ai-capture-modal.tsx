@@ -5,7 +5,6 @@ import { extractOpportunityAction } from "@/app/actions/ai-extraction.actions";
 import { createOpportunityAction } from "@/app/actions/opportunity.actions";
 import { ExtractedOpportunityData } from "@/services/interfaces/ai-extraction.service";
 import {
-  Wand2,
   X,
   Link as LinkIcon,
   FileText,
@@ -199,11 +198,10 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
               <button
                 type="button"
                 onClick={() => setActiveTab("url")}
-                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-                  activeTab === "url"
+                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "url"
                     ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.01]"
                     : "text-muted-foreground hover:text-foreground"
-                }`}
+                  }`}
               >
                 <LinkIcon className="w-3.5 h-3.5" />
                 <span>Website URL</span>
@@ -211,11 +209,10 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
               <button
                 type="button"
                 onClick={() => setActiveTab("text")}
-                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-                  activeTab === "text"
+                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "text"
                     ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.01]"
                     : "text-muted-foreground hover:text-foreground"
-                }`}
+                  }`}
               >
                 <FileText className="w-3.5 h-3.5" />
                 <span>Copied Message / Text</span>
@@ -332,7 +329,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
                   <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
                     {extractedData.essayQuestions.map((q, idx) => (
                       <li key={idx} className="line-clamp-1">
-                         {q}
+                        {q}
                       </li>
                     ))}
                   </ul>

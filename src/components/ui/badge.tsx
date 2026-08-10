@@ -96,3 +96,172 @@ export function PriorityBadge({ priority }: { priority: OpportunityPriority }) {
     </span>
   );
 }
+
+export function InteractiveStatusBadge({
+  status,
+  onStatusChange,
+}: {
+  status: OpportunityStatus;
+  onStatusChange: (newStatus: OpportunityStatus) => void;
+}) {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const statusOptions: { value: OpportunityStatus; label: string; style: string }[] = [
+    { value: "NOT_STARTED", label: "Not Started", style: "bg-secondary text-muted-foreground border-border" },
+    { value: "IN_PROGRESS", label: "In Progress", style: "bg-sky-500/10 text-sky-400 border-sky-500/20" },
+    { value: "SUBMITTED", label: "Submitted", style: "bg-primary/10 text-primary border-primary/20" },
+    { value: "INTERVIEW", label: "Interview", style: "bg-amber-500/10 text-amber-400 border-amber-500/20" },
+    { value: "ACCEPTED", label: "Accepted", style: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
+    { value: "REJECTED", label: "Rejected", style: "bg-destructive/10 text-destructive border-destructive/20" },
+  ];
+
+  const currentOption = statusOptions.find((opt) => opt.value === status) || statusOptions[0];
+
+  return (
+    <div className="relative inline-block" ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={cn(
+          "inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-bold border tracking-wide transition-all cursor-pointer hover:opacity-85 shadow-xs",
+          currentOption.style
+        )}
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+      >
+        <span>{currentOption.label}</span>
+        <svg
+          className={cn("w-3 h-3 transition-transform duration-200", isOpen && "rotate-180")}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="absolute left-0 mt-1.5 z-50 w-44 rounded-2xl bg-card border border-border shadow-2xl p-1.5 space-y-1 text-xs animate-in fade-in zoom-in-95 duration-150">
+          <div className="px-2.5 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-wider border-b border-border/60 mb-1">
+            Update Status
+          </div>
+          {statusOptions.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                onStatusChange(opt.value);
+                setIsOpen(false);
+              }}
+              className={cn(
+                "w-full px-2.5 py-1.5 rounded-xl flex items-center justify-between text-left font-semibold transition-all cursor-pointer",
+                opt.value === status
+                  ? "bg-primary/10 text-primary font-bold"
+                  : "hover:bg-secondary text-foreground"
+              )}
+            >
+              <span className={cn("px-2 py-0.5 rounded-md text-[11px] border", opt.style)}>
+                {opt.label}
+              </span>
+              {opt.value === status && <span className="text-primary text-xs">✓</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function InteractivePriorityBadge({
+  priority,
+  onPriorityChange,
+}: {
+  priority: OpportunityPriority;
+  onPriorityChange: (newPriority: OpportunityPriority) => void;
+}) {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const priorityOptions: { value: OpportunityPriority; label: string; style: string }[] = [
+    { value: "HIGH", label: "High Priority", style: "bg-destructive/10 text-destructive border-destructive/20" },
+    { value: "MEDIUM", label: "Medium Priority", style: "bg-amber-500/10 text-amber-400 border-amber-500/20" },
+    { value: "LOW", label: "Low Priority", style: "bg-secondary text-muted-foreground border-border" },
+  ];
+
+  const currentOption = priorityOptions.find((opt) => opt.value === priority) || priorityOptions[1];
+
+  return (
+    <div className="relative inline-block" ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={cn(
+          "inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-bold border tracking-wide transition-all cursor-pointer hover:opacity-85 shadow-xs",
+          currentOption.style
+        )}
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+      >
+        <span>{currentOption.label}</span>
+        <svg
+          className={cn("w-3 h-3 transition-transform duration-200", isOpen && "rotate-180")}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="absolute left-0 mt-1.5 z-50 w-40 rounded-2xl bg-card border border-border shadow-2xl p-1.5 space-y-1 text-xs animate-in fade-in zoom-in-95 duration-150">
+          <div className="px-2.5 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-wider border-b border-border/60 mb-1">
+            Set Priority
+          </div>
+          {priorityOptions.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                onPriorityChange(opt.value);
+                setIsOpen(false);
+              }}
+              className={cn(
+                "w-full px-2.5 py-1.5 rounded-xl flex items-center justify-between text-left font-semibold transition-all cursor-pointer",
+                opt.value === priority
+                  ? "bg-primary/10 text-primary font-bold"
+                  : "hover:bg-secondary text-foreground"
+              )}
+            >
+              <span className={cn("px-2 py-0.5 rounded-md text-[11px] border", opt.style)}>
+                {opt.label}
+              </span>
+              {opt.value === priority && <span className="text-primary text-xs">✓</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
