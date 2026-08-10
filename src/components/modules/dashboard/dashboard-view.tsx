@@ -88,19 +88,27 @@ export function DashboardView({
         </PageHeader>
       </AnimatedContainer>
 
-      {/* Summary Metrics Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+      {/* Summary Metrics Cards (Clickable Filter Triggers) */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 select-none">
         <AnimatedContainer delay={60}>
-          <MetricCard label="Total Vault" value={stats.total} icon={Layers} iconColorClass="text-primary" />
+          <Link href="/dashboard" className="block cursor-pointer transition-transform hover:scale-[1.02]" title="Click to show all opportunities">
+            <MetricCard label="Total Vault" value={stats.total} icon={Layers} iconColorClass="text-primary" />
+          </Link>
         </AnimatedContainer>
         <AnimatedContainer delay={120}>
-          <MetricCard label="In Progress" value={stats.inProgress} icon={Sparkles} iconColorClass="text-sky-600 dark:text-sky-400" valueColorClass="text-sky-600 dark:text-sky-400" />
+          <Link href="/dashboard?status=IN_PROGRESS" className="block cursor-pointer transition-transform hover:scale-[1.02]" title="Click to filter In Progress opportunities">
+            <MetricCard label="In Progress" value={stats.inProgress} icon={Sparkles} iconColorClass="text-sky-600 dark:text-sky-400" valueColorClass="text-sky-600 dark:text-sky-400" />
+          </Link>
         </AnimatedContainer>
         <AnimatedContainer delay={180}>
-          <MetricCard label="Submitted" value={stats.submitted} icon={CheckCircle2} iconColorClass="text-primary" valueColorClass="text-primary" />
+          <Link href="/dashboard?status=SUBMITTED" className="block cursor-pointer transition-transform hover:scale-[1.02]" title="Click to filter Submitted opportunities">
+            <MetricCard label="Submitted" value={stats.submitted} icon={CheckCircle2} iconColorClass="text-primary" valueColorClass="text-primary" />
+          </Link>
         </AnimatedContainer>
         <AnimatedContainer delay={240}>
-          <MetricCard label="Due Soon" value={stats.dueSoon} icon={Clock} iconColorClass="text-amber-600 dark:text-amber-400" valueColorClass="text-amber-600 dark:text-amber-400" />
+          <Link href="/dashboard?dueSoon=true" className="block cursor-pointer transition-transform hover:scale-[1.02]" title="Click to filter Due Soon opportunities">
+            <MetricCard label="Due Soon" value={stats.dueSoon} icon={Clock} iconColorClass="text-amber-600 dark:text-amber-400" valueColorClass="text-amber-600 dark:text-amber-400" />
+          </Link>
         </AnimatedContainer>
       </div>
 

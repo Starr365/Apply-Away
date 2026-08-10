@@ -14,6 +14,7 @@ interface DashboardPageProps {
     priority?: string;
     sortBy?: string;
     sortOrder?: string;
+    dueSoon?: string;
     page?: string;
   }>;
 }
@@ -27,13 +28,15 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const page = parseInt(params.page || "1", 10);
   const limit = 10;
 
+  const isDueSoon = params.dueSoon === "true";
+
   const { items: opportunities, total } = await repository.findAll({
     userId,
     category: params.category as OpportunityCategory,
     status: params.status as OpportunityStatus,
     search: params.search,
-    sortBy: (params.sortBy as "deadline" | "createdAt" | "priority" | "title") || "createdAt",
-    sortOrder: (params.sortOrder as "asc" | "desc") || "desc",
+    sortBy: isDueSoon ? "deadline" : ((params.sortBy as "deadline" | "createdAt" | "priority" | "title") || "createdAt"),
+    sortOrder: isDueSoon ? "asc" : ((params.sortOrder as "asc" | "desc") || "desc"),
     page,
     limit,
   });
