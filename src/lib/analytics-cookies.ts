@@ -33,7 +33,7 @@ export async function getOrCreateSessionId(): Promise<string> {
     });
 
     return newSessionId;
-  } catch (error) {
+  } catch {
     // Return a transient random ID if cookieStore cannot be modified (e.g. read-only context)
     return crypto.randomUUID();
   }
@@ -78,7 +78,7 @@ export async function captureUtmAttribution(params: {
 
       return attribution;
     }
-  } catch (error) {
+  } catch {
     // Ignore cookie write errors in read-only render contexts
   }
 

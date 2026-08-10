@@ -20,7 +20,7 @@ export default async function LandingLayout({
       userId: session?.user?.id || null,
       metadata: { path: "/" },
     });
-  } catch (err) {
+  } catch {
     // Fail silently in render path
   }
 

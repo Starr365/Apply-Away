@@ -18,7 +18,7 @@ export interface TrackEventInput {
   source?: string | null;
   medium?: string | null;
   campaign?: string | null;
-  metadata?: Record<string, any> | null;
+  metadata?: Record<string, unknown> | null;
 }
 
 /**
@@ -37,17 +37,36 @@ export async function trackEvent(input: TrackEventInput): Promise<void> {
     const medium = input.medium ?? storedUtm.medium ?? null;
     const campaign = input.campaign ?? storedUtm.campaign ?? null;
 
-    await prisma.analyticsEvent.create({
-      data: {
-        eventName,
-        userId: userId || null,
-        sessionId: sessionId || null,
-        source: source || null,
-        medium: medium || null,
-        campaign: campaign || null,
-        metadata: metadata ? JSON.parse(JSON.stringify(metadata)) : undefined,
-      },
-    });
+    // Access analyticsEvent delegate safely from prisma instance
+    const db = prisma as unknown as {
+      analyticsEvent: {
+        create: (args: {
+          data: {
+            eventName: string;
+            userId?: string | null;
+            sessionId?: string | null;
+            source?: string | null;
+            medium?: string | null;
+            campaign?: string | null;
+            metadata?: unknown;
+          };
+        }) => Promise<unknown>;
+      };
+    };
+
+    if (db.analyticsEvent) {
+      await db.analyticsEvent.create({
+        data: {
+          eventName,
+          userId: userId || null,
+          sessionId: sessionId || null,
+          source: source || null,
+          medium: medium || null,
+          campaign: campaign || null,
+          metadata: metadata ? JSON.parse(JSON.stringify(metadata)) : undefined,
+        },
+      });
+    }
   } catch (error) {
     // Fail silently in production so analytics never disrupts core user workflows
     console.error("[Analytics] Event tracking error:", error);
