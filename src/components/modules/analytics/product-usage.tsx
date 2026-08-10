@@ -34,7 +34,7 @@ export function ProductUsage({ usage }: ProductUsageProps) {
               </div>
               <div className="w-full h-2.5 rounded-full bg-secondary/80 overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-primary to-sky-400 rounded-full transition-all duration-500"
+                  className="h-full bg-linear-to-r from-primary to-sky-400 rounded-full transition-all duration-500"
                   style={{ width: `${pct}%` }}
                 />
               </div>

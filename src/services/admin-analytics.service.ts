@@ -81,12 +81,12 @@ interface AnalyticsEventDelegate {
     select?: Record<string, boolean>;
     orderBy?: Record<string, string>;
     take?: number;
-  }) => Promise<any[]>;
+  }) => Promise<Record<string, unknown>[]>;
   groupBy: (args: {
     by: string[];
     where?: Record<string, unknown>;
     _count?: Record<string, boolean>;
-  }) => Promise<any[]>;
+  }) => Promise<Record<string, unknown>[]>;
 }
 
 function getAnalyticsDb(): AnalyticsEventDelegate | null {
@@ -105,11 +105,11 @@ export class AdminAnalyticsService {
     const [currentVisitors, currentSignups, currentActivated, currentSaved] = await Promise.all([
       analyticsDb
         ? analyticsDb.count({
-            where: {
-              eventName: "page_view",
-              createdAt: { gte: range.startDate, lte: range.endDate },
-            },
-          })
+          where: {
+            eventName: "page_view",
+            createdAt: { gte: range.startDate, lte: range.endDate },
+          },
+        })
         : Promise.resolve(0),
       prisma.user.count({
         where: {
@@ -135,11 +135,11 @@ export class AdminAnalyticsService {
     const [prevVisitors, prevSignups, prevActivated, prevSaved] = await Promise.all([
       analyticsDb
         ? analyticsDb.count({
-            where: {
-              eventName: "page_view",
-              createdAt: { gte: range.prevStartDate, lte: range.prevEndDate },
-            },
-          })
+          where: {
+            eventName: "page_view",
+            createdAt: { gte: range.prevStartDate, lte: range.prevEndDate },
+          },
+        })
         : Promise.resolve(0),
       prisma.user.count({
         where: {
@@ -176,22 +176,22 @@ export class AdminAnalyticsService {
     const analyticsDb = getAnalyticsDb();
     const events = analyticsDb
       ? await analyticsDb.findMany({
-          where: {
-            eventName: "page_view",
-            createdAt: { gte: range.startDate, lte: range.endDate },
-          },
-          select: {
-            createdAt: true,
-            sessionId: true,
-            userId: true,
-          },
-          orderBy: { createdAt: "asc" },
-        })
+        where: {
+          eventName: "page_view",
+          createdAt: { gte: range.startDate, lte: range.endDate },
+        },
+        select: {
+          createdAt: true,
+          sessionId: true,
+          userId: true,
+        },
+        orderBy: { createdAt: "asc" },
+      })
       : [];
 
     const datesMap: Record<string, { total: number; newVisitors: number; returningVisitors: number }> = {};
 
-    events.forEach((ev: { createdAt: Date | string; userId?: string | null }) => {
+    (events as any[]).forEach((ev: { createdAt: Date | string; userId?: string | null }) => {
       const createdDate = typeof ev.createdAt === "string" ? new Date(ev.createdAt) : ev.createdAt;
       const dayKey = createdDate.toISOString().split("T")[0];
       if (!datesMap[dayKey]) {
@@ -220,22 +220,22 @@ export class AdminAnalyticsService {
     const analyticsDb = getAnalyticsDb();
     const pageViews = analyticsDb
       ? await analyticsDb.findMany({
-          where: {
-            eventName: "page_view",
-            createdAt: { gte: range.startDate, lte: range.endDate },
-          },
-          select: { source: true, sessionId: true },
-        })
+        where: {
+          eventName: "page_view",
+          createdAt: { gte: range.startDate, lte: range.endDate },
+        },
+        select: { source: true, sessionId: true },
+      })
       : [];
 
     const signups = analyticsDb
       ? await analyticsDb.findMany({
-          where: {
-            eventName: "sign_up",
-            createdAt: { gte: range.startDate, lte: range.endDate },
-          },
-          select: { source: true },
-        })
+        where: {
+          eventName: "sign_up",
+          createdAt: { gte: range.startDate, lte: range.endDate },
+        },
+        select: { source: true },
+      })
       : [];
 
     const sourcesMap: Record<string, { visitors: number; signups: number }> = {
@@ -283,13 +283,13 @@ export class AdminAnalyticsService {
     const analyticsDb = getAnalyticsDb();
     const campaigns = analyticsDb
       ? await analyticsDb.groupBy({
-          by: ["campaign", "source"],
-          where: {
-            campaign: { not: null },
-            createdAt: { gte: range.startDate, lte: range.endDate },
-          },
-          _count: { id: true },
-        })
+        by: ["campaign", "source"],
+        where: {
+          campaign: { not: null },
+          createdAt: { gte: range.startDate, lte: range.endDate },
+        },
+        _count: { id: true },
+      })
       : [];
 
     const results = await Promise.all(
@@ -297,21 +297,21 @@ export class AdminAnalyticsService {
         const campaignName = c.campaign || "Unassigned";
         const [visitors, signups] = analyticsDb
           ? await Promise.all([
-              analyticsDb.count({
-                where: {
-                  campaign: c.campaign,
-                  eventName: "page_view",
-                  createdAt: { gte: range.startDate, lte: range.endDate },
-                },
-              }),
-              analyticsDb.count({
-                where: {
-                  campaign: c.campaign,
-                  eventName: "sign_up",
-                  createdAt: { gte: range.startDate, lte: range.endDate },
-                },
-              }),
-            ])
+            analyticsDb.count({
+              where: {
+                campaign: c.campaign,
+                eventName: "page_view",
+                createdAt: { gte: range.startDate, lte: range.endDate },
+              },
+            }),
+            analyticsDb.count({
+              where: {
+                campaign: c.campaign,
+                eventName: "sign_up",
+                createdAt: { gte: range.startDate, lte: range.endDate },
+              },
+            }),
+          ])
           : [0, 0];
 
         return {
@@ -337,11 +337,11 @@ export class AdminAnalyticsService {
     const [visitors, signups, activatedUsers] = await Promise.all([
       analyticsDb
         ? analyticsDb.count({
-            where: {
-              eventName: "page_view",
-              createdAt: { gte: range.startDate, lte: range.endDate },
-            },
-          })
+          where: {
+            eventName: "page_view",
+            createdAt: { gte: range.startDate, lte: range.endDate },
+          },
+        })
         : Promise.resolve(0),
       prisma.user.count({
         where: {
@@ -377,21 +377,21 @@ export class AdminAnalyticsService {
     const analyticsDb = getAnalyticsDb();
     const events = analyticsDb
       ? await analyticsDb.groupBy({
-          by: ["eventName"],
-          where: {
-            eventName: {
-              in: [
-                "opportunity_saved",
-                "ai_extraction_used",
-                "opportunity_viewed",
-                "calendar_viewed",
-                "status_updated",
-              ],
-            },
-            createdAt: { gte: range.startDate, lte: range.endDate },
+        by: ["eventName"],
+        where: {
+          eventName: {
+            in: [
+              "opportunity_saved",
+              "ai_extraction_used",
+              "opportunity_viewed",
+              "calendar_viewed",
+              "status_updated",
+            ],
           },
-          _count: { id: true },
-        })
+          createdAt: { gte: range.startDate, lte: range.endDate },
+        },
+        _count: { id: true },
+      })
       : [];
 
     const labelMap: Record<string, string> = {
@@ -402,7 +402,7 @@ export class AdminAnalyticsService {
       status_updated: "Status Updates",
     };
 
-    return events.map((e: { eventName: string; _count?: { id: number } }) => ({
+    return (events as any[]).map((e: { eventName: string; _count?: { id: number } }) => ({
       event: labelMap[e.eventName] || e.eventName,
       count: e._count?.id || 0,
     }));
@@ -463,8 +463,8 @@ export class AdminAnalyticsService {
     const attentionText = highTrafficLowConv
       ? `${highTrafficLowConv.source} is generating high visitor traffic but converting under 5% into registered users.`
       : funnel.signupToActivation < 30
-      ? "User activation is under 30%. Focus on nudging new signups to save their first opportunity."
-      : "Acquisition pipeline is healthy across all channels.";
+        ? "User activation is under 30%. Focus on nudging new signups to save their first opportunity."
+        : "Acquisition pipeline is healthy across all channels.";
 
     const nextDecisionText =
       kpis.activatedUsers.changePercentage > 0
@@ -485,15 +485,15 @@ export class AdminAnalyticsService {
     const analyticsDb = getAnalyticsDb();
     const logs = analyticsDb
       ? await analyticsDb.findMany({
-          take: 10,
-          orderBy: { createdAt: "desc" },
-          select: {
-            id: true,
-            eventName: true,
-            createdAt: true,
-            source: true,
-          },
-        })
+        take: 10,
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          eventName: true,
+          createdAt: true,
+          source: true,
+        },
+      })
       : [];
 
     const eventLabelMap: Record<string, string> = {
@@ -507,7 +507,7 @@ export class AdminAnalyticsService {
       status_updated: "Opportunity Status Changed",
     };
 
-    return logs.map((log: { id: string; eventName: string; createdAt: Date | string; source?: string | null }) => ({
+    return (logs as any[]).map((log: { id: string; eventName: string; createdAt: Date | string; source?: string | null }) => ({
       id: log.id,
       event: eventLabelMap[log.eventName] || log.eventName,
       timestamp: log.createdAt,
