@@ -30,12 +30,8 @@ const FAQS = [
     a: "Apply Away handles the conversion for you automatically. The original deadline and timezone are preserved, while the deadline is displayed in your preferred local timezone. This prevents one of the worst application mistakes: thinking you still have time when the opportunity has already closed.",
   },
   {
-    q: "Can I track my applications and progress?",
-    a: "Yes. Each opportunity can have a status that reflects where you are in the application process, such as Not Started → Preparing → Drafting → Reviewing → Submitted → Interview → Accepted / Rejected. You can also add personal notes and view the audit history log for each opportunity.",
-  },
-  {
     q: "Can I edit information extracted by the AI?",
-    a: "Absolutely. AI extraction is designed to save you time—not make decisions for you. You can review, correct, add, or remove any information before or after saving an opportunity.",
+    a: "Absolutely. AI extraction is designed to save you time; not make decisions for you. You can review, correct, add, or remove any information before or after saving an opportunity.",
   },
   {
     q: "Is my application data private?",
@@ -58,10 +54,10 @@ export function LandingFAQ() {
           <div className="text-xs sm:text-sm font-bold text-primary uppercase tracking-widest select-none">
             FREQUENTLY ASKED QUESTIONS
           </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold font-outfit text-foreground leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-bold font-outfit text-foreground leading-tight">
             Everything you need to know about Apply Away
           </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground select-none">
+          <p className="text-sm sm:text-base text-muted-foreground select-none">
             Have a question? We&apos;re here to help.
           </p>
         </AnimatedContainer>
@@ -79,7 +75,7 @@ export function LandingFAQ() {
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
                   type="button"
-                  className="w-full p-5 sm:p-6 flex items-center justify-between text-left font-bold font-outfit text-base sm:text-lg text-foreground hover:bg-accent transition-colors cursor-pointer"
+                  className="w-full py-4 px-6 flex items-center justify-between text-left font-bold font-outfit text-base sm:text-lg text-foreground hover:bg-accent transition-colors cursor-pointer"
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
@@ -92,7 +88,7 @@ export function LandingFAQ() {
                     }`}
                 >
                   {isOpen && (
-                    <p className="p-5 text-xs text-muted-foreground leading-relaxed text-left">
+                    <p className="p-5 text-xs sm:text-base text-muted-foreground leading-relaxed text-left">
                       {faq.a}
                     </p>
                   )}

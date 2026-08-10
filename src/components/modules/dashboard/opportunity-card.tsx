@@ -128,47 +128,49 @@ export function OpportunityCard({ opportunity, onEdit }: OpportunityCardProps) {
                 <span>Edit Opportunity</span>
               </button>
 
-              <div className="border-t border-border my-1" />
+              <div className="hidden sm:block">
+                <div className="border-t border-border my-1" />
 
-              <div className="px-3 py-1 text-[10px] font-semibold text-muted-foreground uppercase">
-                Change Status
-              </div>
+                <div className="px-3 py-1 text-[10px] font-semibold text-muted-foreground uppercase">
+                  Change Status
+                </div>
 
-              {(["NOT_STARTED", "IN_PROGRESS", "SUBMITTED", "INTERVIEW", "ACCEPTED", "REJECTED"] as OpportunityStatus[]).map(
-                (st) => (
+                {(["NOT_STARTED", "IN_PROGRESS", "SUBMITTED", "INTERVIEW", "ACCEPTED", "REJECTED"] as OpportunityStatus[]).map(
+                  (st) => (
+                    <button
+                      key={st}
+                      type="button"
+                      onClick={() => handleStatusChange(st)}
+                      className={`w-full px-3 py-1.5 rounded-lg hover:bg-secondary flex items-center justify-between cursor-pointer ${
+                        opportunity.status === st ? "text-primary font-bold" : ""
+                      }`}
+                    >
+                      <span>{st.replace(/_/g, " ")}</span>
+                      {opportunity.status === st && <span>✓</span>}
+                    </button>
+                  )
+                )}
+
+                <div className="border-t border-border my-1" />
+
+                <div className="px-3 py-1 text-[10px] font-semibold text-muted-foreground uppercase">
+                  Change Priority
+                </div>
+
+                {(["HIGH", "MEDIUM", "LOW"] as OpportunityPriority[]).map((pr) => (
                   <button
-                    key={st}
+                    key={pr}
                     type="button"
-                    onClick={() => handleStatusChange(st)}
-                    className={`w-full px-3 py-1.5 rounded-lg hover:bg-secondary flex items-center justify-between cursor-pointer ${
-                      opportunity.status === st ? "text-primary font-bold" : ""
+                    onClick={() => handlePriorityChange(pr)}
+                    className={`w-full px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between cursor-pointer ${
+                      opportunity.priority === pr ? "text-amber-600 dark:text-amber-400 font-bold" : ""
                     }`}
                   >
-                    <span>{st.replace(/_/g, " ")}</span>
-                    {opportunity.status === st && <span>✓</span>}
+                    <span>{pr} Priority</span>
+                    {opportunity.priority === pr && <span>✓</span>}
                   </button>
-                )
-              )}
-
-              <div className="border-t border-border my-1" />
-
-              <div className="px-3 py-1 text-[10px] font-semibold text-muted-foreground uppercase">
-                Change Priority
+                ))}
               </div>
-
-              {(["HIGH", "MEDIUM", "LOW"] as OpportunityPriority[]).map((pr) => (
-                <button
-                  key={pr}
-                  type="button"
-                  onClick={() => handlePriorityChange(pr)}
-                  className={`w-full px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between cursor-pointer ${
-                    opportunity.priority === pr ? "text-amber-600 dark:text-amber-400 font-bold" : ""
-                  }`}
-                >
-                  <span>{pr} Priority</span>
-                  {opportunity.priority === pr && <span>✓</span>}
-                </button>
-              ))}
 
               <div className="border-t border-border my-1" />
 

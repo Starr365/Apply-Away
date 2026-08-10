@@ -5,7 +5,6 @@ import { extractOpportunityAction } from "@/app/actions/ai-extraction.actions";
 import { createOpportunityAction } from "@/app/actions/opportunity.actions";
 import { ExtractedOpportunityData } from "@/services/interfaces/ai-extraction.service";
 import {
-  Wand2,
   X,
   Link as LinkIcon,
   FileText,
@@ -143,16 +142,11 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
       <div className="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto border border-border shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border pb-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-md shadow-primary/20">
-              <Wand2 className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold font-outfit text-foreground">AI Opportunity Capture</h2>
-              <p className="text-xs text-muted-foreground">
-                Paste a website link or text message to extract structured data automatically.
-              </p>
-            </div>
+          <div>
+            <h2 className="text-xl font-bold font-outfit text-foreground">AI Opportunity Capture</h2>
+            <p className="text-xs text-muted-foreground">
+              Paste a website link or text message to extract structured data automatically.
+            </p>
           </div>
           <button
             type="button"
@@ -204,11 +198,10 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
               <button
                 type="button"
                 onClick={() => setActiveTab("url")}
-                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-                  activeTab === "url"
+                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "url"
                     ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.01]"
                     : "text-muted-foreground hover:text-foreground"
-                }`}
+                  }`}
               >
                 <LinkIcon className="w-3.5 h-3.5" />
                 <span>Website URL</span>
@@ -216,11 +209,10 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
               <button
                 type="button"
                 onClick={() => setActiveTab("text")}
-                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-                  activeTab === "text"
+                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "text"
                     ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.01]"
                     : "text-muted-foreground hover:text-foreground"
-                }`}
+                  }`}
               >
                 <FileText className="w-3.5 h-3.5" />
                 <span>Copied Message / Text</span>
@@ -259,18 +251,15 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
               <button
                 type="submit"
                 disabled={isExtracting}
-                className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25 flex items-center justify-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
+                className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25 flex items-center justify-center transition-all cursor-pointer disabled:opacity-50"
               >
                 {isExtracting ? (
-                  <>
+                  <div className="flex items-center space-x-2">
                     <Loader2 className="w-4 h-4 animate-spin text-white" />
                     <span>Extracting Structured Opportunity...</span>
-                  </>
+                  </div>
                 ) : (
-                  <>
-                    <Wand2 className="w-4 h-4" />
-                    <span>Extract with AI</span>
-                  </>
+                  <span>Extract with AI</span>
                 )}
               </button>
             </form>
@@ -340,7 +329,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
                   <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
                     {extractedData.essayQuestions.map((q, idx) => (
                       <li key={idx} className="line-clamp-1">
-                         {q}
+                        {q}
                       </li>
                     ))}
                   </ul>

@@ -41,11 +41,11 @@ export function LandingHeader() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
         isScrolled
-          ? "bg-background/85 backdrop-blur-md border-border shadow-sm"
+          ? "bg-background/95 backdrop-blur-xl border-border shadow-md"
           : "bg-transparent border-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 sm:h-24 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
         {/* Logo Branding */}
         <a
           href="#hero"
@@ -54,23 +54,23 @@ export function LandingHeader() {
           aria-label="Apply Away Home"
         >
           {/* Mobile Icon */}
-          <div className="relative w-12 h-12 shrink-0 md:hidden">
+          <div className="relative w-10 h-10 shrink-0 md:hidden">
             <Image
               src="/vault-logo.png"
               alt="Apply Away Icon"
               fill
-              sizes="48px"
+              sizes="40px"
               priority
               className="object-contain filter drop-shadow-sm"
             />
           </div>
           {/* Desktop Full Logo */}
-          <div className="relative h-14 w-60 sm:h-16 sm:w-64 shrink-0 hidden md:block">
+          <div className="relative h-11 w-48 sm:h-12 sm:w-52 shrink-0 hidden md:block">
             <Image
               src="/valut-text-logo.png"
               alt="Apply Away Logo"
               fill
-              sizes="256px"
+              sizes="208px"
               priority
               className="object-contain dark:brightness-0 dark:invert transition-all filter drop-shadow-sm"
             />
@@ -78,7 +78,7 @@ export function LandingHeader() {
         </a>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center space-x-8 text-xs sm:text-sm font-medium text-muted-foreground">
+        <nav className="hidden md:flex items-center space-x-8 text-sm sm:text-base font-bold text-muted-foreground">
           <a
             href="#hero"
             onClick={(e) => handleNavClick(e, "hero")}

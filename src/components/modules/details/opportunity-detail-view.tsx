@@ -1,10 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Opportunity, ActivityLog } from "@/domain/opportunity.types";
-import { CategoryBadge, StatusBadge, PriorityBadge } from "@/components/ui/badge";
+import { Opportunity, ActivityLog, OpportunityStatus, OpportunityPriority } from "@/domain/opportunity.types";
+import {
+  CategoryBadge,
+  StatusBadge,
+  PriorityBadge,
+  InteractiveStatusBadge,
+  InteractivePriorityBadge,
+} from "@/components/ui/badge";
 import { formatDate, getDaysRemaining } from "@/lib/utils";
 import { updateEssayDraftAction, updatePersonalNotesAction } from "@/app/actions/detail.actions";
+import { updateOpportunityStatusAction, updateOpportunityPriorityAction } from "@/app/actions/opportunity.actions";
 import {
   ArrowLeft,
   Building,
@@ -38,10 +45,33 @@ export function OpportunityDetailView({
     "overview" | "essays" | "checklist" | "notes" | "timeline"
   >("overview");
 
+  const [currentStatus, setCurrentStatus] = useState<OpportunityStatus>(opportunity.status);
+  const [currentPriority, setCurrentPriority] = useState<OpportunityPriority>(opportunity.priority);
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [notes, setNotes] = useState(opportunity.personalNotes || "");
   const [isSavingNotes, setIsSavingNotes] = useState(false);
   const [notesSuccess, setNotesSuccess] = useState(false);
+
+  const handleStatusChange = async (st: OpportunityStatus) => {
+    setCurrentStatus(st);
+    const res = await updateOpportunityStatusAction(opportunity.id, st);
+    if (res.success) {
+      toast.success(`Status updated to ${st.replace(/_/g, " ")}`);
+    } else {
+      toast.error(res.error || "Failed to update status.");
+    }
+  };
+
+  const handlePriorityChange = async (pr: OpportunityPriority) => {
+    setCurrentPriority(pr);
+    const res = await updateOpportunityPriorityAction(opportunity.id, pr);
+    if (res.success) {
+      toast.success(`Priority updated to ${pr}`);
+    } else {
+      toast.error(res.error || "Failed to update priority.");
+    }
+  };
 
   // Essay drafts state map
   const [essayDrafts, setEssayDrafts] = useState<Record<string, string>>(() => {
@@ -150,10 +180,16 @@ export function OpportunityDetailView({
             </h1>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2.5">
             <CategoryBadge category={opportunity.category} />
-            <StatusBadge status={opportunity.status} />
-            <PriorityBadge priority={opportunity.priority} />
+            <InteractiveStatusBadge
+              status={currentStatus}
+              onStatusChange={handleStatusChange}
+            />
+            <InteractivePriorityBadge
+              priority={currentPriority}
+              onPriorityChange={handlePriorityChange}
+            />
           </div>
         </div>
 

@@ -31,15 +31,15 @@ export function LandingHuman() {
 
           {/* Right Editorial Copy & CTA */}
           <AnimatedContainer delay={200} className="lg:col-span-6 space-y-6 text-left">
-            <span className="text-xs sm:text-sm font-bold text-primary uppercase tracking-widest">
+            <span className="text-xs font-bold text-primary uppercase tracking-widest">
               FOR AMBITIOUS LEARNERS & BUILDERS
             </span>
 
-            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-outfit text-foreground tracking-tight leading-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold font-outfit text-foreground tracking-tight leading-snug">
               For people who are always looking for what&apos;s next.
             </h2>
 
-            <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed">
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               Because the next opportunity shouldn&apos;t depend on how good you are at keeping 27 browser tabs open.
             </p>
 
