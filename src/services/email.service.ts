@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import { retryWithBackoff } from "@/lib/retry";
 import { getAppUrl } from "@/lib/app-url";
+import { emailTheme as t, emailRadius } from "@/lib/email-theme";
 
 export interface SendReminderEmailParams {
   toEmail: string;
@@ -29,14 +30,17 @@ export interface SendDigestEmailParams {
   items: DigestItem[];
 }
 
-/** Accent colour and label per remaining-days bucket, most urgent first. */
-const DIGEST_URGENCY: Record<number, { accent: string; label: string }> = {
-  0: { accent: "#f43f5e", label: "Due Today" },
-  1: { accent: "#fb923c", label: "1 Day Remaining" },
-  3: { accent: "#fbbf24", label: "3 Days Remaining" },
-  7: { accent: "#a78bfa", label: "7 Days Remaining" },
-  14: { accent: "#38bdf8", label: "14 Days Remaining" },
+/** Human label per remaining-days bucket. Urgency is conveyed by wording. */
+const DAYS_LEFT_LABEL: Record<number, string> = {
+  0: "Due Today",
+  1: "1 Day Remaining",
+  3: "3 Days Remaining",
+  7: "7 Days Remaining",
+  14: "14 Days Remaining",
 };
+
+/** A deadline this close is styled with the destructive token instead of primary. */
+const URGENT_DAYS_THRESHOLD = 1;
 
 /** Escape user-supplied values before interpolating them into email HTML. */
 function escapeHtml(value: string): string {
@@ -48,6 +52,68 @@ function escapeHtml(value: string): string {
     .replace(/'/g, "&#39;");
 }
 
+/* -------------------------------------------------------------------------- */
+/*  Shared layout partials                                                     */
+/*                                                                            */
+/*  Every email is built from these, so the welcome, reminder, and digest      */
+/*  messages stay visually identical. Colours come only from emailTheme,       */
+/*  which mirrors the tokens in globals.css.                                   */
+/* -------------------------------------------------------------------------- */
+
+const FONT_STACK = "Arial, Helvetica, sans-serif";
+
+/** Outer page + centered card. `body` is the card's inner HTML. */
+function shell(body: string): string {
+  return `
+  <div style="font-family: ${FONT_STACK}; background-color: ${t.background}; color: ${t.foreground}; padding: 24px;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: ${t.card}; border-radius: ${emailRadius}; padding: 32px; border: 1px solid ${t.border};">
+      ${body}
+    </div>
+  </div>`;
+}
+
+/** Logo, wordmark, and a short subtitle. */
+function header(subtitle: string): string {
+  return `
+      <div style="text-align: center; margin-bottom: 28px;">
+        <img src="${getAppUrl()}/vault-logo.png" alt="Apply Away" width="48" height="48" style="border-radius: ${emailRadius}; display: block; margin: 0 auto 10px auto;" />
+        <div style="color: ${t.foreground}; font-size: 22px; font-weight: bold; letter-spacing: -0.2px;">Apply Away</div>
+        <div style="color: ${t.mutedForeground}; font-size: 13px; margin-top: 4px;">${escapeHtml(subtitle)}</div>
+      </div>`;
+}
+
+/** Primary call-to-action button. */
+function cta(href: string, label: string): string {
+  return `
+      <div style="text-align: center; margin-top: 28px;">
+        <a href="${href}" style="background-color: ${t.primary}; color: ${t.primaryForeground}; padding: 12px 26px; border-radius: ${emailRadius}; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block;">${escapeHtml(label)}</a>
+      </div>`;
+}
+
+/** Divider plus fine print. */
+function footer(note: string): string {
+  return `
+      <hr style="border: 0; border-top: 1px solid ${t.border}; margin: 32px 0 16px 0;" />
+      <div style="color: ${t.mutedForeground}; font-size: 11px; text-align: center; line-height: 1.6;">
+        Apply Away &copy; ${new Date().getFullYear()} &middot; Opportunity Vault<br />${note}
+      </div>`;
+}
+
+/** Inset panel used for deadline details and tip lists. */
+function panel(inner: string, accent: string = t.border): string {
+  return `
+      <div style="background-color: ${t.background}; border: 1px solid ${t.border}; border-left: 3px solid ${accent}; border-radius: ${emailRadius}; padding: 16px; margin: 20px 0;">
+        ${inner}
+      </div>`;
+}
+
+/** Small uppercase status pill. */
+function badge(label: string, urgent: boolean): string {
+  const bg = urgent ? t.destructive : t.secondary;
+  const fg = urgent ? t.destructiveForeground : t.foreground;
+  return `<span style="display: inline-block; background-color: ${bg}; color: ${fg}; font-size: 10px; font-weight: bold; letter-spacing: 0.6px; text-transform: uppercase; padding: 4px 10px; border-radius: 999px;">${escapeHtml(label)}</span>`;
+}
+
 export class EmailService {
   private transporter: nodemailer.Transporter | null = null;
   private resendApiKey: string | null = null;
@@ -55,6 +121,10 @@ export class EmailService {
 
   constructor() {
     this.resendApiKey = process.env.RESEND_API_KEY || null;
+    // NOTE: this is the Resend *verified sending domain*, which is deliberately
+    // separate from the app's URL (apply-away.vercel.app). A vercel.app
+    // subdomain cannot be DNS-verified for sending, so this must not be
+    // "updated" to match the site origin.
     this.defaultFrom =
       process.env.EMAIL_FROM ||
       process.env.SMTP_FROM ||
@@ -81,9 +151,7 @@ export class EmailService {
   /**
    * POST to the Resend API. Throws on any non-2xx response.
    *
-   * Throwing (rather than returning false) is deliberate: it is what allows
-   * retryWithBackoff to actually retry, and what stops a failed send from being
-   * reported to callers as a delivered one.
+
    */
   private async sendViaResendApi(params: {
     from: string;
@@ -165,51 +233,33 @@ export class EmailService {
       opportunityUrl,
     } = params;
 
-    const htmlContent = `
-      <div style="font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 24px; border-radius: 16px;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155;">
-          <div style="text-align: center; margin-bottom: 24px;">
-            <img src="${getAppUrl()}/vault-logo.png" alt="Apply Away Logo" width="48" height="48" style="margin-bottom: 8px; border-radius: 12px;" />
-            <h1 style="color: #38bdf8; font-size: 24px; margin: 0;">Apply Away</h1>
-            <p style="color: #94a3b8; font-size: 14px; margin-top: 4px;">Opportunity Vault Deadline Alert</p>
-          </div>
+    const htmlContent = shell(`
+      ${header("Deadline Alert")}
 
-          <div style="background-color: #3b0764; border: 1px solid #7e22ce; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
-            <h2 style="color: #e9d5ff; font-size: 16px; margin: 0;">⏰ Reminder: ${escapeHtml(reminderTypeLabel)}</h2>
-          </div>
+      <div style="margin-bottom: 20px;">${badge(reminderTypeLabel, true)}</div>
 
-          <p style="color: #e2e8f0; font-size: 14px;">Hi ${escapeHtml(userName || "Opportunity Seeker")},</p>
+      <p style="color: ${t.foreground}; font-size: 14px; margin: 0 0 12px 0;">Hi ${escapeHtml(userName || "Opportunity Seeker")},</p>
 
-          <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6;">
-            This is an automated reminder that your application deadline for
-            <strong style="color: #ffffff;">${escapeHtml(opportunityTitle)}</strong> at
-            <strong style="color: #38bdf8;">${escapeHtml(organization)}</strong> is approaching!
-          </p>
+      <p style="color: ${t.mutedForeground}; font-size: 14px; line-height: 1.6; margin: 0;">
+        Your application deadline for
+        <strong style="color: ${t.foreground};">${escapeHtml(opportunityTitle)}</strong> at
+        <strong style="color: ${t.foreground};">${escapeHtml(organization)}</strong> is approaching.
+      </p>
 
-          <div style="background-color: #0f172a; border-radius: 12px; padding: 16px; margin: 24px 0; border: 1px solid #334155;">
-            <p style="margin: 4px 0; color: #94a3b8; font-size: 12px;">APPLICATION DEADLINE (${escapeHtml(userTimezone)})</p>
-            <p style="margin: 0; color: #fbbf24; font-size: 18px; font-weight: bold;">${escapeHtml(deadlineFormatted)}</p>
-          </div>
+      ${panel(
+      `<div style="color: ${t.mutedForeground}; font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 6px;">Deadline &middot; ${escapeHtml(userTimezone)}</div>
+         <div style="color: ${t.foreground}; font-size: 17px; font-weight: bold;">${escapeHtml(deadlineFormatted)}</div>`,
+      t.destructive
+    )}
 
-          ${
-            opportunityUrl
-              ? `<div style="text-align: center; margin-top: 24px;">
-                  <a href="${opportunityUrl}" style="background-color: #38bdf8; color: #0f172a; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block;">View Opportunity Details</a>
-                </div>`
-              : ""
-          }
+      ${opportunityUrl ? cta(opportunityUrl, "View Opportunity") : ""}
 
-          <hr style="border: 0; border-top: 1px solid #334155; margin: 32px 0 16px 0;" />
-          <p style="color: #64748b; font-size: 11px; text-align: center;">
-            Apply Away &copy; ${new Date().getFullYear()} – Opportunity Vault & Deadline Reminder System
-          </p>
-        </div>
-      </div>
-    `;
+      ${footer("You receive these because you have an upcoming deadline saved in your vault.")}
+    `);
 
     return await this.dispatch({
       to: toEmail,
-      subject: `⏰ Deadline Alert: ${opportunityTitle} (${reminderTypeLabel})`,
+      subject: `Deadline Alert: ${opportunityTitle} (${reminderTypeLabel})`,
       html: htmlContent,
     });
   }
@@ -217,47 +267,36 @@ export class EmailService {
   async sendWelcomeEmail(params: { toEmail: string; userName: string }): Promise<boolean> {
     const { toEmail, userName } = params;
 
-    const htmlContent = `
-      <div style="font-family: Arial, sans-serif; background-color: #0f172a; color: #e2e8f0; padding: 24px; border-radius: 16px;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155;">
-          <div style="text-align: center; margin-bottom: 24px;">
-            <img src="${getAppUrl()}/vault-logo.png" alt="Apply Away Logo" width="56" height="56" style="margin-bottom: 8px; border-radius: 14px;" />
-            <h1 style="color: #38bdf8; font-size: 26px; margin: 0; font-weight: bold;">Apply Away</h1>
-            <p style="color: #94a3b8; font-size: 14px; margin-top: 4px;">Welcome to Your Centralized Opportunity Vault</p>
-          </div>
+    const htmlContent = shell(`
+      ${header("Welcome to your Opportunity Vault")}
 
-          <div style="background-color: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 24px; text-align: center;">
-            <h2 style="color: #38bdf8; font-size: 18px; margin: 0;">🎉 Welcome Onboard, ${escapeHtml(userName || "Opportunity Seeker")}!</h2>
-          </div>
+      <div style="margin-bottom: 20px;">${badge("Account Created", false)}</div>
 
-          <p style="color: #e2e8f0; font-size: 14px; line-height: 1.6;">
-            Your Apply Away account has been created successfully. You can now centralize, track, and manage all your career, scholarship, fellowship, and grant applications in one place.
-          </p>
+      <p style="color: ${t.foreground}; font-size: 14px; margin: 0 0 12px 0;">Hi ${escapeHtml(userName || "Opportunity Seeker")},</p>
 
-          <div style="background-color: #0f172a; border-radius: 12px; padding: 20px; margin: 24px 0; border: 1px solid #334155;">
-            <p style="margin: 0 0 8px 0; color: #38bdf8; font-size: 13px; font-weight: bold;">🚀 What you can do next:</p>
-            <ul style="margin: 0; padding-left: 20px; color: #94a3b8; font-size: 13px; line-height: 1.6;">
-              <li>Use <strong>AI Quick Capture</strong> to save opportunities from URLs or copied text</li>
-              <li>Track deadline reminders localized to your timezone</li>
-              <li>Draft essay prompts and log application reflections</li>
-            </ul>
-          </div>
+      <p style="color: ${t.mutedForeground}; font-size: 14px; line-height: 1.6; margin: 0;">
+        Your account is ready. You can now centralize, track, and manage every
+        scholarship, fellowship, grant, and career application in one place.
+      </p>
 
-          <div style="text-align: center; margin-top: 28px;">
-            <a href="${getAppUrl()}/auth" style="background-color: #38bdf8; color: #0f172a; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block;">Sign In to Your Vault</a>
-          </div>
+      ${panel(
+      `<div style="color: ${t.foreground}; font-size: 13px; font-weight: bold; margin-bottom: 10px;">What you can do next</div>
+         <ul style="margin: 0; padding-left: 18px; color: ${t.mutedForeground}; font-size: 13px; line-height: 1.8;">
+           <li>Use <strong style="color: ${t.foreground};">AI Quick Capture</strong> to save opportunities from a URL or pasted text</li>
+           <li>Get deadline reminders at 7:00 AM in your own timezone</li>
+           <li>Draft essay responses and log application reflections</li>
+         </ul>`,
+      t.primary
+    )}
 
-          <hr style="border: 0; border-top: 1px solid #334155; margin: 32px 0 16px 0;" />
-          <p style="color: #64748b; font-size: 11px; text-align: center;">
-            Apply Away &copy; ${new Date().getFullYear()} – Opportunity Vault System
-          </p>
-        </div>
-      </div>
-    `;
+      ${cta(`${getAppUrl()}/auth`, "Sign In to Your Vault")}
+
+      ${footer(`Set your timezone anytime in <a href="${getAppUrl()}/profile" style="color: ${t.mutedForeground};">Profile settings</a>.`)}
+    `);
 
     return await this.dispatch({
       to: toEmail,
-      subject: `🎉 Welcome to Apply Away, ${userName}!`,
+      subject: `Welcome to Apply Away, ${userName}`,
       html: htmlContent,
     });
   }
@@ -275,64 +314,51 @@ export class EmailService {
 
     const rows = sorted
       .map((item) => {
-        const bucket = Math.max(0, Math.min(item.daysLeft, 14));
-        const { accent, label } = DIGEST_URGENCY[bucket] ?? {
-          accent: "#38bdf8",
-          label: `${item.daysLeft} Days Remaining`,
-        };
+        const urgent = item.daysLeft <= URGENT_DAYS_THRESHOLD;
+        const accent = urgent ? t.destructive : t.primary;
+        const label =
+          DAYS_LEFT_LABEL[Math.max(0, item.daysLeft)] ?? `${item.daysLeft} Days Remaining`;
 
         return `
-          <div style="background-color: #0f172a; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #334155; border-left: 4px solid ${accent};">
-            <p style="margin: 0 0 6px 0; color: ${accent}; font-size: 11px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">${label}</p>
-            <p style="margin: 0; color: #ffffff; font-size: 15px; font-weight: bold;">${escapeHtml(item.title)}</p>
-            <p style="margin: 2px 0 8px 0; color: #38bdf8; font-size: 13px;">${escapeHtml(item.organization)}</p>
-            <p style="margin: 0; color: #fbbf24; font-size: 13px;">${escapeHtml(item.deadlineFormatted)}</p>
-            <a href="${item.url}" style="display: inline-block; margin-top: 10px; color: #38bdf8; font-size: 12px; text-decoration: underline;">View details &rarr;</a>
-          </div>
-        `;
+      <div style="background-color: ${t.background}; border: 1px solid ${t.border}; border-left: 3px solid ${accent}; border-radius: ${emailRadius}; padding: 16px; margin-bottom: 12px;">
+        <div style="margin-bottom: 8px;">${badge(label, urgent)}</div>
+        <div style="color: ${t.foreground}; font-size: 15px; font-weight: bold;">${escapeHtml(item.title)}</div>
+        <div style="color: ${t.mutedForeground}; font-size: 13px; margin-top: 2px;">${escapeHtml(item.organization)}</div>
+        <div style="color: ${t.mutedForeground}; font-size: 13px; margin-top: 8px;">${escapeHtml(item.deadlineFormatted)}</div>
+        <a href="${item.url}" style="display: inline-block; margin-top: 10px; color: ${t.primary}; font-size: 12px; font-weight: bold; text-decoration: none;">View details &rarr;</a>
+      </div>`;
       })
       .join("");
 
-    const htmlContent = `
-      <div style="font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 24px; border-radius: 16px;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155;">
-          <div style="text-align: center; margin-bottom: 24px;">
-            <img src="${getAppUrl()}/vault-logo.png" alt="Apply Away Logo" width="48" height="48" style="margin-bottom: 8px; border-radius: 12px;" />
-            <h1 style="color: #38bdf8; font-size: 24px; margin: 0;">Apply Away</h1>
-            <p style="color: #94a3b8; font-size: 14px; margin-top: 4px;">Your Morning Deadline Briefing</p>
-          </div>
+    const htmlContent = shell(`
+      ${header("Your morning deadline briefing")}
 
-          <div style="background-color: #3b0764; border: 1px solid #7e22ce; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
-            <h2 style="color: #e9d5ff; font-size: 16px; margin: 0;">
-              ${hasDueToday ? "🔥" : "⏰"} ${sorted.length} deadline${sorted.length === 1 ? "" : "s"} need${sorted.length === 1 ? "s" : ""} your attention
-            </h2>
-          </div>
-
-          <p style="color: #e2e8f0; font-size: 14px;">Good morning ${escapeHtml(userName || "Opportunity Seeker")},</p>
-          <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6;">
-            Here's what's coming up in your vault. All times shown in <strong style="color: #ffffff;">${escapeHtml(userTimezone)}</strong>.
-          </p>
-
-          <div style="margin: 24px 0;">
-            ${rows}
-          </div>
-
-          <div style="text-align: center; margin-top: 24px;">
-            <a href="${getAppUrl()}/dashboard" style="background-color: #38bdf8; color: #0f172a; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block;">Open Your Vault</a>
-          </div>
-
-          <hr style="border: 0; border-top: 1px solid #334155; margin: 32px 0 16px 0;" />
-          <p style="color: #64748b; font-size: 11px; text-align: center;">
-            Apply Away &copy; ${new Date().getFullYear()} – Sent daily at 7:00 AM ${escapeHtml(userTimezone)}.<br />
-            Change your timezone anytime in <a href="${getAppUrl()}/profile" style="color: #64748b;">Profile settings</a>.
-          </p>
-        </div>
+      <div style="margin-bottom: 20px;">
+        ${badge(
+      `${sorted.length} deadline${sorted.length === 1 ? "" : "s"}`,
+      hasDueToday
+    )}
       </div>
-    `;
+
+      <p style="color: ${t.foreground}; font-size: 14px; margin: 0 0 12px 0;">Good morning ${escapeHtml(userName || "Opportunity Seeker")},</p>
+
+      <p style="color: ${t.mutedForeground}; font-size: 14px; line-height: 1.6; margin: 0 0 20px 0;">
+        Here's what's coming up in your vault. All times shown in
+        <strong style="color: ${t.foreground};">${escapeHtml(userTimezone)}</strong>.
+      </p>
+
+      ${rows}
+
+      ${cta(`${getAppUrl()}/dashboard`, "Open Your Vault")}
+
+      ${footer(
+      `Sent daily at 7:00 AM ${escapeHtml(userTimezone)}. Change your timezone in <a href="${getAppUrl()}/profile" style="color: ${t.mutedForeground};">Profile settings</a>.`
+    )}
+    `);
 
     const subject = hasDueToday
-      ? `🔥 Due today: ${sorted[0].title}${sorted.length > 1 ? ` +${sorted.length - 1} more` : ""}`
-      : `⏰ ${sorted.length} upcoming deadline${sorted.length === 1 ? "" : "s"} in your vault`;
+      ? `Due today: ${sorted[0].title}${sorted.length > 1 ? ` and ${sorted.length - 1} more` : ""}`
+      : `${sorted.length} upcoming deadline${sorted.length === 1 ? "" : "s"} in your vault`;
 
     return await this.dispatch({ to: toEmail, subject, html: htmlContent });
   }

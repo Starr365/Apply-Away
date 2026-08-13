@@ -30,7 +30,10 @@ const envSchema = z.object({
   // Public Application URL (used for email links and metadata)
   NEXT_PUBLIC_APP_URL: z.string().url("NEXT_PUBLIC_APP_URL must be a valid URL").optional(),
 
-  // Email Service Configuration
+  // Email Service Configuration.
+  // EMAIL_FROM is the Resend verified sending domain, intentionally distinct
+  // from NEXT_PUBLIC_APP_URL — a vercel.app subdomain cannot be DNS-verified
+  // for outbound mail, so this stays on the owned domain.
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().min(1).default("notifications@applyaway.mmesomanzeribe.me"),
 

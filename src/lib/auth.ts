@@ -1,9 +1,7 @@
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
-import { env } from "@/lib/env";
 import * as bcrypt from "bcryptjs";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -17,12 +15,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/auth",
     error: "/auth",
   },
+  // Google OAuth is not implemented yet. The provider previously registered
+  // here was constructed with empty credentials, which advertised a sign-in
+  // route that could never succeed. The /auth page shows a "coming soon"
+  // notice instead. Re-add a Google provider here when real credentials exist.
   providers: [
-    Google({
-      clientId: env.AUTH_GOOGLE_ID || process.env.AUTH_GOOGLE_ID || "",
-      clientSecret: env.AUTH_GOOGLE_SECRET || process.env.AUTH_GOOGLE_SECRET || "",
-      allowDangerousEmailAccountLinking: true,
-    }),
     Credentials({
       name: "Simplified Development Login",
       credentials: {

@@ -4,6 +4,7 @@ import { SessionProvider } from "@/components/providers/session-provider";
 import { ToastProvider } from "@/components/ui/toast-provider";
 import { PwaRegister } from "@/components/providers/pwa-register";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { getAppUrl } from "@/lib/app-url";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,7 +19,8 @@ const outfit = Outfit({
   display: "swap",
 });
 
-const baseUrl: string = process.env.NEXT_PUBLIC_APP_URL || "https://apply-away.vercel.app/";
+// Single source of truth for the app origin, shared with the email layer.
+const baseUrl: string = getAppUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -40,6 +42,10 @@ export const metadata: Metadata = {
   authors: [{ name: "Apply Away Team", url: baseUrl }],
   creator: "Apply Away",
   publisher: "Apply Away",
+  // Resolved against metadataBase, so it always tracks the deployed origin.
+  alternates: {
+    canonical: "/",
+  },
   manifest: "/manifest.json",
   icons: {
     icon: [
