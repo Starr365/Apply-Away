@@ -73,7 +73,14 @@ function AuthContent() {
         const signupRes = await fetch("/api/auth/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, name, password }),
+          body: JSON.stringify({
+            email,
+            name,
+            password,
+            // Detected here so deadline reminders land at 7am the user's time,
+            // not 7am Lagos. Still editable later in Profile settings.
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          }),
         });
         const signupData = await signupRes.json();
 
@@ -118,8 +125,13 @@ function AuthContent() {
     }
   };
 
-  const handleGoogle = () => {
-    toast.info("Google OAuth is pre-configured. Use email credentials for dev test.");
+  // Google OAuth is not implemented yet. Show a notice rather than starting a
+  // flow that cannot complete. Guard against the click bubbling into the
+  // credentials form below.
+  const handleGoogle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toast.info("Google sign-in is coming soon.");
   };
 
   return (
@@ -239,12 +251,14 @@ function AuthContent() {
 
             {/* Smooth Animated Form Body */}
             <animated.div style={formSpring} className="space-y-6">
-              {/* Google OAuth Button using Reusable Button component */}
+              {/* Google sign-in placeholder — not wired to an OAuth provider yet. */}
               <Button
+                type="button"
                 variant="secondary"
                 size="lg"
                 onClick={handleGoogle}
                 disabled={isLoading}
+                aria-label="Continue with Google Account (coming soon)"
                 className="w-full justify-center space-x-3 bg-card border-border hover:bg-secondary"
                 leftIcon={
                   <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">

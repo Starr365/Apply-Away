@@ -1,0 +1,56 @@
+name: Deadline Reminders
+
+# Hourly trigger for the reminder scheduler.
+#
+# Vercel Cron on the Hobby plan only runs once per day, which cannot drive
+# per-timezone 7am delivery, so the hourly tick comes from here instead. The
+# endpoint decides which users have reached their local 7am; it is idempotent,
+# so an early, late, or repeated run is harmless.
+#
+# Required repository secrets:
+#   APP_URL      e.g. https://apply-away.vercel.app
+#   CRON_SECRET  must match the CRON_SECRET set in Vercel
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+    inputs:
+      pass:
+        description: "Which pass to run"
+        required: false
+        default: "all"
+        type: choice
+        options: [all, digest, urgent]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger reminder scan
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          PASS: ${{ inputs.pass || 'all' }}
+        run: |
+          if [ -z "$APP_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "::error::APP_URL and CRON_SECRET repository secrets must be set."
+            exit 1
+          fi
+
+          response=$(curl --silent --show-error --max-time 120 \
+            --write-out "\n%{http_code}" \
+            --header "Authorization: Bearer $CRON_SECRET" \
+            "${APP_URL}/api/cron/reminders?pass=${PASS}")
+
+          status=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "HTTP $status"
+          echo "$body"
+
+          if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
+            echo "::error::Reminder cron returned HTTP $status"
+            exit 1
+          fi

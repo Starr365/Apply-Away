@@ -27,9 +27,20 @@ const envSchema = z.object({
   GEMINI_API_KEY: z.string().optional(),
   GEMINI_MODEL: z.string().default("gemini-3.6-flash"),
 
-  // Email Service Configuration
+  // Public Application URL (used for email links and metadata)
+  NEXT_PUBLIC_APP_URL: z.string().url("NEXT_PUBLIC_APP_URL must be a valid URL").optional(),
+
+  // Email Service Configuration.
+  // EMAIL_FROM is the Resend verified sending domain, intentionally distinct
+  // from NEXT_PUBLIC_APP_URL — a vercel.app subdomain cannot be DNS-verified
+  // for outbound mail, so this stays on the owned domain.
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().min(1).default("notifications@applyaway.mmesomanzeribe.me"),
+
+  // Reminder Scheduling Configuration
+  CRON_SECRET: z.string().optional(),
+  REMINDER_HOUR: z.coerce.number().int().min(0).max(23).default(7),
+  ENABLE_NODE_CRON: z.string().optional(),
 
   // Timezone Configuration
   DEFAULT_TIMEZONE: z.string().default("Africa/Lagos"),
@@ -54,8 +65,12 @@ export function getEnv() {
       NEXTAUTH_URL: process.env.NEXTAUTH_URL || "http://localhost:3000",
       GEMINI_API_KEY: process.env.GEMINI_API_KEY,
       GEMINI_MODEL: process.env.GEMINI_MODEL || "gemini-3.6-flash",
+      NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
       RESEND_API_KEY: process.env.RESEND_API_KEY,
       EMAIL_FROM: process.env.EMAIL_FROM || "notifications@applyaway.mmesomanzeribe.me",
+      CRON_SECRET: process.env.CRON_SECRET,
+      REMINDER_HOUR: process.env.REMINDER_HOUR || 7,
+      ENABLE_NODE_CRON: process.env.ENABLE_NODE_CRON,
       DEFAULT_TIMEZONE: process.env.DEFAULT_TIMEZONE || "Africa/Lagos",
       NODE_ENV: process.env.NODE_ENV || "development",
     });

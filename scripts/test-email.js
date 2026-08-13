@@ -5,7 +5,7 @@ dotenv.config({ path: ".env" });
 
 const apiKey = process.env.RESEND_API_KEY;
 const emailFrom = process.env.EMAIL_FROM || '"Apply Away" <notifications@applyaway.mmesomanzeribe.me>';
-const targetEmail = "mmesomanzeribe@gmail.com";
+const targetEmail = "ellajoan1035@gmail.com";
 
 console.log("=== Testing Resend Email Send ===");
 console.log("From:", emailFrom);

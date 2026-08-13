@@ -1,9 +1,7 @@
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
-import { env } from "@/lib/env";
 import * as bcrypt from "bcryptjs";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -17,12 +15,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/auth",
     error: "/auth",
   },
+  // Google OAuth is not implemented yet. The provider previously registered
+  // here was constructed with empty credentials, which advertised a sign-in
+  // route that could never succeed. The /auth page shows a "coming soon"
+  // notice instead. Re-add a Google provider here when real credentials exist.
   providers: [
-    Google({
-      clientId: env.AUTH_GOOGLE_ID || process.env.AUTH_GOOGLE_ID || "",
-      clientSecret: env.AUTH_GOOGLE_SECRET || process.env.AUTH_GOOGLE_SECRET || "",
-      allowDangerousEmailAccountLinking: true,
-    }),
     Credentials({
       name: "Simplified Development Login",
       credentials: {
@@ -65,6 +62,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   events: {
+    /**
+     * Fires only for adapter-created users, i.e. the OAuth path. The credentials
+     * signup route creates its user directly via prisma.user.create and sends
+     * its own welcome email, so there is no double-send.
+     */
+    async createUser({ user }) {
+      if (!user?.email) return;
+
+      try {
+        const { EmailService } = await import("@/services/email.service");
+        await new EmailService().sendWelcomeEmail({
+          toEmail: user.email,
+          userName: user.name || "Apply Away User",
+        });
+      } catch (err) {
+        console.warn("[Auth] Failed to send welcome email to OAuth user:", err);
+      }
+    },
     async signIn({ user }) {
       if (user?.id) {
         const { trackEvent } = await import("@/lib/analytics");
