@@ -18,6 +18,9 @@ model User {
   emailVerified DateTime?
   image         String?
   timezone      String    @default("Africa/Lagos")
+  // Local calendar date ("yyyy-MM-dd", in this user's timezone) of the last 7am
+  // digest sent. Gates the daily digest to exactly once per local day.
+  lastDigestDate String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -186,12 +189,14 @@ model ReminderLog {
   id            String   @id @default(cuid())
   opportunityId String
   userId        String
-  reminderType  String   // e.g., "14_DAYS", "7_DAYS", "3_DAYS", "24_HOURS", "12_HOURS"
+  reminderType  String   // e.g., "14_DAYS", "7_DAYS", "3_DAYS", "24_HOURS", "12_HOURS", "DUE_TODAY"
   sentAt        DateTime @default(now())
 
   opportunity Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // Hard guarantee against double-sends when two cron runs overlap.
+  @@unique([opportunityId, reminderType])
   @@index([opportunityId])
   @@index([userId])
   @@map("reminder_logs")

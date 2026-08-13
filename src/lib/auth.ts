@@ -65,6 +65,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   events: {
+    /**
+     * Fires only for adapter-created users, i.e. the OAuth path. The credentials
+     * signup route creates its user directly via prisma.user.create and sends
+     * its own welcome email, so there is no double-send.
+     */
+    async createUser({ user }) {
+      if (!user?.email) return;
+
+      try {
+        const { EmailService } = await import("@/services/email.service");
+        await new EmailService().sendWelcomeEmail({
+          toEmail: user.email,
+          userName: user.name || "Apply Away User",
+        });
+      } catch (err) {
+        console.warn("[Auth] Failed to send welcome email to OAuth user:", err);
+      }
+    },
     async signIn({ user }) {
       if (user?.id) {
         const { trackEvent } = await import("@/lib/analytics");

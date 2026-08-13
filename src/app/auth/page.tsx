@@ -73,7 +73,14 @@ function AuthContent() {
         const signupRes = await fetch("/api/auth/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, name, password }),
+          body: JSON.stringify({
+            email,
+            name,
+            password,
+            // Detected here so deadline reminders land at 7am the user's time,
+            // not 7am Lagos. Still editable later in Profile settings.
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          }),
         });
         const signupData = await signupRes.json();
 
@@ -119,7 +126,7 @@ function AuthContent() {
   };
 
   const handleGoogle = () => {
-    toast.info("Google OAuth is pre-configured. Use email credentials for dev test.");
+    toast.info("Google OAuth feature would be implemented soon.");
   };
 
   return (

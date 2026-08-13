@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import * as bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { trackEvent } from "@/lib/analytics";
+import { isValidTimezone } from "@/lib/timezone";
+import { env } from "@/lib/env";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, name, password } = await req.json();
+    const { email, name, password, timezone } = await req.json();
 
     if (!email || !password) {
       return NextResponse.json(
@@ -31,12 +33,18 @@ export async function POST(req: NextRequest) {
     // Hash password with bcrypt
     const passwordHash = await bcrypt.hash(password, 12);
 
+    // Trust the browser-detected zone only if the runtime recognises it.
+    const resolvedTimezone =
+      typeof timezone === "string" && isValidTimezone(timezone)
+        ? timezone
+        : env.DEFAULT_TIMEZONE;
+
     const user = await prisma.user.create({
       data: {
         email: normalizedEmail,
         name: name || "Apply Away User",
         passwordHash,
-        timezone: "Africa/Lagos",
+        timezone: resolvedTimezone,
       },
     });
 
