@@ -6,7 +6,7 @@ import * as bcrypt from "bcryptjs";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  secret: process.env.NEXTAUTH_SECRET || "http://localhost:3000",
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
     maxAge: 5 * 60, // 5 minutes lifetime
@@ -55,8 +55,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           id: user.id,
           name: user.name,
           email: user.email,
-          image: user.image,
-          timezone: user.timezone,
         };
       },
     }),
@@ -91,41 +89,67 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.accessTokenExpires = Date.now() + 5 * 60 * 1000;
-        const dbUser = await prisma.user.findUnique({
-          where: { id: user.id },
-          select: { timezone: true },
-        });
-        token.timezone = dbUser?.timezone || "Africa/Lagos";
-      }
-
-      if (trigger === "update" && session?.user?.timezone) {
-        token.timezone = session.user.timezone;
-      }
-
-      // Transparent refresh: If token is expiring or expired, verify user status against DB
-      if (token.id && Date.now() > (token.accessTokenExpires as number || 0)) {
-        const activeUser = await prisma.user.findUnique({
-          where: { id: token.id as string },
-          select: { id: true, timezone: true },
-        });
-        if (activeUser) {
-          token.accessTokenExpires = Date.now() + 5 * 60 * 1000;
-          token.timezone = activeUser.timezone || "Africa/Lagos";
-        }
       }
 
       return token;
     },
+
     async session({ session, token }) {
-      if (token && session.user) {
-        session.user.id = token.id as string;
-        session.user.timezone = (token.timezone as string) || "Africa/Lagos";
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
+
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.sub },
+          select: { timezone: true },
+        });
+
+        session.user.timezone = dbUser?.timezone || "Africa/Lagos";
       }
+
       return session;
     },
   },
+
+
+  // callbacks: {
+  //   async jwt({ token, user, trigger, session }) {
+  //     if (user) {
+  //       token.id = user.id;
+  //       token.accessTokenExpires = Date.now() + 5 * 60 * 1000;
+  //       const dbUser = await prisma.user.findUnique({
+  //         where: { id: user.id },
+  //         select: { timezone: true },
+  //       });
+  //       token.timezone = dbUser?.timezone || "Africa/Lagos";
+  //     }
+
+  //     if (trigger === "update" && session?.user?.timezone) {
+  //       token.timezone = session.user.timezone;
+  //     }
+
+  //     // Transparent refresh: If token is expiring or expired, verify user status against DB
+  //     if (token.id && Date.now() > (token.accessTokenExpires as number || 0)) {
+  //       const activeUser = await prisma.user.findUnique({
+  //         where: { id: token.id as string },
+  //         select: { id: true, timezone: true },
+  //       });
+  //       if (activeUser) {
+  //         token.accessTokenExpires = Date.now() + 5 * 60 * 1000;
+  //         token.timezone = activeUser.timezone || "Africa/Lagos";
+  //       }
+  //     }
+
+  //     return token;
+  //   },
+  //   async session({ session, token }) {
+  //     if (token && session.user) {
+  //       session.user.id = token.id as string;
+  //       session.user.timezone = (token.timezone as string) || "Africa/Lagos";
+  //     }
+  //     return session;
+  //   },
+  // },
 });
