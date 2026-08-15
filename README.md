@@ -1,150 +1,62 @@
-# Apply Away – AI-Powered Opportunity Vault
+# 🔍 Apply Away – Enterprise Technical System Reference & Documentation
 
-> **Apply Away** is an intelligent, full-stack personal opportunity vault that empowers professionals, researchers, and students to effortlessly capture, organize, track, and analyze fellowships, scholarships, grants, internships, and career opportunities in one secure dashboard.
-
----
-
-## Executive Summary 
-
-### The Problem
-High-achieving applicants often discover opportunities scattered across WhatsApp messages, LinkedIn posts, email newsletters, and web links. Managing deadlines, application requirements, essay prompts, and progress across spreadsheets leads to missed deadlines, lost information, and administrative overwhelm.
-
-### The Solution
-**Apply Away** acts as a centralized "second brain" for your career and academic applications:
-- **Instant AI Extraction**: Simply paste a web link or text message—our AI automatically extracts the title, host organization, application deadlines, requirements, benefits, and essay prompts into your vault.
-- **Duplicate Prevention**: Warns you if you try to add an opportunity you are already tracking.
-- **Smart Deadline Calendar & Reminders**: Visualizes upcoming deadlines on an interactive calendar and dispatches timely email alerts in your local timezone (`Africa/Lagos`, `America/New_York`, etc.) so you never miss a submission window.
-- **Essay & Preparation Tracker**: Dedicated drafting space for essay prompts, interactive document checklists (Resume, Transcripts, Recommendations), and personal vault notes.
-- **Reflection & Growth Dashboard**: Visualizes application progress over time with charts, tracks status conversion rates, and logs monthly reflection notes.
+**Apply Away** is an intelligent, full-stack personal opportunity vault built on Next.js 16 (App Router) and Prisma ORM. It acts as an isolated multi-tenant application tracker that helps users capture, organize, schedule, and reflect on career fellowships, grants, internships, and scholarships.
 
 ---
 
-## ✨ Product Capabilities & User Flows
+## 🏛️ 1. Core Product Capabilities & Functional Flows
+
+### A. Intelligent AI Quick Capture
+- **URL Scraper**: Fetches and strips HTML content directly from target websites, extracting metadata with minimal network overhead.
+- **Unstructured Message Parser**: Converts copy-pasted social updates (WhatsApp, LinkedIn, Email newsletters) into structured relational datasets.
+- **Duplicate Prevention Engine**: Employs query-matching logic comparing organization names and titles during AI extraction, preventing vault clutter.
+
+### B. Multi-Tenant Vault Dashboard
+- **Preparation Workspace**: Features writing prompts and document checklists (Resume/CV, Recommendation letters, Transcripts, Portfolios).
+- **Milestone deadline calendar**: Interactive month views powered by FullCalendar.
+- **Velocity analytics**: Generates charts logging status conversion pipelines and application momentum over time.
+- **Dashboard Personal Notes**: Displays user-created notes underneath opportunity descriptions and table columns directly inside the dashboard viewport.
+
+---
+
+## 🏛️ 2. Architectural Design Specifications
 
 ```mermaid
 graph TD
-    A[Raw Link or Copied Text] -->|Paste into AI Capture| B(AI Extraction Service)
-    B -->|Zod Structured Parsing| C{Duplicate Check}
-    C -->|New Record| D[(Personal Opportunity Vault)]
-    C -->|Candidate Match| E[Duplicate Warning & Update Dialog]
-    D --> F[Interactive Dashboard & Filters]
-    D --> G[FullCalendar Deadline View]
-    D --> H[Essay Prompts & Checklist Manager]
-    D --> I[Reflection Analytics & Charts]
-    D --> J[Automated Timezone Email Reminders]
+    User([SaaS Client]) -->|Session Request| EdgeProxy[proxy.ts Edge Middleware]
+    EdgeProxy -->|Validation: Cookie Inspection| AuthJS[Auth.js Session Context]
+    AuthJS -->|Database Multi-Tenant Isolation| PostgreSQL[(PostgreSQL Database)]
+    PostgreSQL -->|Repository Pattern| Prisma[Prisma ORM Client]
+    Prisma -->|PrismaOpportunityRepository| AppActions[Next.js Server Actions]
 ```
 
-### 1. AI Quick Capture & Text Parsing
-- **Web Link Extraction**: Paste an official URL—Apply Away fetches the page and extracts program details automatically.
-- **Social & Chat Message Parsing**: Paste raw text from WhatsApp groups, LinkedIn posts, or email newsletters.
-- **Structured Data Generation**: AI converts unstructured text into standardized opportunity records (Category, Host, Benefits, Deadlines, Prompts).
+### A. Strict SaaS Multi-Tenant Isolation
+Every schema model (`Opportunity`, `EssayQuestion`, `ActivityLog`, `ReminderLog`, `MonthlyReflection`) references `userId` via foreign key constraints with `onDelete: Cascade`. Database queries are mediated by repositories checking authenticated user sessions (`await auth()`).
 
-### 2. Centralized Vault & Smart Filters
-- **Filter & Search**: Search by title or organization, and filter by Category (*Fellowship, Scholarship, Internship, Job, Grant, Competition*), Status (*Not Started, In Progress, Submitted, Interview, Accepted, Rejected*), or Priority (*High, Medium, Low*).
-- **Responsive Layout**: Desktop data table view and mobile-friendly card grid layout.
+### B. Vercel Edge proxy.ts Middleware
+Protects route groups at the Vercel Edge layer. Checks session tokens directly from HTTP cookies instead of loading Prisma databases, keeping compiled Edge bundles under **5 KB**.
 
-### 3. Preparation Workspace & Essay Manager
-- **Essay Prompt Space**: Work on specific essay responses right next to the application details.
-- **Interactive Document Checklist**: Check off items like *Resume/CV, Academic Transcripts, Passport, Recommendation Letters, Portfolio, Final Review*.
-- **Audit Timeline**: View a timeline of all updates made to each opportunity.
-
-### 4. Application Analytics & Reflection Journal
-- **Visual Charts**: Application velocity over time, category distribution, and status conversion pipeline.
-- **Monthly Reflection Notes**: Write monthly journal entries to document wins, lessons learned, and strategy adjustments.
+### C. Timezone-Aware Cron Scheduler
+- **Milestone Evaluation**: Checks upcoming deadlines at 5 milestones: `14_DAYS`, `7_DAYS`, `3_DAYS`, `1_DAY`, and `DUE_TODAY`.
+- **Hourly Dispatch Loop**: GitHub Actions triggers an hourly scheduler endpoint. The server calculates local times and sends daily briefs at exactly 7:00 AM local time.
+- **Atomic Locking & Deduplication**: Database writes log transactions (`prisma.$transaction`) to update `lastDigestDate` and record sent alerts inside the `ReminderLog` table, preventing duplicate dispatches.
 
 ---
 
-## Technical Architecture Specification (For Engineers)
+## 📂 3. Directory Audits
 
-### Technology Stack Overview
-
-| Domain | Technology Chosen | Purpose & Rationale |
-| :--- | :--- | :--- |
-| **Framework** | **Next.js 16 (App Router)** | Full-stack React framework utilizing Server Components for fast initial loads and Server Actions for mutation safety. |
-| **Language** | **TypeScript 5 (Strict)** | End-to-end type safety spanning domain entities, DB models, AI schemas, and UI components. |
-| **Database** | **PostgreSQL & Prisma v6** | ACID-compliant relational storage using Prisma ORM with native text arrays (`String[]`) for eligibility/benefits lists. |
-| **Authentication**| **Auth.js v5 (`next-auth`)** | Google OAuth & Credentials auth with custom JWT session callbacks and multi-tenant DB isolation (`userId` FK). |
-| **Edge Security** | **Lightweight Proxy** | Next.js 16 `proxy.ts` cookie inspection (`<5KB`) ensuring Edge Function compliance under Vercel's 1MB limit. |
-| **AI Integration**| **Google Gemini API (`gemini-2.5-flash`)** | Structured Output parsing via constrained JSON schema decoding to ensure predictable JSON payloads. |
-| **Calendar** | **FullCalendar v6** | Interactive month day-grid calendar widget customized with dark-mode glassmorphic design tokens. |
-| **Analytics** | **Recharts** | Composable, responsive SVG chart library for data visualizations. |
-| **Notifications** | **Custom Toast System** | Zero-dependency toast notification provider supporting success, error, info, and warning states. |
-| **Scheduling** | **`node-cron` & Nodemailer** | Background cron scanner with `date-fns-tz` timezone conversion and exponential backoff retries. |
+- **`prisma/schema.prisma`**: Database schemas, multi-tenant FK bindings, and composite indexes.
+- **`src/app/actions/`**: Next.js Server Actions handling opportunity CRUD modifications, AI parsing calls, reflection logs, and profile updates.
+- **`src/app/api/`**: Next.js HTTP controllers handling auth routing and Cron scheduler triggers.
+- **`src/app/(dashboard)/`**: Protected route views staging calendar pages, dashboard tables, profiles, and analytics.
+- **`src/services/`**: Integration services handling Gemini JSON parsing (`gemini-2.5-flash`), Resend/SMTP email triggers, duplicate checks, and scheduling loops.
+- **`src/lib/`**: Singletons (`Prisma`, `Auth.js`) and date helpers.
 
 ---
 
-## Architectural Design Decisions
+## 🛠️ 4. Quick Start & Environment Configuration
 
-1. **Multi-Tenant SaaS Data Isolation**:
-   - Every single database model (`Opportunity`, `EssayQuestion`, `ActivityLog`, `ReminderLog`, `MonthlyReflection`) references `userId` via foreign key constraints with `onDelete: Cascade`.
-   - Repositories and Server Actions strictly pull `userId` from verified `await auth()` session context.
-
-2. **Vercel Edge Function Optimization**:
-   - Resolved Edge Function bundle size bloat by moving heavy Prisma dependencies from `proxy.ts`.
-   - `proxy.ts` reads session tokens directly from HTTP cookies, reducing Edge bundle size to **< 5 KB**.
-
-3. **Idempotent Email Reminders with Exponential Backoff**:
-   - Evaluates active deadlines across 5 milestone windows (`14_DAYS`, `7_DAYS`, `3_DAYS`, `1_DAY`, `DUE_TODAY`).
-   - Queries `reminder_logs` before dispatch to prevent duplicate email alerts.
-   - Converts UTC deadlines into the user's timezone (`user.timezone`) before formatting alerts.
-   - Retries failed SMTP sends up to 3 times using exponential backoff.
-
----
-
-## Repository Directory Structure
-
-```
-apply-away/
-├── prisma/
-│   └── schema.prisma            # Multi-tenant PostgreSQL models & composite indexes
-├── src/
-│   ├── app/
-│   │   ├── (landing)/           # Public Route Group (SaaS Landing Page & layouts)
-│   │   ├── (auth)/login/        # Login page with Google OAuth & Credentials
-│   │   ├── (dashboard)/         # Authenticated route group
-│   │   │   ├── dashboard/       # Main Vault Dashboard & Data Table
-│   │   │   ├── opportunities/   # Dynamic Detail Page [id]
-│   │   │   ├── calendar/        # FullCalendar Deadline View
-│   │   │   ├── reflection/      # Analytics & Journal Dashboard
-│   │   │   └── profile/         # Timezone & User Profile Settings
-│   │   ├── actions/             # Server Actions (Opportunity, AI, Detail, Reflection)
-│   │   ├── api/                 # API Controllers ([...nextauth], Cron triggers)
-│   │   ├── globals.css          # Glassmorphic CSS design system tokens
-│   │   └── layout.tsx           # Root layout mounting Theme & Toast providers
-│   ├── components/
-│   │   ├── modules/             # Feature components (Dashboard, Capture, Details, Calendar, Reflection, Landing)
-│   │   ├── providers/           # Theme, session, and service worker registration providers
-│   │   └── ui/                  # Atomic UI primitives (Badge, Skeleton, PageHeader, MetricCard)
-│   ├── domain/                  # Strongly typed domain entities & Zod schemas
-│   ├── repositories/            # Repository contracts & PrismaOpportunityRepository
-│   ├── services/                # Dedicated AI, Duplicate Detector, Email, and Reminder Services
-│   └── lib/                     # Prisma singleton, Auth.js config, Retry & Timezone helpers
-├── proxy.ts                     # Ultra-lightweight Edge Route Protection Proxy (<5KB)
-└── README.md
-```
-
----
-
-## Quick Start & Setup Guide
-
-### 1. Prerequisites
-- **Node.js 18+**
-- **PostgreSQL Database**
-
-### 2. Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/Starr365/Apply-Away.git
-cd apply-away
-
-# Install dependencies
-npm install
-```
-
-### 3. Environment Configuration
-
-Create an `env.local` file in the root folder:
+Create a `.env.local` file in the root folder:
 
 ```env
 # Database Connection
@@ -154,13 +66,13 @@ DATABASE_URL="postgresql://user:password@localhost:5432/apply_away?schema=public
 NEXTAUTH_SECRET="your-super-secret-key-32-characters"
 NEXTAUTH_URL="http://localhost:3000"
 
-# Google Gemini API (AI Structured Extraction)
+# Google Gemini API
 GEMINI_API_KEY="your-gemini-api-key"
-GEMINI_MODEL="gemini-3.6-flash"
+GEMINI_MODEL="gemini-2.5-flash"
 
-# Resend Email API Key (Timezone-Aware Notifications)
+# Resend Email API Key
 RESEND_API_KEY="re_your-resend-api-key"
-EMAIL_FROM="Apply Away <onboarding@resend.dev>"
+EMAIL_FROM="Apply Away <notifications@yourverifieddomain.me>"
 
 # Default Timezone
 DEFAULT_TIMEZONE="Africa/Lagos"
@@ -169,29 +81,9 @@ DEFAULT_TIMEZONE="Africa/Lagos"
 NODE_ENV="development"
 ```
 
-### 4. Database Setup & Migrations
-
+Push database schemas and start the development server:
 ```bash
-# Push Prisma schema to PostgreSQL
+npm install
 npx prisma db push
-```
-
-### 5. Launch Development Server
-
-```bash
 npm run dev
-```
-
-Visit [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## Quality Verification
-
-```bash
-# Run ESLint checks
-npm run lint
-
-# Compile production build
-npm run build
 ```

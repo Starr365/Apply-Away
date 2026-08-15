@@ -126,6 +126,11 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
                         <div className="font-bold text-foreground text-sm line-clamp-1">{opp.title}</div>
                       )}
                       <div className="text-muted-foreground text-xs">{opp.organization}</div>
+                      {opp.personalNotes && opp.personalNotes.trim() !== "" && (
+                        <div className="text-[10px] text-slate-400 italic mt-1 line-clamp-1" title={opp.personalNotes}>
+                          <span className="font-semibold not-italic text-[9px] text-muted-foreground uppercase">Note:</span> {opp.personalNotes}
+                        </div>
+                      )}
                     </td>
 
                     {/* Category */}
