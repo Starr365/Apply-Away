@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, Suspense, useRef } from "react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSpring, animated } from "@react-spring/web";
 import { Button } from "@/components/ui/button";
@@ -21,7 +20,7 @@ function ResetPasswordContent() {
   const toast = useToast();
   const searchParams = useSearchParams();
 
-  const [email, setEmail] = useState(() => searchParams.get("email") || "");
+  const email = searchParams.get("email") || "";
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

@@ -7,7 +7,6 @@ import { useToast } from "@/components/ui/toast-provider";
 import { useSpring, animated } from "@react-spring/web";
 import { Button } from "@/components/ui/button";
 import {
-  ArrowRight,
   ShieldCheck,
   Mail,
   User as UserIcon,
@@ -226,7 +225,6 @@ export default function SignUpPage() {
             variant="primary"
             size="lg"
             isLoading={isLoading}
-            rightIcon={<ArrowRight className="w-4 h-4" />}
             className="w-full justify-center"
           >
             Create Account
