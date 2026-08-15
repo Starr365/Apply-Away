@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSpring, animated } from "@react-spring/web";
@@ -22,24 +22,15 @@ function ResetPasswordContent() {
   const toast = useToast();
   const searchParams = useSearchParams();
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(() => searchParams.get("email") || "");
   const [resetCode, setResetCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState(() => searchParams.get("msg") || "");
 
-  useEffect(() => {
-    const emailParam = searchParams.get("email") || "";
-    const msgParam = searchParams.get("msg") || "";
-    if (emailParam && email !== emailParam) {
-      setEmail(emailParam);
-    }
-    if (msgParam && successMsg !== msgParam) {
-      setSuccessMsg(msgParam);
-    }
-  }, [searchParams, email, successMsg]);
+
 
   const formSpring = useSpring({
     to: { opacity: 1, transform: "translateY(0px)" },

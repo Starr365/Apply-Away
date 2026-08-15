@@ -27,7 +27,7 @@ export default function SignInPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [successMsg, setSuccessMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState(() => searchParams.get("success") || "");
   const [errorMsg, setErrorMsg] = useState("");
 
   const formSpring = useSpring({
@@ -36,12 +36,7 @@ export default function SignInPage() {
     config: { tension: 280, friction: 22 },
   });
 
-  useEffect(() => {
-    const successParam = searchParams.get("success");
-    if (successParam && successMsg !== successParam) {
-      setSuccessMsg(successParam);
-    }
-  }, [searchParams, successMsg]);
+
 
   useEffect(() => {
     fetch("/api/auth/session")
