@@ -1,10 +1,10 @@
-# 🔍 Apply Away – Enterprise Technical System Reference & Documentation
+# Apply Away – Your Personal Opportunity Vault
 
-**Apply Away** is an intelligent, full-stack personal opportunity vault built on Next.js 16 (App Router) and Prisma ORM. It acts as an isolated multi-tenant application tracker that helps users capture, organize, schedule, and reflect on career fellowships, grants, internships, and scholarships.
+**Apply Away** is an intelligent, full-stack personal opportunity vault built on Next.js 16 (App Router) and Prisma ORM. It acts as an application tracker that helps users capture, organize, schedule, and reflect on career fellowships, grants, internships, and scholarships.
 
 ---
 
-## 🏛️ 1. Core Product Capabilities & Functional Flows
+## 1. Core Product Capabilities & Functional Flows
 
 ### A. Intelligent AI Quick Capture
 - **URL Scraper**: Fetches and strips HTML content directly from target websites, extracting metadata with minimal network overhead.
@@ -13,13 +13,12 @@
 
 ### B. Multi-Tenant Vault Dashboard
 - **Preparation Workspace**: Features writing prompts and document checklists (Resume/CV, Recommendation letters, Transcripts, Portfolios).
-- **Milestone deadline calendar**: Interactive month views powered by FullCalendar.
-- **Velocity analytics**: Generates charts logging status conversion pipelines and application momentum over time.
+- **Milestone Calendar View**: Interactive monthly view of deadlines powered by FullCalendar.
 - **Dashboard Personal Notes**: Displays user-created notes underneath opportunity descriptions and table columns directly inside the dashboard viewport.
 
 ---
 
-## 🏛️ 2. Architectural Design Specifications
+## 2. Architectural Design Specifications
 
 ```mermaid
 graph TD
@@ -49,7 +48,7 @@ Protects route groups at the Vercel Edge layer. Checks session tokens directly f
 - **`src/app/actions/`**: Next.js Server Actions handling opportunity CRUD modifications, AI parsing calls, reflection logs, and profile updates.
 - **`src/app/api/`**: Next.js HTTP controllers handling auth routing and Cron scheduler triggers.
 - **`src/app/(dashboard)/`**: Protected route views staging calendar pages, dashboard tables, profiles, and analytics.
-- **`src/services/`**: Integration services handling Gemini JSON parsing (`gemini-2.5-flash`), Resend/SMTP email triggers, duplicate checks, and scheduling loops.
+- **`src/services/`**: Integration services handling Gemini JSON parsing (`gemini-3.6-flash`), Resend/SMTP email triggers, duplicate checks, and scheduling loops.
 - **`src/lib/`**: Singletons (`Prisma`, `Auth.js`) and date helpers.
 
 ---
