@@ -113,6 +113,13 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
       });
 
       if (res.success) {
+        setUrlInput("");
+        setTextInput("");
+        setExtractedData(null);
+        setIsDuplicate(false);
+        setDuplicateType("");
+        setErrorMsg("");
+        setIsQuotaError(false);
         onSuccess();
         onClose();
       } else {
