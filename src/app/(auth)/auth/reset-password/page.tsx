@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useRef } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSpring, animated } from "@react-spring/web";
@@ -14,7 +14,6 @@ import {
   EyeOff,
   CheckCircle2,
   KeyRound,
-  ArrowLeft,
 } from "lucide-react";
 
 function ResetPasswordContent() {
@@ -23,14 +22,15 @@ function ResetPasswordContent() {
   const searchParams = useSearchParams();
 
   const [email, setEmail] = useState(() => searchParams.get("email") || "");
-  const [resetCode, setResetCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState(() => searchParams.get("msg") || "");
 
-
+  // 6 separate OTP input box values
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const formSpring = useSpring({
     to: { opacity: 1, transform: "translateY(0px)" },
@@ -38,11 +38,52 @@ function ResetPasswordContent() {
     config: { tension: 280, friction: 22 },
   });
 
+  const handleOtpChange = (value: string, index: number) => {
+    // Only accept numeric inputs
+    if (value && !/^\d+$/.test(value)) return;
+
+    const newOtp = [...otp];
+    // Keep only the last character entered
+    newOtp[index] = value.slice(-1);
+    setOtp(newOtp);
+
+    // Auto-focus next input box if filled
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+    // Focus previous input box on backspace if current is empty
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text").trim();
+    if (!/^\d{6}$/.test(pastedData)) return;
+
+    const digits = pastedData.split("");
+    setOtp(digits);
+    // Focus the last input box
+    inputRefs.current[5]?.focus();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMsg("");
     setSuccessMsg("");
+
+    const assembledCode = otp.join("");
+    if (assembledCode.length !== 6) {
+      setErrorMsg("Please enter all 6 verification digits.");
+      toast.error("Please enter all 6 verification digits.");
+      setIsLoading(false);
+      return;
+    }
 
     if (newPassword.length < 6) {
       setErrorMsg("Password must be at least 6 characters.");
@@ -55,7 +96,7 @@ function ResetPasswordContent() {
       const res = await fetch("/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code: resetCode, newPassword }),
+        body: JSON.stringify({ email, code: assembledCode, newPassword }),
       });
       const data = await res.json();
 
@@ -64,7 +105,6 @@ function ResetPasswordContent() {
         toast.error(data.error || "Reset failed.");
       } else {
         toast.success("Password updated successfully.");
-        // Redirect to Login Page with success parameter
         router.push("/auth?success=" + encodeURIComponent(data.message || "Password updated successfully. Please login."));
       }
     } catch {
@@ -106,22 +146,30 @@ function ResetPasswordContent() {
       )}
 
       <animated.div style={formSpring} className="space-y-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1.5">
-            <label htmlFor="code-input" className="text-xs font-semibold text-foreground flex items-center space-x-1.5">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* OTP Box Inputs */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-foreground flex items-center space-x-1.5 justify-center sm:justify-start">
               <KeyRound className="w-3.5 h-3.5 text-primary" />
-              <span>Verification Code</span>
+              <span>6-Digit Verification PIN</span>
             </label>
-            <input
-              id="code-input"
-              type="text"
-              required
-              maxLength={6}
-              placeholder="Enter 6-digit code"
-              value={resetCode}
-              onChange={(e) => setResetCode(e.target.value)}
-              className="w-full h-11 px-4 rounded-xl bg-card border border-input text-center tracking-widest text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
-            />
+            <div className="flex justify-between gap-2 max-w-xs mx-auto sm:mx-0">
+              {otp.map((digit, idx) => (
+                <input
+                  key={idx}
+                  ref={(el) => {
+                    inputRefs.current[idx] = el;
+                  }}
+                  type="text"
+                  maxLength={1}
+                  value={digit}
+                  onPaste={handlePaste}
+                  onKeyDown={(e) => handleKeyDown(e, idx)}
+                  onChange={(e) => handleOtpChange(e.target.value, idx)}
+                  className="w-11 h-12 bg-card border border-input rounded-xl text-center font-extrabold text-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-all"
+                />
+              ))}
+            </div>
           </div>
 
           <div className="space-y-1.5">
@@ -160,14 +208,6 @@ function ResetPasswordContent() {
           >
             Update Password
           </Button>
-
-          <Link
-            href="/auth"
-            className="w-full h-11 rounded-xl bg-secondary hover:bg-secondary/80 text-xs font-semibold text-foreground flex items-center justify-center space-x-2 transition-colors cursor-pointer"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to Login</span>
-          </Link>
         </form>
       </animated.div>
 
