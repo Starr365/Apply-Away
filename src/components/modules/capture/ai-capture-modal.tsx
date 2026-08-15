@@ -30,6 +30,13 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      setUrlInput("");
+      setTextInput("");
+      setExtractedData(null);
+      setIsDuplicate(false);
+      setDuplicateType("");
+      setErrorMsg("");
+      setIsQuotaError(false);
     } else {
       document.body.style.overflow = "unset";
     }

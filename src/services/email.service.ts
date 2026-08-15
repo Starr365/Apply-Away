@@ -370,4 +370,34 @@ export class EmailService {
 
     return await this.dispatch({ to: toEmail, subject, html: htmlContent });
   }
+
+  async sendPasswordResetEmail(params: { toEmail: string; code: string }): Promise<boolean> {
+    const { toEmail, code } = params;
+
+    const htmlContent = shell(`
+      ${header("Reset Your Password")}
+
+      <div style="margin-bottom: 20px;">${badge("Verification Code", true)}</div>
+
+      <p style="color: ${t.foreground}; font-size: 14px; margin: 0 0 12px 0;">Hello,</p>
+
+      <p style="color: ${t.mutedForeground}; font-size: 14px; line-height: 1.6; margin: 0;">
+        We received a request to reset your password. Use the verification code below to set a new password. This code will expire in 15 minutes.
+      </p>
+
+      ${panel(
+        `<div style="color: ${t.mutedForeground}; font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 6px;">Your Reset Code</div>
+         <div style="color: ${t.foreground}; font-size: 24px; font-weight: bold; letter-spacing: 2px;">${escapeHtml(code)}</div>`,
+        t.primary
+      )}
+
+      ${footer("If you did not request a password reset, please ignore this email.")}
+    `);
+
+    return await this.dispatch({
+      to: toEmail,
+      subject: `Apply Away Password Reset Verification Code: ${code}`,
+      html: htmlContent,
+    });
+  }
 }
