@@ -14,7 +14,7 @@ export class GeminiAIExtractionService implements IAIExtractionService {
 
   constructor() {
     const apiKey = process.env.GEMINI_API_KEY || "";
-    this.model = process.env.GEMINI_MODEL || "gemini-3.6-flash";
+    this.model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
     if (!apiKey || apiKey.trim() === "") {
       throw new Error(
