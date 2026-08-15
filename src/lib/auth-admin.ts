@@ -15,8 +15,8 @@ export async function getAdminSession() {
   const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase().trim();
   const userEmail = session.user.email.toLowerCase().trim();
 
-  // If ADMIN_EMAIL is configured, compare against it; otherwise check if user matches first admin
-  const isOwner = adminEmail ? userEmail === adminEmail : true;
+  // If ADMIN_EMAIL is configured, compare against it; otherwise fail closed (not admin)
+  const isOwner = adminEmail ? userEmail === adminEmail : false;
 
   return { isOwner, session };
 }

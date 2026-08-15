@@ -66,7 +66,7 @@ const FONT_STACK = "Arial, Helvetica, sans-serif";
 function shell(body: string): string {
   return `
   <div style="font-family: ${FONT_STACK}; background-color: ${t.background}; color: ${t.foreground}; padding: 24px;">
-    <div style="max-width: 600px; margin: 0 auto; background-color: ${t.card}; border-radius: ${emailRadius}; padding: 32px; border: 1px solid ${t.border};">
+    <div style="max-width: 600px; margin: 0 auto; background-color: ${t.card}; border-radius: ${emailRadius}; padding: 16px; border: 1px solid ${t.border};">
       ${body}
     </div>
   </div>`;
@@ -75,10 +75,18 @@ function shell(body: string): string {
 /** Logo, wordmark, and a short subtitle. */
 function header(subtitle: string): string {
   return `
-      <div style="text-align: center; margin-bottom: 28px;">
-        <img src="${getAppUrl()}/vault-logo.png" alt="Apply Away" width="48" height="48" style="border-radius: ${emailRadius}; display: block; margin: 0 auto 10px auto;" />
-        <div style="color: ${t.foreground}; font-size: 22px; font-weight: bold; letter-spacing: -0.2px;">Apply Away</div>
-        <div style="color: ${t.mutedForeground}; font-size: 13px; margin-top: 4px;">${escapeHtml(subtitle)}</div>
+      <div style="margin-bottom: 28px;">
+        <table border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 6px;">
+          <tr>
+            <td style="vertical-align: middle; padding-right: 12px;">
+              <img src="${getAppUrl()}/vault-logo.png" alt="Apply Away" width="36" height="36" style="border-radius: ${emailRadius}; display: block;" />
+            </td>
+            <td style="vertical-align: middle;">
+              <div style="color: ${t.foreground}; font-size: 20px; font-weight: bold; letter-spacing: -0.2px; line-height: 1;">Apply Away</div>
+            </td>
+          </tr>
+        </table>
+        <div style="color: ${t.mutedForeground}; font-size: 13px; margin-left: 2px;">${escapeHtml(subtitle)}</div>
       </div>`;
 }
 

@@ -192,6 +192,14 @@ export function OpportunityCard({ opportunity, onEdit }: OpportunityCardProps) {
         <p className="text-xs text-muted-foreground line-clamp-2">{opportunity.shortDescription}</p>
       )}
 
+      {/* Personal Notes Section */}
+      {opportunity.personalNotes && opportunity.personalNotes.trim() !== "" && (
+        <div className="p-3 rounded-xl bg-secondary/30 border border-border/40 text-[11px] leading-relaxed text-slate-400 italic">
+          <strong className="text-[10px] font-bold text-muted-foreground uppercase not-italic block mb-0.5">Notes:</strong>
+          <p className="line-clamp-2">{opportunity.personalNotes}</p>
+        </div>
+      )}
+
       {/* Badges Row */}
       <div className="flex flex-wrap items-center gap-1.5">
         <CategoryBadge category={opportunity.category} />

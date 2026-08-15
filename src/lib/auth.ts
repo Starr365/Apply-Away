@@ -9,7 +9,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
-    maxAge: 5 * 60, // 5 minutes lifetime
+    maxAge: 15 * 60, // 15 minutes lifetime
   },
   pages: {
     signIn: "/auth",
