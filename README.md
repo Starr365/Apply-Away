@@ -27,7 +27,7 @@ graph TD
 - **Dashboard Personal Notes**: Renders user-written personal notes directly under opportunity cards and table columns on the main dashboard layout for immediate context.
 - **TimeZone-Aware Daily Digests**: Processes local dates and schedules consolidated morning briefings to deliver exactly at 7:00 AM in each user's respective timezone (e.g. `Africa/Lagos`, `America/New_York`).
 - **Preparation Workspace & Checklists**: Hosts essay editors and interactive checklist trackers for key application documents (Resume, Transcripts, Recommendations).
-- **Reflection Journal & Analytics**: Features data charts (velocity trends, category distribution, conversion pipelines) and monthly journal prompts to audit and refine application strategies.
+- **Reflection Journal & Analytics**: Features data charts (velocity trends, category distribution, conversion pipelines) and charts to audit and keep track of applications submitted, accepted or rejected.
 
 ---
 

@@ -54,7 +54,7 @@ export function LandingFAQ() {
           <div className="text-xs sm:text-sm font-bold text-primary uppercase tracking-widest select-none">
             FREQUENTLY ASKED QUESTIONS
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold font-outfit text-foreground leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-bold text-foreground leading-tight">
             Everything you need to know about Apply Away
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground select-none">

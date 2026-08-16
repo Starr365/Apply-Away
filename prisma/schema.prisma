@@ -235,3 +235,13 @@ model AnalyticsEvent {
   @@index([sessionId])
   @@map("analytics_events")
 }
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("password_resets")
+}
