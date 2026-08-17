@@ -1,6 +1,6 @@
-# Apply Away – Your Intelligent Opportunity Vault
+# Apply Away – Your Personal Opportunity Vault
 
-**Apply Away** is an intelligent, full-stack personal opportunity vault designed for professionals, researchers, and students to centralize, track, and prepare career and academic applications. The platform acts as a secure "second brain," enabling users to instantly extract opportunities from across the web, monitor deadlines in their local timezones, draft essays, track required documents, and reflect on their application progress.
+**Apply Away** is an intelligent, full-stack personal opportunity vault designed for professionals, researchers, and students to centralize, track, and prepare their career and academic applications. The platform acts as a secure "second brain," enabling users to instantly extract opportunities from across the web, monitor deadlines in their local timezones, track required documents, and reflect on their application progress.
 
 ---
 
