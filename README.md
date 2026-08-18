@@ -21,9 +21,9 @@ graph TD
 
 ## ✨ Core Product Capabilities
 
-- **AI Quick Capture**: Scrapes web links and parses unstructured text messages (e.g. copied from WhatsApp or LinkedIn) to automatically extract titles, hosts, requirements, benefits, and essay prompts into structured vault records.
-- **Duplicate Prevention Warning**: Compares host organization details and opportunity names during parsing, alerting you to potential duplicates before they get saved.
-- **Milestone Deadline Calendar**: Visualizes upcoming deadlines on an interactive month calendar widget styled with responsive glassmorphic interfaces.
+- **AI Quick Capture**: Scrapes web links and parses unstructured text messages (e.g. copied from WhatsApp or LinkedIn) to automatically extract titles, hosts, requirements, benefits, and essay prompts into structured records.
+- **Duplicate Prevention Warning**: Compares host organization details and opportunity names during parsing, alerting you to detect potential duplicates before they get saved.
+- **Milestone Deadline Calendar**: Visualizes upcoming deadlines on an interactive month calendar widget styled with responsive interfaces.
 - **Dashboard Personal Notes**: Renders user-written personal notes directly under opportunity cards and table columns on the main dashboard layout for immediate context.
 - **TimeZone-Aware Daily Digests**: Processes local dates and schedules consolidated morning briefings to deliver exactly at 7:00 AM in each user's respective timezone (e.g. `Africa/Lagos`, `America/New_York`).
 - **Preparation Workspace & Checklists**: Hosts essay editors and interactive checklist trackers for key application documents (Resume, Transcripts, Recommendations).
