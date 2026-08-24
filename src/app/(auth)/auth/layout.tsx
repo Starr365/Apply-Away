@@ -12,7 +12,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="w-full max-w-7xl px-4 sm:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column: Product Showcase */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <div className="inline-flex items-center space-x-2.5 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary">
+            <div className="hidden lg:inline-flex items-center space-x-2.5 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary">
               <Sparkles className="w-4 h-4" />
               <span>AI-Powered Opportunity Platform</span>
             </div>
@@ -30,15 +30,15 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                   />
                 </Link>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold font-outfit tracking-tight text-foreground leading-tight">
+              <h1 className="hidden lg:block text-3xl sm:text-4xl font-extrabold font-outfit tracking-tight text-foreground leading-tight">
                 Manage all opportunities from one central vault.
               </h1>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="hidden lg:block text-sm text-muted-foreground leading-relaxed">
                 Save opportunities from URLs or copied text, automatically extract structured data with AI, track deadlines, and reflect on your application journey.
               </p>
             </div>
 
-            <div className="space-y-3 pt-2 text-xs font-medium text-muted-foreground hidden sm:block">
+            <div className="hidden lg:block space-y-3 pt-2 text-xs font-medium text-muted-foreground">
               <div className="flex items-center space-x-2.5 justify-center lg:justify-start">
                 <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
                 <span>Instant AI Structured Data Extraction</span>

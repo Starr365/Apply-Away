@@ -8,7 +8,7 @@ datasource db {
 }
 
 // -----------------------------------------------------------------------------
-// USER & AUTHENTICATION MODELS (Auth.js v5 / NextAuth Multi-Tenant Foundation)
+// USER & AUTHENTICATION MODELS (Auth.js v5 / NextAuth)
 // -----------------------------------------------------------------------------
 
 model User {
