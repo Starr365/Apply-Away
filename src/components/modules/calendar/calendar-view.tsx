@@ -98,7 +98,7 @@ export function CalendarView({ opportunities }: CalendarViewProps) {
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-primary" />
-            <span>Standard Deadline</span>
+            <span>Low / Standard Priority</span>
           </div>
         </div>
       </div>
