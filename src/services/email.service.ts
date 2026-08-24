@@ -76,17 +76,17 @@ function shell(body: string): string {
 function header(subtitle: string): string {
   return `
       <div style="margin-bottom: 28px;">
-        <table border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 6px;">
+        <table border="0" cellpadding="0" cellspacing="0">
           <tr>
             <td style="vertical-align: middle; padding-right: 12px;">
               <img src="${getAppUrl()}/vault-logo.png" alt="Apply Away" width="36" height="36" style="border-radius: ${emailRadius}; display: block;" />
             </td>
             <td style="vertical-align: middle;">
               <div style="color: ${t.foreground}; font-size: 20px; font-weight: bold; letter-spacing: -0.2px; line-height: 1;">Apply Away</div>
+              <div style="color: ${t.mutedForeground}; font-size: 13px; margin-top: 4px; line-height: 1.2;">${escapeHtml(subtitle)}</div>
             </td>
           </tr>
         </table>
-        <div style="color: ${t.mutedForeground}; font-size: 13px; margin-left: 2px;">${escapeHtml(subtitle)}</div>
       </div>`;
 }
 
@@ -386,10 +386,10 @@ export class EmailService {
       </p>
 
       ${panel(
-        `<div style="color: ${t.mutedForeground}; font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 6px;">Your Reset Code</div>
+      `<div style="color: ${t.mutedForeground}; font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 6px;">Your Reset Code</div>
          <div style="color: ${t.foreground}; font-size: 24px; font-weight: bold; letter-spacing: 2px;">${escapeHtml(code)}</div>`,
-        t.primary
-      )}
+      t.primary
+    )}
 
       ${footer("If you did not request a password reset, please ignore this email.")}
     `);

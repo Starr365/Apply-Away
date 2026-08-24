@@ -1,11 +1,8 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ReflectionView } from "@/components/modules/reflection/reflection-view";
-import { PageHeader } from "@/components/ui/page-header";
 import { STATUS_LABELS } from "@/lib/constants";
 import { Opportunity, ActivityLog } from "@/domain/opportunity.types";
-import Link from "next/link";
-import { Calendar, CalendarDays } from "lucide-react";
 
 interface ReflectionPageProps {
   searchParams: Promise<{

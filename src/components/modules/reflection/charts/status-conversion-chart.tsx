@@ -54,6 +54,8 @@ export function StatusConversionChart({ data }: StatusConversionChartProps) {
               color: "#ffffff",
               fontSize: "12px",
             }}
+            itemStyle={{ color: "#38bdf8", fontWeight: 600 }}
+            labelStyle={{ color: "#94a3b8" }}
           />
 
           <Bar dataKey="count" radius={[6, 6, 0, 0]}>
