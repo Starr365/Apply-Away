@@ -154,7 +154,7 @@ export function ReflectionView({
                 type="month"
                 value={selectedMonth}
                 onChange={(e) => handleDateChange(e.target.value)}
-                className="h-9 px-3 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer font-medium"
+                className="h-9 px-3 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
                 title="Select Month"
               />
             ) : (
@@ -163,7 +163,7 @@ export function ReflectionView({
                   id="header-year-picker"
                   value={selectedYear}
                   onChange={(e) => handleDateChange(e.target.value)}
-                  className="h-9 pl-3 pr-8 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer appearance-none font-medium"
+                  className="h-9 pl-3 pr-8 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer appearance-none"
                   title="Select Year"
                 >
                   {availableYears.map((yr) => (

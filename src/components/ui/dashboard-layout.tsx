@@ -14,7 +14,6 @@ import {
   LogOut,
   Menu,
   X,
-  Shield,
   Sun,
   Moon,
 } from "lucide-react";
@@ -252,11 +251,6 @@ export function DashboardLayout({
           >
             Sign Out
           </Button>
-
-          <div className="flex items-center justify-center space-x-1.5 text-[10px] text-muted-foreground pt-1">
-            <Shield className="w-3 h-3 text-primary" />
-            <span>Opportunity Vault</span>
-          </div>
         </div>
       </aside>
 
