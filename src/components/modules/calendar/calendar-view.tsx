@@ -37,11 +37,14 @@ export function CalendarView({ opportunities }: CalendarViewProps) {
       if (opp.status === "SUBMITTED" || opp.status === "ACCEPTED") {
         backgroundColor = "#10b981";
         borderColor = "#34d399";
-      } else if (isOverdue || opp.priority === "HIGH") {
-        backgroundColor = "#f43f5e";
-        borderColor = "#fb7185";
+      } else if (isOverdue && opp.status !== "REJECTED") {
+        backgroundColor = "#f97316"; // Orange for Missed Deadlines
+        borderColor = "#fb923c";
+      } else if (opp.priority === "HIGH") {
+        backgroundColor = "#ef4444"; // Red for High Priority
+        borderColor = "#f87171";
       } else if (opp.priority === "MEDIUM") {
-        backgroundColor = "#f59e0b"; // Amber
+        backgroundColor = "#f59e0b"; // Amber for Medium Priority
         borderColor = "#fbbf24";
       }
 
@@ -78,8 +81,12 @@ export function CalendarView({ opportunities }: CalendarViewProps) {
 
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-            <span>High Priority / Due Soon</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
+            <span>Missed Deadline</span>
+          </div>
+          <div className="flex items-center space-x-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
+            <span>High Priority</span>
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
@@ -91,7 +98,7 @@ export function CalendarView({ opportunities }: CalendarViewProps) {
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-primary" />
-            <span>Standard Deadline</span>
+            <span>Low / Standard Priority</span>
           </div>
         </div>
       </div>
