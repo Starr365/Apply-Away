@@ -101,7 +101,7 @@ export function DashboardView({
           </Link>
         </AnimatedContainer>
         <AnimatedContainer delay={180}>
-          <Link href="/dashboard?status=SUBMITTED" className="block cursor-pointer transition-transform hover:scale-[1.02]" title="Click to filter Submitted opportunities">
+          <Link href="/dashboard?submitted=true" className="block cursor-pointer transition-transform hover:scale-[1.02]" title="Click to filter Submitted opportunities">
             <MetricCard label="Submitted" value={stats.submitted} icon={CheckCircle2} iconColorClass="text-primary" valueColorClass="text-primary" />
           </Link>
         </AnimatedContainer>

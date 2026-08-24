@@ -6,6 +6,8 @@ import { prisma } from "@/lib/prisma";
 
 const repository = new PrismaOpportunityRepository();
 
+const SUBMITTED_STAGES = ["SUBMITTED", "INTERVIEW", "ACCEPTED", "REJECTED"] as const;
+
 interface DashboardPageProps {
   searchParams: Promise<{
     search?: string;
@@ -16,6 +18,7 @@ interface DashboardPageProps {
     sortOrder?: string;
     dueSoon?: string;
     missed?: string;
+    submitted?: string;
     page?: string;
   }>;
 }
@@ -32,8 +35,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const now = new Date();
   const isDueSoon = params.dueSoon === "true";
   const isMissed = params.missed === "true";
+  const isSubmittedFilter = params.submitted === "true";
 
-  // If missed=true, fetch opportunities with past deadlines that were never submitted
   let opportunities: Awaited<ReturnType<typeof repository.findAll>>["items"];
   let total: number;
 
@@ -53,6 +56,24 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         include: { essayQuestions: true },
       }),
       prisma.opportunity.count({ where: missedWhere }),
+    ]);
+    opportunities = items as unknown as typeof opportunities;
+    total = count;
+  } else if (isSubmittedFilter) {
+    const skip = (page - 1) * limit;
+    const submittedWhere = {
+      userId,
+      status: { in: [...SUBMITTED_STAGES] },
+    };
+    const [items, count] = await Promise.all([
+      prisma.opportunity.findMany({
+        where: submittedWhere,
+        orderBy: { updatedAt: "desc" },
+        skip,
+        take: limit,
+        include: { essayQuestions: true },
+      }),
+      prisma.opportunity.count({ where: submittedWhere }),
     ]);
     opportunities = items as unknown as typeof opportunities;
     total = count;
@@ -83,7 +104,12 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         deadline: { lt: now },
       },
     }),
-    prisma.opportunity.count({ where: { userId, status: "SUBMITTED" } }),
+    prisma.opportunity.count({
+      where: {
+        userId,
+        status: { in: [...SUBMITTED_STAGES] },
+      },
+    }),
     prisma.opportunity.count({
       where: {
         userId,
@@ -110,5 +136,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     />
   );
 }
+
 
 
