@@ -75,13 +75,13 @@ function shell(body: string): string {
 /** Logo, wordmark, and a short subtitle. */
 function header(subtitle: string): string {
   return `
-      <div style="margin-bottom: 28px;">
-        <table border="0" cellpadding="0" cellspacing="0">
+      <div style="margin-bottom: 28px; text-align: center;">
+        <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto; display: inline-block;">
           <tr>
             <td style="vertical-align: middle; padding-right: 12px;">
               <img src="${getAppUrl()}/vault-logo.png" alt="Apply Away" width="36" height="36" style="border-radius: ${emailRadius}; display: block;" />
             </td>
-            <td style="vertical-align: middle;">
+            <td style="vertical-align: middle; text-align: left;">
               <div style="color: ${t.foreground}; font-size: 20px; font-weight: bold; letter-spacing: -0.2px; line-height: 1;">Apply Away</div>
               <div style="color: ${t.mutedForeground}; font-size: 13px; margin-top: 4px; line-height: 1.2;">${escapeHtml(subtitle)}</div>
             </td>
