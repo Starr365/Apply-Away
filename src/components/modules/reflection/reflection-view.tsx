@@ -30,10 +30,12 @@ import {
   PieChart as PieIcon,
   BarChart3,
   Calendar,
+  CalendarDays,
   Edit3,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface MonthlyReflectionItem {
   id: string;
@@ -42,14 +44,16 @@ interface MonthlyReflectionItem {
 }
 
 interface ReflectionViewProps {
-  velocityData: { month: string; total: number; submitted: number }[];
+  velocityData: { period: string; total: number; submitted: number }[];
   categoryData: { name: string; value: number }[];
   statusData: { status: string; count: number }[];
   recentActivities: ActivityLog[];
   reflectionsMap: Record<string, MonthlyReflectionItem>;
+  currentView: "monthly" | "yearly";
   stats: {
     totalApplications: number;
     submittedThisMonth: number;
+    acceptedCount: number;
     acceptanceRate: string;
     topCategory: string;
   };
@@ -61,6 +65,7 @@ export function ReflectionView({
   statusData,
   recentActivities,
   reflectionsMap,
+  currentView,
   stats,
 }: ReflectionViewProps) {
   const toast = useToast();
@@ -116,9 +121,46 @@ export function ReflectionView({
 
   return (
     <div className="space-y-8">
+      {/* Monthly / Yearly View Toggle — Prominent in Header */}
+      <AnimatedContainer delay={0} direction="fade">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            {currentView === "monthly" ? "Showing stats per month (last 6 months)" : "Showing combined stats per year (last 6 years)"}
+          </p>
+          <div className="flex items-center rounded-xl bg-secondary border border-border p-1" role="tablist" aria-label="Analytics view period toggle">
+            <Link
+              href="/reflection?view=monthly"
+              role="tab"
+              aria-selected={currentView === "monthly"}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-1.5 ${
+                currentView === "monthly"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <CalendarDays className="w-4 h-4" aria-hidden="true" />
+              Monthly
+            </Link>
+            <Link
+              href="/reflection?view=yearly"
+              role="tab"
+              aria-selected={currentView === "yearly"}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-1.5 ${
+                currentView === "yearly"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Calendar className="w-4 h-4" aria-hidden="true" />
+              Yearly
+            </Link>
+          </div>
+        </div>
+      </AnimatedContainer>
+
       {/* Metrics Summary Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <AnimatedContainer delay={0}>
+        <AnimatedContainer delay={60}>
           <MetricCard
             label="Total Vault"
             value={stats.totalApplications}
@@ -126,7 +168,7 @@ export function ReflectionView({
             iconColorClass="text-primary"
           />
         </AnimatedContainer>
-        <AnimatedContainer delay={60}>
+        <AnimatedContainer delay={120}>
           <MetricCard
             label="Submitted (This Month)"
             value={stats.submittedThisMonth}
@@ -135,16 +177,16 @@ export function ReflectionView({
             valueColorClass="text-emerald-600 dark:text-emerald-400"
           />
         </AnimatedContainer>
-        <AnimatedContainer delay={120}>
+        <AnimatedContainer delay={180}>
           <MetricCard
-            label="Acceptance Rate"
+            label={`Acceptance Rate · ${stats.acceptedCount} accepted`}
             value={stats.acceptanceRate}
             icon={Award}
             iconColorClass="text-amber-600 dark:text-amber-400"
             valueColorClass="text-amber-600 dark:text-amber-400"
           />
         </AnimatedContainer>
-        <AnimatedContainer delay={180}>
+        <AnimatedContainer delay={240}>
           <MetricCard
             label="Top Category"
             value={stats.topCategory}
@@ -158,14 +200,16 @@ export function ReflectionView({
       {/* Responsive Analytics Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Chart 1: Application Velocity Over Time */}
-        <AnimatedContainer delay={200}>
+        <AnimatedContainer delay={300}>
           <div className="glass-panel p-6 rounded-3xl space-y-4">
             <div className="flex items-center space-x-2">
               <BarChart3 className="w-5 h-5 text-primary" aria-hidden="true" />
               <h3 className="text-base font-bold font-outfit text-foreground">Application Velocity</h3>
             </div>
             <p className="text-xs text-muted-foreground">
-              Monthly trend of new opportunities created vs. submitted applications over time.
+              {currentView === "monthly"
+                ? "Monthly trend of new opportunities created vs. submitted applications over the past 6 months."
+                : "Yearly overview of opportunities created vs. submitted applications over the past 6 years."}
             </p>
             <ErrorBoundary fallbackTitle="Chart Error" fallbackDescription="Unable to render the velocity chart.">
               <ApplicationVelocityChart data={velocityData} />

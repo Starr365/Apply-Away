@@ -11,7 +11,7 @@ import {
 } from "recharts";
 
 interface VelocityDataPoint {
-  month: string;
+  period: string;
   total: number;
   submitted: number;
 }
@@ -45,7 +45,7 @@ export function ApplicationVelocityChart({ data }: ApplicationVelocityChartProps
           </defs>
 
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(51, 65, 85, 0.4)" />
-          <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} tickLine={false} />
+          <XAxis dataKey="period" stroke="#94a3b8" fontSize={11} tickLine={false} />
           <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} allowDecimals={false} />
 
           <Tooltip
