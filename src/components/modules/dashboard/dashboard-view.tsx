@@ -97,11 +97,11 @@ export function DashboardView({
         </AnimatedContainer>
         <AnimatedContainer delay={120}>
           <Link href="/dashboard?missed=true" className="block cursor-pointer transition-transform hover:scale-[1.02]" title="Click to filter missed deadline opportunities">
-            <MetricCard label="Missed Deadlines" value={stats.missedDeadlines} icon={AlertTriangle} iconColorClass="text-rose-600 dark:text-rose-400" valueColorClass="text-rose-600 dark:text-rose-400" />
+            <MetricCard label="Missed Deadlines" value={stats.missedDeadlines} icon={AlertTriangle} iconColorClass="text-amber-500 dark:text-amber-400" valueColorClass="text-amber-500 dark:text-amber-400" />
           </Link>
         </AnimatedContainer>
         <AnimatedContainer delay={180}>
-          <Link href="/dashboard?status=SUBMITTED" className="block cursor-pointer transition-transform hover:scale-[1.02]" title="Click to filter Submitted opportunities">
+          <Link href="/dashboard?submitted=true" className="block cursor-pointer transition-transform hover:scale-[1.02]" title="Click to filter Submitted opportunities">
             <MetricCard label="Submitted" value={stats.submitted} icon={CheckCircle2} iconColorClass="text-primary" valueColorClass="text-primary" />
           </Link>
         </AnimatedContainer>
