@@ -12,7 +12,7 @@ import { MetricCard } from "@/components/ui/metric-card";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
-import { Plus, Sparkles, CheckCircle2, Clock, Layers, Wand2 } from "lucide-react";
+import { Plus, AlertTriangle, CheckCircle2, Clock, Layers, Wand2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -23,7 +23,7 @@ interface DashboardViewProps {
   limit: number;
   stats: {
     total: number;
-    inProgress: number;
+    missedDeadlines: number;
     submitted: number;
     dueSoon: number;
   };
@@ -96,8 +96,8 @@ export function DashboardView({
           </Link>
         </AnimatedContainer>
         <AnimatedContainer delay={120}>
-          <Link href="/dashboard?status=IN_PROGRESS" className="block cursor-pointer transition-transform hover:scale-[1.02]" title="Click to filter In Progress opportunities">
-            <MetricCard label="In Progress" value={stats.inProgress} icon={Sparkles} iconColorClass="text-sky-600 dark:text-sky-400" valueColorClass="text-sky-600 dark:text-sky-400" />
+          <Link href="/dashboard?missed=true" className="block cursor-pointer transition-transform hover:scale-[1.02]" title="Click to filter missed deadline opportunities">
+            <MetricCard label="Missed Deadlines" value={stats.missedDeadlines} icon={AlertTriangle} iconColorClass="text-rose-600 dark:text-rose-400" valueColorClass="text-rose-600 dark:text-rose-400" />
           </Link>
         </AnimatedContainer>
         <AnimatedContainer delay={180}>
