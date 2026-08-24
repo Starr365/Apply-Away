@@ -56,6 +56,8 @@ export function ApplicationVelocityChart({ data }: ApplicationVelocityChartProps
               color: "#ffffff",
               fontSize: "12px",
             }}
+            itemStyle={{ color: "#f8fafc", fontWeight: 600 }}
+            labelStyle={{ color: "#94a3b8" }}
           />
 
           <Area

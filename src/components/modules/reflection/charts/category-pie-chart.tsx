@@ -56,6 +56,8 @@ export function CategoryPieChart({ data }: CategoryPieChartProps) {
               color: "#ffffff",
               fontSize: "12px",
             }}
+            itemStyle={{ color: "#38bdf8", fontWeight: 600 }}
+            labelStyle={{ color: "#94a3b8" }}
           />
           <Legend
             wrapperStyle={{ fontSize: "11px", color: "#94a3b8" }}
