@@ -5,9 +5,11 @@ import { useToast } from "@/components/ui/toast-provider";
 import { AnimatedContainer } from "@/components/ui/animated-container";
 import { MetricCard } from "@/components/ui/metric-card";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { PageHeader } from "@/components/ui/page-header";
 import { saveMonthlyReflectionAction } from "@/app/actions/reflection.actions";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const ApplicationVelocityChart = dynamic(
   () => import("./charts/application-velocity-chart").then((mod) => mod.ApplicationVelocityChart),
@@ -137,51 +139,74 @@ export function ReflectionView({
   };
 
   return (
-    <div className="space-y-8">
-      {/* Date Filter Selection Bar */}
+    <div className="space-y-6">
+      {/* Page Header with Tab Switcher & Date Picker on the Right */}
       <AnimatedContainer delay={0} direction="fade">
-        <div className="glass-panel p-4 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border border-border">
-          <div className="flex items-center space-x-2">
-            <CalendarDays className="w-4 h-4 text-primary" aria-hidden="true" />
-            <span className="text-xs font-semibold text-foreground">
-              Filter Scoped Period: <strong className="text-primary">{periodLabel}</strong>
-            </span>
-          </div>
+        <PageHeader
+          title="Reflection & Analytics Dashboard"
+          description={`Analyzing metrics for ${periodLabel}. Track application velocity, conversions, and monthly reflections.`}
+        >
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Monthly / Yearly Segmented Switcher */}
+            <div className="flex items-center rounded-xl bg-secondary border border-border p-1" role="tablist" aria-label="Analytics view mode">
+              <Link
+                href={`/reflection?view=monthly&month=${selectedMonth}`}
+                role="tab"
+                aria-selected={currentView === "monthly"}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                  currentView === "monthly"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <CalendarDays className="w-3.5 h-3.5" aria-hidden="true" />
+                Monthly
+              </Link>
+              <Link
+                href={`/reflection?view=yearly&year=${selectedYear}`}
+                role="tab"
+                aria-selected={currentView === "yearly"}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                  currentView === "yearly"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
+                Yearly
+              </Link>
+            </div>
 
-          <div className="flex items-center space-x-2">
+            {/* Date Picker Inline Beside Tab Switcher */}
             {currentView === "monthly" ? (
-              <div className="flex items-center space-x-2">
-                <label htmlFor="month-picker" className="text-xs text-muted-foreground font-medium">Select Month:</label>
-                <input
-                  id="month-picker"
-                  type="month"
-                  value={selectedMonth}
-                  onChange={(e) => handleDateChange(e.target.value)}
-                  className="h-9 px-3 rounded-xl bg-card border border-input text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer font-medium"
-                />
-              </div>
+              <input
+                id="header-month-picker"
+                type="month"
+                value={selectedMonth}
+                onChange={(e) => handleDateChange(e.target.value)}
+                className="h-9 px-3 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
+                title="Select Month"
+              />
             ) : (
-              <div className="flex items-center space-x-2">
-                <label htmlFor="year-picker" className="text-xs text-muted-foreground font-medium">Select Year:</label>
-                <div className="relative">
-                  <select
-                    id="year-picker"
-                    value={selectedYear}
-                    onChange={(e) => handleDateChange(e.target.value)}
-                    className="h-9 pl-3 pr-8 rounded-xl bg-card border border-input text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer appearance-none font-medium"
-                  >
-                    {availableYears.map((yr) => (
-                      <option key={yr} value={yr}>
-                        {yr}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="w-3.5 h-3.5 text-muted-foreground absolute right-2.5 top-3 pointer-events-none" aria-hidden="true" />
-                </div>
+              <div className="relative">
+                <select
+                  id="header-year-picker"
+                  value={selectedYear}
+                  onChange={(e) => handleDateChange(e.target.value)}
+                  className="h-9 pl-3 pr-8 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer appearance-none font-medium"
+                  title="Select Year"
+                >
+                  {availableYears.map((yr) => (
+                    <option key={yr} value={yr}>
+                      {yr}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground absolute right-2.5 top-3 pointer-events-none" aria-hidden="true" />
               </div>
             )}
           </div>
-        </div>
+        </PageHeader>
       </AnimatedContainer>
 
       {/* Metrics Summary Row Scoped to Selection */}

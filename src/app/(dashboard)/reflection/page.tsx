@@ -176,65 +176,26 @@ export default async function ReflectionPage({ searchParams }: ReflectionPagePro
       : new Date(selectedMonth + "-01").toLocaleString("default", { month: "long", year: "numeric" });
 
   return (
-    <div className="space-y-6">
-      {/* Page Header with Tab Switcher & Date Selectors on the Right Side */}
-      <PageHeader
-        title="Reflection & Analytics Dashboard"
-        description={`Analyzing metrics for ${periodLabel}. Track application velocity, conversions, and reflections.`}
-      >
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Monthly / Yearly Segmented Control */}
-          <div className="flex items-center rounded-xl bg-secondary border border-border p-1" role="tablist" aria-label="Analytics view mode">
-            <Link
-              href={`/reflection?view=monthly&month=${selectedMonth}`}
-              role="tab"
-              aria-selected={currentView === "monthly"}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                currentView === "monthly"
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <CalendarDays className="w-3.5 h-3.5" aria-hidden="true" />
-              Monthly
-            </Link>
-            <Link
-              href={`/reflection?view=yearly&year=${selectedYear}`}
-              role="tab"
-              aria-selected={currentView === "yearly"}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                currentView === "yearly"
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
-              Yearly
-            </Link>
-          </div>
-        </div>
-      </PageHeader>
-
-      <ReflectionView
-        velocityData={velocityData}
-        categoryData={categoryData}
-        statusData={statusData}
-        recentActivities={recentActivities as unknown as ActivityLog[]}
-        reflectionsMap={reflectionsMap}
-        currentView={currentView}
-        selectedMonth={selectedMonth}
-        selectedYear={selectedYear}
-        availableYears={availableYears}
-        periodLabel={periodLabel}
-        stats={{
-          totalApplications: scopedOpps.length,
-          submittedThisMonth: submittedInPeriod,
-          acceptedCount,
-          acceptanceRate,
-          topCategory: topCat,
-        }}
-      />
-    </div>
+    <ReflectionView
+      velocityData={velocityData}
+      categoryData={categoryData}
+      statusData={statusData}
+      recentActivities={recentActivities as unknown as ActivityLog[]}
+      reflectionsMap={reflectionsMap}
+      currentView={currentView}
+      selectedMonth={selectedMonth}
+      selectedYear={selectedYear}
+      availableYears={availableYears}
+      periodLabel={periodLabel}
+      stats={{
+        totalApplications: scopedOpps.length,
+        submittedThisMonth: submittedInPeriod,
+        acceptedCount,
+        acceptanceRate,
+        topCategory: topCat,
+      }}
+    />
   );
 }
+
 
