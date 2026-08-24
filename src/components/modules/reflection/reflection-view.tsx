@@ -147,6 +147,35 @@ export function ReflectionView({
           description={`Analyzing metrics for ${periodLabel}. Track application velocity, conversions, and monthly reflections.`}
         >
           <div className="flex flex-wrap items-center gap-2.5">
+            {/* Date Picker Inline BEFORE Tab Switcher */}
+            {currentView === "monthly" ? (
+              <input
+                id="header-month-picker"
+                type="month"
+                value={selectedMonth}
+                onChange={(e) => handleDateChange(e.target.value)}
+                className="h-9 px-3 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer font-medium"
+                title="Select Month"
+              />
+            ) : (
+              <div className="relative">
+                <select
+                  id="header-year-picker"
+                  value={selectedYear}
+                  onChange={(e) => handleDateChange(e.target.value)}
+                  className="h-9 pl-3 pr-8 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer appearance-none font-medium"
+                  title="Select Year"
+                >
+                  {availableYears.map((yr) => (
+                    <option key={yr} value={yr}>
+                      {yr}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground absolute right-2.5 top-3 pointer-events-none" aria-hidden="true" />
+              </div>
+            )}
+
             {/* Monthly / Yearly Segmented Switcher */}
             <div className="flex items-center rounded-xl bg-secondary border border-border p-1" role="tablist" aria-label="Analytics view mode">
               <Link
@@ -176,35 +205,6 @@ export function ReflectionView({
                 Yearly
               </Link>
             </div>
-
-            {/* Date Picker Inline Beside Tab Switcher */}
-            {currentView === "monthly" ? (
-              <input
-                id="header-month-picker"
-                type="month"
-                value={selectedMonth}
-                onChange={(e) => handleDateChange(e.target.value)}
-                className="h-9 px-3 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer"
-                title="Select Month"
-              />
-            ) : (
-              <div className="relative">
-                <select
-                  id="header-year-picker"
-                  value={selectedYear}
-                  onChange={(e) => handleDateChange(e.target.value)}
-                  className="h-9 pl-3 pr-8 rounded-xl bg-card border border-input text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 cursor-pointer appearance-none font-medium"
-                  title="Select Year"
-                >
-                  {availableYears.map((yr) => (
-                    <option key={yr} value={yr}>
-                      {yr}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground absolute right-2.5 top-3 pointer-events-none" aria-hidden="true" />
-              </div>
-            )}
           </div>
         </PageHeader>
       </AnimatedContainer>
