@@ -4,27 +4,51 @@ import { ReflectionView } from "@/components/modules/reflection/reflection-view"
 import { PageHeader } from "@/components/ui/page-header";
 import { STATUS_LABELS } from "@/lib/constants";
 import { Opportunity, ActivityLog } from "@/domain/opportunity.types";
+import Link from "next/link";
+import { Calendar, CalendarDays } from "lucide-react";
 
 interface ReflectionPageProps {
   searchParams: Promise<{
     view?: string;
+    month?: string;
+    year?: string;
   }>;
 }
 
 export default async function ReflectionPage({ searchParams }: ReflectionPageProps) {
   const params = await searchParams;
+  const now = new Date();
+  const defaultMonth = now.toISOString().slice(0, 7); // "YYYY-MM"
+  const defaultYear = String(now.getFullYear()); // "YYYY"
+
   const currentView = (params.view === "yearly" ? "yearly" : "monthly") as "monthly" | "yearly";
+  const selectedMonth = params.month || defaultMonth;
+  const selectedYear = params.year || defaultYear;
+
   const session = await auth();
   const userId = session?.user?.id || "";
 
-  // Fetch all user opportunities for metrics calculations
+  // Fetch all user opportunities
   const opportunities = (await prisma.opportunity.findMany({
     where: { userId },
   })) as unknown as Opportunity[];
 
-  // Calculate Category breakdown
+  // Helper date matchers
+  const getMonthKey = (d: Date | string) => new Date(d).toISOString().slice(0, 7);
+  const getYearKey = (d: Date | string) => String(new Date(d).getFullYear());
+
+  // Filter opportunities scoped to current selection
+  const scopedOpps = opportunities.filter((opp: Opportunity) => {
+    if (currentView === "yearly") {
+      return getYearKey(opp.createdAt) === selectedYear || getYearKey(opp.updatedAt) === selectedYear;
+    } else {
+      return getMonthKey(opp.createdAt) === selectedMonth || getMonthKey(opp.updatedAt) === selectedMonth;
+    }
+  });
+
+  // Calculate Category breakdown for scoped view
   const categoryCounts: Record<string, number> = {};
-  opportunities.forEach((opp: Opportunity) => {
+  scopedOpps.forEach((opp: Opportunity) => {
     const cat = opp.category || "OTHER";
     categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
   });
@@ -44,13 +68,13 @@ export default async function ReflectionPage({ searchParams }: ReflectionPagePro
     }
   });
 
-  // Calculate Status Conversion counts using centralized labels
+  // Calculate Status Conversion counts using centralized labels for scoped view
   const statusCounts: Record<string, number> = {};
   Object.values(STATUS_LABELS).forEach((label) => {
     statusCounts[label] = 0;
   });
 
-  opportunities.forEach((opp: Opportunity) => {
+  scopedOpps.forEach((opp: Opportunity) => {
     const label = STATUS_LABELS[opp.status] || "Not Started";
     statusCounts[label] = (statusCounts[label] || 0) + 1;
   });
@@ -60,7 +84,7 @@ export default async function ReflectionPage({ searchParams }: ReflectionPagePro
     count,
   }));
 
-  // Calculate Acceptance Rate
+  // Calculate Acceptance Rate for scoped view
   const totalSubmittedOrDecided =
     statusCounts["Submitted"] + statusCounts["Interview"] + statusCounts["Accepted"] + statusCounts["Rejected"];
   const acceptedCount = statusCounts["Accepted"];
@@ -69,46 +93,42 @@ export default async function ReflectionPage({ searchParams }: ReflectionPagePro
       ? `${Math.round((acceptedCount / totalSubmittedOrDecided) * 100)}%`
       : "N/A";
 
-  // Calculate Velocity Data based on view (monthly or yearly)
-  const now = new Date();
+  // Calculate Velocity Data
   const velocityData: { period: string; total: number; submitted: number }[] = [];
 
   if (currentView === "yearly") {
-    // Yearly view: aggregate data for the past 6 years
-    for (let i = 5; i >= 0; i--) {
-      const year = now.getFullYear() - i;
-      const yearStr = String(year);
+    // Yearly view: show all 12 individual months (Jan - Dec) for the selected year
+    const targetYearNum = parseInt(selectedYear, 10);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-      const totalCreatedInYear = opportunities.filter((opp: Opportunity) => {
-        return new Date(opp.createdAt).getFullYear() === year;
-      }).length;
+    months.forEach((monthName, idx) => {
+      const monthStr = String(idx + 1).padStart(2, "0");
+      const monthKey = `${targetYearNum}-${monthStr}`;
 
-      const totalSubmittedInYear = opportunities.filter((opp: Opportunity) => {
-        const updatedYear = new Date(opp.updatedAt).getFullYear();
-        return updatedYear === year && (opp.status === "SUBMITTED" || opp.status === "ACCEPTED");
+      const totalCreated = opportunities.filter((opp: Opportunity) => getMonthKey(opp.createdAt) === monthKey).length;
+      const totalSubmitted = opportunities.filter((opp: Opportunity) => {
+        return getMonthKey(opp.updatedAt) === monthKey && (opp.status === "SUBMITTED" || opp.status === "ACCEPTED" || opp.status === "INTERVIEW" || opp.status === "REJECTED");
       }).length;
 
       velocityData.push({
-        period: yearStr,
-        total: totalCreatedInYear,
-        submitted: totalSubmittedInYear,
+        period: monthName,
+        total: totalCreated,
+        submitted: totalSubmitted,
       });
-    }
+    });
   } else {
-    // Monthly view: aggregate data for the past 6 months
+    // Monthly view: past 6 months leading up to selected month
+    const [yNum, mNum] = selectedMonth.split("-").map((n) => parseInt(n, 10));
+    const baseDate = new Date(yNum, mNum - 1, 1);
+
     for (let i = 5; i >= 0; i--) {
-      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const monthKey = d.toISOString().slice(0, 7); // e.g. "2026-08"
+      const d = new Date(baseDate.getFullYear(), baseDate.getMonth() - i, 1);
+      const monthKey = d.toISOString().slice(0, 7);
       const monthLabel = d.toLocaleString("default", { month: "short", year: "2-digit" });
 
-      const totalCreatedInMonth = opportunities.filter((opp: Opportunity) => {
-        const createdKey = new Date(opp.createdAt).toISOString().slice(0, 7);
-        return createdKey === monthKey;
-      }).length;
-
+      const totalCreatedInMonth = opportunities.filter((opp: Opportunity) => getMonthKey(opp.createdAt) === monthKey).length;
       const totalSubmittedInMonth = opportunities.filter((opp: Opportunity) => {
-        const updatedKey = new Date(opp.updatedAt).toISOString().slice(0, 7);
-        return updatedKey === monthKey && (opp.status === "SUBMITTED" || opp.status === "ACCEPTED");
+        return getMonthKey(opp.updatedAt) === monthKey && (opp.status === "SUBMITTED" || opp.status === "ACCEPTED" || opp.status === "INTERVIEW" || opp.status === "REJECTED");
       }).length;
 
       velocityData.push({
@@ -119,12 +139,14 @@ export default async function ReflectionPage({ searchParams }: ReflectionPagePro
     }
   }
 
-  // Submitted this month
-  const currentMonthKey = now.toISOString().slice(0, 7);
-  const submittedThisMonth = opportunities.filter((opp: Opportunity) => {
-    const updatedKey = new Date(opp.updatedAt).toISOString().slice(0, 7);
-    return updatedKey === currentMonthKey && (opp.status === "SUBMITTED" || opp.status === "ACCEPTED");
-  }).length;
+  // Count submitted applications in the selected period
+  const submittedInPeriod = scopedOpps.filter(
+    (opp: Opportunity) => opp.status === "SUBMITTED" || opp.status === "ACCEPTED" || opp.status === "INTERVIEW" || opp.status === "REJECTED"
+  ).length;
+
+  // Available years for dropdown selection (past 5 years + current year)
+  const currentYearNum = now.getFullYear();
+  const availableYears = Array.from({ length: 6 }, (_, i) => String(currentYearNum - i));
 
   // Fetch monthly reflections
   const reflections = await prisma.monthlyReflection.findMany({
@@ -147,12 +169,51 @@ export default async function ReflectionPage({ searchParams }: ReflectionPagePro
     orderBy: { createdAt: "desc" },
   });
 
+  // Display label for selected period
+  const periodLabel =
+    currentView === "yearly"
+      ? selectedYear
+      : new Date(selectedMonth + "-01").toLocaleString("default", { month: "long", year: "numeric" });
+
   return (
     <div className="space-y-6">
+      {/* Page Header with Tab Switcher & Date Selectors on the Right Side */}
       <PageHeader
         title="Reflection & Analytics Dashboard"
-        description="Track application velocity, category distribution, pipeline conversions, and monthly journal notes."
-      />
+        description={`Analyzing metrics for ${periodLabel}. Track application velocity, conversions, and reflections.`}
+      >
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Monthly / Yearly Segmented Control */}
+          <div className="flex items-center rounded-xl bg-secondary border border-border p-1" role="tablist" aria-label="Analytics view mode">
+            <Link
+              href={`/reflection?view=monthly&month=${selectedMonth}`}
+              role="tab"
+              aria-selected={currentView === "monthly"}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                currentView === "monthly"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <CalendarDays className="w-3.5 h-3.5" aria-hidden="true" />
+              Monthly
+            </Link>
+            <Link
+              href={`/reflection?view=yearly&year=${selectedYear}`}
+              role="tab"
+              aria-selected={currentView === "yearly"}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                currentView === "yearly"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
+              Yearly
+            </Link>
+          </div>
+        </div>
+      </PageHeader>
 
       <ReflectionView
         velocityData={velocityData}
@@ -161,9 +222,13 @@ export default async function ReflectionPage({ searchParams }: ReflectionPagePro
         recentActivities={recentActivities as unknown as ActivityLog[]}
         reflectionsMap={reflectionsMap}
         currentView={currentView}
+        selectedMonth={selectedMonth}
+        selectedYear={selectedYear}
+        availableYears={availableYears}
+        periodLabel={periodLabel}
         stats={{
-          totalApplications: opportunities.length,
-          submittedThisMonth,
+          totalApplications: scopedOpps.length,
+          submittedThisMonth: submittedInPeriod,
           acceptedCount,
           acceptanceRate,
           topCategory: topCat,
@@ -172,3 +237,4 @@ export default async function ReflectionPage({ searchParams }: ReflectionPagePro
     </div>
   );
 }
+
