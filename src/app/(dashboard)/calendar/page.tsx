@@ -12,7 +12,7 @@ export default async function CalendarPage() {
   // Fetch opportunities with deadlines for this user
   const { items: opportunities } = await repository.findAll({
     userId,
-    limit: 100, // Fetch up to 100 opportunities for calendar view
+    limit: 100,
     sortBy: "deadline",
     sortOrder: "asc",
   });
