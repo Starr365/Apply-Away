@@ -11,7 +11,7 @@ import {
   createOpportunityAction,
   updateOpportunityAction,
 } from "@/app/actions/opportunity.actions";
-import { X, FolderPlus, FileEdit, Plus, Check } from "lucide-react";
+import { X, Plus, Check } from "lucide-react";
 import { useToast } from "@/components/ui/toast-provider";
 import { Button } from "@/components/ui/button";
 

@@ -27,24 +27,6 @@ interface AICaptureModalProps {
 }
 
 export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }: AICaptureModalProps) {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      setUrlInput("");
-      setTextInput("");
-      setExtractedData(null);
-      setIsDuplicate(false);
-      setDuplicateType("");
-      setErrorMsg("");
-      setIsQuotaError(false);
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
-
   const [activeTab, setActiveTab] = useState<"url" | "text">("url");
   const [urlInput, setUrlInput] = useState("");
   const [textInput, setTextInput] = useState("");
@@ -58,6 +40,28 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [duplicateType, setDuplicateType] = useState<string>("");
   const [isSaving, setIsSaving] = useState(false);
+
+  const handleClose = () => {
+    setUrlInput("");
+    setTextInput("");
+    setExtractedData(null);
+    setIsDuplicate(false);
+    setDuplicateType("");
+    setErrorMsg("");
+    setIsQuotaError(false);
+    onClose();
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -128,7 +132,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
         setErrorMsg("");
         setIsQuotaError(false);
         onSuccess();
-        onClose();
+        handleClose();
       } else {
         setErrorMsg(res.error || "Failed to save extracted opportunity.");
       }
@@ -147,7 +151,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
   };
 
   const handleContinueManually = () => {
-    onClose();
+    handleClose();
     onFallbackManual?.();
   };
 
@@ -164,7 +168,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="w-8 h-8 rounded-lg bg-secondary hover:bg-secondary/80 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
