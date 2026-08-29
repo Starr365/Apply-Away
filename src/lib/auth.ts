@@ -75,7 +75,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           userName: user.name || "Apply Away User",
         });
       } catch (err) {
-        console.warn("[Auth] Failed to send welcome email to OAuth user:", err);
+        const { logger } = await import("@/lib/logger");
+        logger.warn("[Auth] Failed to send welcome email to OAuth user:", err);
       }
     },
     async signIn({ user }) {

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { trackEvent } from "@/lib/analytics";
 import { isValidTimezone } from "@/lib/timezone";
 import { env } from "@/lib/env";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: NextRequest) {
   try {
@@ -64,7 +65,7 @@ export async function POST(req: NextRequest) {
         userName: user.name || "Apply Away User",
       });
     } catch (emailErr) {
-      console.warn("[SignUp] Failed to send welcome email:", emailErr);
+      logger.warn("[SignUp] Failed to send welcome email:", emailErr);
     }
 
     return NextResponse.json(
@@ -72,7 +73,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Signup error:", error);
+    logger.error("Signup error:", error);
     return NextResponse.json(
       { error: "Internal server error." },
       { status: 500 }

@@ -11,6 +11,7 @@ import {
   OpportunityPriority,
 } from "@/domain/opportunity.types";
 import { revalidatePath } from "next/cache";
+import { logger } from "@/lib/logger";
 
 const repository = new PrismaOpportunityRepository();
 
@@ -77,7 +78,7 @@ export async function createOpportunityAction(formData: unknown) {
     revalidatePath("/dashboard");
     return { success: true, data: opportunity };
   } catch (err) {
-    console.error("Failed to create opportunity:", err);
+    logger.error("Failed to create opportunity:", err);
     return { success: false, error: "Failed to create opportunity. Please try again." };
   }
 }
@@ -130,7 +131,7 @@ export async function updateOpportunityAction(id: string, formData: unknown) {
     revalidatePath(`/opportunities/${id}`);
     return { success: true, data: opportunity };
   } catch (err) {
-    console.error(`Failed to update opportunity ${id}:`, err);
+    logger.error(`Failed to update opportunity ${id}:`, err);
     return { success: false, error: "Failed to update opportunity. Please try again." };
   }
 }
@@ -153,7 +154,7 @@ export async function deleteOpportunityAction(id: string) {
     revalidatePath("/dashboard");
     return { success: true };
   } catch (err) {
-    console.error(`Failed to delete opportunity ${id}:`, err);
+    logger.error(`Failed to delete opportunity ${id}:`, err);
     return { success: false, error: "Failed to delete opportunity. Please try again." };
   }
 }
@@ -205,7 +206,7 @@ export async function updateOpportunityStatusAction(
     revalidatePath("/dashboard");
     return { success: true, data: opportunity };
   } catch (err) {
-    console.error(`Failed to update status for ${id}:`, err);
+    logger.error(`Failed to update status for ${id}:`, err);
     return { success: false, error: "Failed to update status." };
   }
 }
@@ -246,7 +247,7 @@ export async function updateOpportunityPriorityAction(
     revalidatePath("/dashboard");
     return { success: true, data: opportunity };
   } catch (err) {
-    console.error(`Failed to update priority for ${id}:`, err);
+    logger.error(`Failed to update priority for ${id}:`, err);
     return { success: false, error: "Failed to update priority." };
   }
 }

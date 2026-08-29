@@ -3,6 +3,7 @@ import {
   IAIExtractionService,
   ExtractedOpportunityData,
 } from "./interfaces/ai-extraction.service";
+import { logger } from "@/lib/logger";
 
 /**
  * Google Gemini AI Extraction Service.
@@ -251,7 +252,7 @@ export class GeminiAIExtractionService implements IAIExtractionService {
       }
 
       // Re-throw with sanitized message (never expose raw error details)
-      console.error("[GeminiExtraction] Extraction failed:", errorMessage);
+      logger.error("[GeminiExtraction] Extraction failed:", errorMessage);
       throw new Error("Failed to extract opportunity data. Please try again or add it manually.");
     }
   }

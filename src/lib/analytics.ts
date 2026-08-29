@@ -69,6 +69,7 @@ export async function trackEvent(input: TrackEventInput): Promise<void> {
     }
   } catch (error) {
     // Fail silently in production so analytics never disrupts core user workflows
-    console.error("[Analytics] Event tracking error:", error);
+    const { logger } = await import("@/lib/logger");
+    logger.error("[Analytics] Event tracking error:", error);
   }
 }

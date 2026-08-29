@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import { retryWithBackoff } from "@/lib/retry";
 import { getAppUrl } from "@/lib/app-url";
 import { emailTheme as t, emailRadius } from "@/lib/email-theme";
+import { logger } from "@/lib/logger";
 
 export interface SendReminderEmailParams {
   toEmail: string;
@@ -72,21 +73,25 @@ function shell(body: string): string {
   </div>`;
 }
 
-/** Logo, wordmark, and a short subtitle. */
+/** Logo and brand text side-by-side (centered), with subtitle on the next line (centered). */
 function header(subtitle: string): string {
   return `
       <div style="margin-bottom: 28px; text-align: center;">
-        <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto; display: inline-block;">
+        <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto;">
           <tr>
-            <td style="vertical-align: middle; padding-right: 12px;">
-              <img src="${getAppUrl()}/vault-logo.png" alt="Apply Away" width="36" height="36" style="border-radius: ${emailRadius}; display: block;" />
+            <td style="vertical-align: middle; padding-right: 10px;">
+              <img src="${getAppUrl()}/vault-logo.png" alt="Apply Away" width="32" height="32" style="border-radius: ${emailRadius}; display: block;" />
             </td>
-            <td style="vertical-align: middle; text-align: left;">
-              <div style="color: ${t.foreground}; font-size: 20px; font-weight: bold; letter-spacing: -0.2px; line-height: 1;">Apply Away</div>
-              <div style="color: ${t.mutedForeground}; font-size: 13px; margin-top: 4px; line-height: 1.2;">${escapeHtml(subtitle)}</div>
+            <td style="vertical-align: middle;">
+              <span style="color: ${t.foreground}; font-size: 20px; font-weight: bold; letter-spacing: -0.3px; line-height: 1; display: inline-block;">Apply Away</span>
             </td>
           </tr>
         </table>
+        ${
+          subtitle
+            ? `<div style="color: ${t.mutedForeground}; font-size: 13px; margin-top: 8px; line-height: 1.3; text-align: center;">${escapeHtml(subtitle)}</div>`
+            : ""
+        }
       </div>`;
 }
 
@@ -191,7 +196,7 @@ export class EmailService {
       throw new Error(`Resend API ${response.status}: ${detail}`);
     }
 
-    console.log(
+    logger.info(
       `[EmailService RESEND API SUCCESS] Sent email to ${params.to}, id: ${(data as { id?: string }).id}`
     );
   }
@@ -211,7 +216,7 @@ export class EmailService {
     const { to, subject, html } = params;
 
     if (!this.resendApiKey && !this.transporter) {
-      console.log(`[EmailService MOCK MODE] No email provider configured. Would send "${subject}" to ${to}`);
+      logger.info(`[EmailService MOCK MODE] No email provider configured. Would send "${subject}" to ${to}`);
       return true;
     }
 
@@ -222,7 +227,7 @@ export class EmailService {
       }
 
       await this.transporter!.sendMail({ from: this.defaultFrom, to, subject, html });
-      console.log(`[EmailService SMTP SUCCESS] Sent "${subject}" to ${to}`);
+      logger.info(`[EmailService SMTP SUCCESS] Sent "${subject}" to ${to}`);
       return true;
     };
 

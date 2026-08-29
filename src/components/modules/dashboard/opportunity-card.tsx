@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/components/ui/toast-provider";
+import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import Link from "next/link";
 
 interface OpportunityCardProps {
@@ -30,6 +31,7 @@ export function OpportunityCard({ opportunity, onEdit }: OpportunityCardProps) {
   const toast = useToast();
   const [showMenu, setShowMenu] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const deadlineInfo = getDaysRemaining(opportunity.deadline);
 
@@ -53,14 +55,19 @@ export function OpportunityCard({ opportunity, onEdit }: OpportunityCardProps) {
     }
   };
 
-  const handleDelete = async () => {
-    if (!confirm(`Are you sure you want to delete "${opportunity.title}"?`)) return;
+  const confirmDelete = async () => {
     setIsDeleting(true);
-    const res = await deleteOpportunityAction(opportunity.id);
-    if (res.success) {
-      toast.success("Opportunity deleted.");
-    } else {
-      toast.error(res.error || "Failed to delete record.");
+    try {
+      const res = await deleteOpportunityAction(opportunity.id);
+      if (res.success) {
+        toast.success("Opportunity deleted.");
+        setIsConfirmModalOpen(false);
+      } else {
+        toast.error(res.error || "Failed to delete record.");
+        setIsDeleting(false);
+      }
+    } catch {
+      toast.error("Failed to delete record.");
       setIsDeleting(false);
     }
   };
@@ -176,7 +183,10 @@ export function OpportunityCard({ opportunity, onEdit }: OpportunityCardProps) {
 
               <button
                 type="button"
-                onClick={handleDelete}
+                onClick={() => {
+                  setShowMenu(false);
+                  setIsConfirmModalOpen(true);
+                }}
                 className="w-full px-3 py-2 rounded-lg hover:bg-destructive/10 text-destructive flex items-center space-x-2 text-left cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -232,6 +242,20 @@ export function OpportunityCard({ opportunity, onEdit }: OpportunityCardProps) {
           </a>
         )}
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isConfirmModalOpen}
+        onClose={() => {
+          if (!isDeleting) setIsConfirmModalOpen(false);
+        }}
+        onConfirm={confirmDelete}
+        title="Delete Opportunity"
+        description={`Are you sure you want to delete "${opportunity.title}"? This will permanently remove this opportunity and its associated notes and essay drafts.`}
+        confirmText="Delete Record"
+        variant="danger"
+        isLoading={isDeleting}
+      />
     </div>
   );
 }

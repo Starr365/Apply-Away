@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Opportunity } from "@/domain/opportunity.types";
 import { CategoryBadge, StatusBadge, PriorityBadge } from "@/components/ui/badge";
 import { OpportunityCard } from "./opportunity-card";
@@ -8,7 +9,8 @@ import { ExternalLink, Pencil, Trash2, FolderOpen, ArrowUpDown, Eye } from "luci
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { deleteOpportunityAction } from "@/app/actions/opportunity.actions";
 import Link from "next/link";
-
+import { useToast } from "@/components/ui/toast-provider";
+import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { EmptyState } from "@/components/ui/empty-state";
 
 interface OpportunityTableProps {
@@ -17,9 +19,13 @@ interface OpportunityTableProps {
 }
 
 export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProps) {
+  const toast = useToast();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const [itemToDelete, setItemToDelete] = useState<{ id: string; title: string } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const currentSortBy = searchParams.get("sortBy") || "createdAt";
   const currentSortOrder = searchParams.get("sortOrder") || "desc";
@@ -35,9 +41,22 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const handleDelete = async (id: string, title: string) => {
-    if (!confirm(`Are you sure you want to delete "${title}"?`)) return;
-    await deleteOpportunityAction(id);
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    setIsDeleting(true);
+    try {
+      const res = await deleteOpportunityAction(itemToDelete.id);
+      if (res.success) {
+        toast.success("Opportunity deleted.");
+        setItemToDelete(null);
+      } else {
+        toast.error(res.error || "Failed to delete opportunity.");
+      }
+    } catch {
+      toast.error("Failed to delete opportunity.");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   if (opportunities.length === 0) {
@@ -182,7 +201,7 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
                         </button>
                         <button
                           type="button"
-                          onClick={() => handleDelete(opp.id, opp.title)}
+                          onClick={() => setItemToDelete({ id: opp.id, title: opp.title })}
                           className="p-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-destructive hover:text-destructive transition-colors cursor-pointer"
                           title="Delete"
                         >
@@ -197,6 +216,24 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
           </table>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={Boolean(itemToDelete)}
+        onClose={() => {
+          if (!isDeleting) setItemToDelete(null);
+        }}
+        onConfirm={confirmDelete}
+        title="Delete Opportunity"
+        description={
+          itemToDelete
+            ? `Are you sure you want to delete "${itemToDelete.title}"? This will permanently remove this opportunity and its associated notes and essay drafts.`
+            : ""
+        }
+        confirmText="Delete Record"
+        variant="danger"
+        isLoading={isDeleting}
+      />
     </div>
   );
 }

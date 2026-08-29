@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: NextRequest) {
   try {
@@ -47,7 +48,7 @@ export async function POST(req: NextRequest) {
       message: "Password updated successfully. Please login with your new password.",
     });
   } catch (error) {
-    console.error("[ResetPassword] Error:", error);
+    logger.error("[ResetPassword] Error:", error);
     return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

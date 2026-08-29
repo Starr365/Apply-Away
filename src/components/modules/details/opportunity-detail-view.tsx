@@ -28,6 +28,7 @@ import {
 import Link from "next/link";
 import { OpportunityFormModal } from "@/components/modules/opportunity/opportunity-form-modal";
 import { useToast } from "@/components/ui/toast-provider";
+import { logger } from "@/lib/logger";
 
 interface OpportunityDetailViewProps {
   opportunity: Opportunity;
@@ -119,7 +120,7 @@ export function OpportunityDetailView({
         toast.error(res.error || "Failed to save notes.");
       }
     } catch (err) {
-      console.error("Failed to save notes:", err);
+      logger.error("Failed to save notes:", err);
       toast.error("Failed to save notes.");
     } finally {
       setIsSavingNotes(false);
@@ -136,7 +137,7 @@ export function OpportunityDetailView({
         toast.error(res.error || "Failed to save draft.");
       }
     } catch (err) {
-      console.error("Failed to save essay draft:", err);
+      logger.error("Failed to save essay draft:", err);
       toast.error("Failed to save draft.");
     } finally {
       setSavingEssayId(null);

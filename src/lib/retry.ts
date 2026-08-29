@@ -1,3 +1,5 @@
+import { logger } from "@/lib/logger";
+
 /**
  * Utility executing an asynchronous operation with exponential backoff retry strategy.
  */
@@ -20,7 +22,7 @@ export async function retryWithBackoff<T>(
       return await fn();
     } catch (err) {
       lastError = err;
-      console.warn(`Attempt ${attempt}/${maxRetries} failed:`, err);
+      logger.warn(`Attempt ${attempt}/${maxRetries} failed:`, err);
 
       if (attempt === maxRetries) break;
 

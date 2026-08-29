@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { getAIExtractionService } from "@/services/ai-extraction.factory";
 import { DuplicateDetectorService } from "@/services/duplicate-detector.service";
 import { ExtractedOpportunityData } from "@/services/interfaces/ai-extraction.service";
+import { logger } from "@/lib/logger";
 
 const duplicateDetector = new DuplicateDetectorService();
 
@@ -74,7 +75,7 @@ export async function extractOpportunityAction(params: {
       existingOpportunityId: dupCheck.existingOpportunity?.id,
     };
   } catch (err: unknown) {
-    console.error("[AIExtraction] Server action failed:", (err as Error)?.message || err);
+    logger.error("[AIExtraction] Server action failed:", (err as Error)?.message || err);
 
     // Detect quota/rate-limit errors from the Gemini service
     const isQuotaError =

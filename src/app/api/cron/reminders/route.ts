@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ReminderSchedulerService } from "@/services/reminder-scheduler.service";
+import { logger } from "@/lib/logger";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -15,7 +16,7 @@ export async function GET(request: Request) {
   // Fail closed. An unauthenticated reminder endpoint lets anyone trigger a
   // full email blast, so a missing secret is a misconfiguration, not a bypass.
   if (!expectedSecret) {
-    console.error("[Cron] CRON_SECRET is not configured; refusing to run.");
+    logger.error("[Cron] CRON_SECRET is not configured; refusing to run.");
     return NextResponse.json(
       { success: false, error: "Cron endpoint is not configured." },
       { status: 500 }
@@ -53,7 +54,7 @@ export async function GET(request: Request) {
 
     const errors = [...(digest?.errors ?? []), ...(urgent?.errors ?? [])];
     if (errors.length > 0) {
-      console.warn("[Cron] Reminder pass completed with errors:", errors);
+      logger.warn("[Cron] Reminder pass completed with errors:", errors);
     }
 
     return NextResponse.json({
@@ -64,7 +65,7 @@ export async function GET(request: Request) {
       urgent,
     });
   } catch (err: unknown) {
-    console.error("Cron Reminder Job failed:", err);
+    logger.error("Cron Reminder Job failed:", err);
     return NextResponse.json(
       { success: false, error: err instanceof Error ? err.message : "Cron execution failed." },
       { status: 500 }
