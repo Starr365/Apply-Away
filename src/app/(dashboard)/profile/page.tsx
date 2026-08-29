@@ -11,6 +11,7 @@ import { AnimatedContainer } from "@/components/ui/animated-container";
 import { COMMON_TIMEZONES } from "@/lib/constants";
 import { Globe, LogOut, Camera, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { logger } from "@/lib/logger";
 
 export default function ProfilePage() {
   const { data: session, update } = useSession();
@@ -49,7 +50,7 @@ export default function ProfilePage() {
       };
       reader.readAsDataURL(file);
     } catch (err) {
-      console.error("Failed to upload avatar image:", err);
+      logger.error("Failed to upload avatar image:", err);
       toast.error("Failed to update avatar image.");
       setIsAvatarSaving(false);
     }
@@ -64,7 +65,7 @@ export default function ProfilePage() {
       if (fileInputRef.current) fileInputRef.current.value = "";
       toast.success("Avatar removed.");
     } catch (err) {
-      console.error("Failed to remove avatar image:", err);
+      logger.error("Failed to remove avatar image:", err);
       toast.error("Failed to remove avatar image.");
     } finally {
       setIsAvatarSaving(false);
@@ -78,7 +79,7 @@ export default function ProfilePage() {
       await update({ user: { ...session?.user, timezone: selectedTimezone } });
       toast.success("Timezone updated successfully!");
     } catch (err) {
-      console.error("Failed to update timezone:", err);
+      logger.error("Failed to update timezone:", err);
       toast.error("Failed to update timezone. Please try again.");
     } finally {
       setIsSaving(false);

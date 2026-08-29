@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { logger } from "./logger";
 
 /**
  * Environment variable schema definition.
@@ -54,7 +55,7 @@ export function getEnv() {
   const result = envSchema.safeParse(process.env);
 
   if (!result.success) {
-    console.warn("⚠️ Invalid environment variables detected:", result.error.flatten().fieldErrors);
+    logger.warn("⚠️ Invalid environment variables detected:", result.error.flatten().fieldErrors);
     // Return formatted defaults for smooth development start
     return envSchema.parse({
       DATABASE_URL: process.env.DATABASE_URL || "postgresql://user:password@localhost:5432/apply_away",

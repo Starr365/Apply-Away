@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { logger } from "@/lib/logger";
 
 /**
  * Server Action: Update Essay Question draft response
@@ -40,7 +41,7 @@ export async function updateEssayDraftAction(essayId: string, draftResponse: str
     revalidatePath(`/opportunities/${essay.opportunityId}`);
     return { success: true };
   } catch (err) {
-    console.error(`Failed to update essay draft ${essayId}:`, err);
+    logger.error(`Failed to update essay draft ${essayId}:`, err);
     return { success: false, error: "Failed to update draft response." };
   }
 }
@@ -81,7 +82,7 @@ export async function updatePersonalNotesAction(opportunityId: string, personalN
     revalidatePath(`/opportunities/${opportunityId}`);
     return { success: true };
   } catch (err) {
-    console.error(`Failed to update notes for ${opportunityId}:`, err);
+    logger.error(`Failed to update notes for ${opportunityId}:`, err);
     return { success: false, error: "Failed to update notes." };
   }
 }

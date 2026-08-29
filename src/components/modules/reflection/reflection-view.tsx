@@ -7,6 +7,7 @@ import { MetricCard } from "@/components/ui/metric-card";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { PageHeader } from "@/components/ui/page-header";
 import { saveMonthlyReflectionAction } from "@/app/actions/reflection.actions";
+import { logger } from "@/lib/logger";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -131,7 +132,7 @@ export function ReflectionView({
         toast.error(res.error || "Failed to save reflection.");
       }
     } catch (err) {
-      console.error("Failed to save reflection:", err);
+      logger.error("Failed to save reflection:", err);
       toast.error("Failed to save reflection.");
     } finally {
       setIsSaving(false);

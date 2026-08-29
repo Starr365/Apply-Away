@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { logger } from "@/lib/logger";
 
 /**
  * Server Action: Save or update monthly reflection journal entry
@@ -38,7 +39,7 @@ export async function saveMonthlyReflectionAction(monthYear: string, content: st
     revalidatePath("/reflection");
     return { success: true, data: reflection };
   } catch (err) {
-    console.error("Failed to save monthly reflection:", err);
+    logger.error("Failed to save monthly reflection:", err);
     return { success: false, error: "Failed to save monthly reflection notes." };
   }
 }

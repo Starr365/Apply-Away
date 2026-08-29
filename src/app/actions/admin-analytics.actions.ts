@@ -6,6 +6,7 @@ import {
   DateRangeKey,
   calculateDateRange,
 } from "@/services/admin-analytics.service";
+import { logger } from "@/lib/logger";
 
 const analyticsService = new AdminAnalyticsService();
 
@@ -59,7 +60,7 @@ export async function getOwnerAnalyticsDataAction(
       },
     };
   } catch (error) {
-    console.error("[AdminAnalytics] Failed to fetch metrics:", error);
+    logger.error("[AdminAnalytics] Failed to fetch metrics:", error);
     return { success: false, error: "Failed to fetch analytics data." };
   }
 }

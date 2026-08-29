@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { EmailService } from "@/services/email.service";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: NextRequest) {
   try {
@@ -48,7 +49,7 @@ export async function POST(req: NextRequest) {
       message: "Verification code sent successfully to your email.",
     });
   } catch (error) {
-    console.error("[ForgotPassword] Error:", error);
+    logger.error("[ForgotPassword] Error:", error);
     return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

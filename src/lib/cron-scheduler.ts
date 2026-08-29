@@ -1,5 +1,6 @@
 import cron from "node-cron";
 import { ReminderSchedulerService } from "@/services/reminder-scheduler.service";
+import { logger } from "@/lib/logger";
 
 const schedulerService = new ReminderSchedulerService();
 
@@ -16,36 +17,36 @@ let started = false;
  */
 export function initCronScheduler() {
   if (process.env.VERCEL && !process.env.ENABLE_NODE_CRON) {
-    console.log("[NodeCron] Skipping node-cron on Vercel (external cron trigger active).");
+    logger.info("[NodeCron] Skipping node-cron on Vercel (external cron trigger active).");
     return;
   }
 
   if (started) return;
   started = true;
 
-  console.log("[NodeCron] Initializing hourly reminder scheduler...");
+  logger.info("[NodeCron] Initializing hourly reminder scheduler...");
 
   // Hourly at minute 0. The scheduler itself decides which users have reached
   // their local 7am, so an hourly tick is all that is needed.
   cron.schedule("0 * * * *", async () => {
     const now = new Date();
-    console.log(`[NodeCron] Running reminder scan at ${now.toISOString()}`);
+    logger.info(`[NodeCron] Running reminder scan at ${now.toISOString()}`);
 
     try {
       const digest = await schedulerService.processDailyDigests(now);
       const urgent = await schedulerService.processUrgentAlerts(now);
 
-      console.log(
+      logger.info(
         `[NodeCron Summary] digest — scanned: ${digest.scannedCount}, sent: ${digest.dispatchedCount}, skipped: ${digest.skippedCount} | ` +
           `urgent — scanned: ${urgent.scannedCount}, sent: ${urgent.dispatchedCount}, skipped: ${urgent.skippedCount}`
       );
 
       const errors = [...digest.errors, ...urgent.errors];
       if (errors.length > 0) {
-        console.warn("[NodeCron Errors]:", errors);
+        logger.warn("[NodeCron Errors]:", errors);
       }
     } catch (err) {
-      console.error("[NodeCron Exception]:", err);
+      logger.error("[NodeCron Exception]:", err);
     }
   });
 }

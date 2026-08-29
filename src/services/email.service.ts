@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import { retryWithBackoff } from "@/lib/retry";
 import { getAppUrl } from "@/lib/app-url";
 import { emailTheme as t, emailRadius } from "@/lib/email-theme";
+import { logger } from "@/lib/logger";
 
 export interface SendReminderEmailParams {
   toEmail: string;
@@ -191,7 +192,7 @@ export class EmailService {
       throw new Error(`Resend API ${response.status}: ${detail}`);
     }
 
-    console.log(
+    logger.info(
       `[EmailService RESEND API SUCCESS] Sent email to ${params.to}, id: ${(data as { id?: string }).id}`
     );
   }
@@ -211,7 +212,7 @@ export class EmailService {
     const { to, subject, html } = params;
 
     if (!this.resendApiKey && !this.transporter) {
-      console.log(`[EmailService MOCK MODE] No email provider configured. Would send "${subject}" to ${to}`);
+      logger.info(`[EmailService MOCK MODE] No email provider configured. Would send "${subject}" to ${to}`);
       return true;
     }
 
@@ -222,7 +223,7 @@ export class EmailService {
       }
 
       await this.transporter!.sendMail({ from: this.defaultFrom, to, subject, html });
-      console.log(`[EmailService SMTP SUCCESS] Sent "${subject}" to ${to}`);
+      logger.info(`[EmailService SMTP SUCCESS] Sent "${subject}" to ${to}`);
       return true;
     };
 

@@ -1,4 +1,5 @@
 import { formatInTimeZone, toZonedTime } from "date-fns-tz";
+import { logger } from "@/lib/logger";
 
 /**
  * Format a Date or ISO string in a specific IANA timezone (e.g. "Africa/Lagos", "America/New_York").
@@ -15,7 +16,7 @@ export function formatInUserTimezone(
   try {
     return formatInTimeZone(d, timeZone, formatStr);
   } catch (err) {
-    console.warn(`Invalid timezone "${timeZone}", falling back to UTC:`, err);
+    logger.warn(`Invalid timezone "${timeZone}", falling back to UTC:`, err);
     return formatInTimeZone(d, "UTC", formatStr);
   }
 }
