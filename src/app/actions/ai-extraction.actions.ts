@@ -14,6 +14,7 @@ export interface AIExtractionActionResult {
   isDuplicate?: boolean;
   duplicateMatchType?: "URL_MATCH" | "TITLE_ORG_MATCH" | "NONE";
   existingOpportunityId?: string;
+  existingOpportunityTitle?: string;
   error?: string;
   isQuotaError?: boolean;
 }
@@ -73,6 +74,7 @@ export async function extractOpportunityAction(params: {
       isDuplicate: dupCheck.isDuplicate,
       duplicateMatchType: dupCheck.matchType,
       existingOpportunityId: dupCheck.existingOpportunity?.id,
+      existingOpportunityTitle: dupCheck.existingOpportunity?.title,
     };
   } catch (err: unknown) {
     logger.error("[AIExtraction] Server action failed:", (err as Error)?.message || err);

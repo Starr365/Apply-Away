@@ -39,6 +39,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
   const [extractedData, setExtractedData] = useState<ExtractedOpportunityData | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [duplicateType, setDuplicateType] = useState<string>("");
+  const [duplicateTitle, setDuplicateTitle] = useState<string>("");
   const [isSaving, setIsSaving] = useState(false);
 
   const handleClose = () => {
@@ -47,6 +48,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
     setExtractedData(null);
     setIsDuplicate(false);
     setDuplicateType("");
+    setDuplicateTitle("");
     setErrorMsg("");
     setIsQuotaError(false);
     onClose();
@@ -72,6 +74,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
     setIsQuotaError(false);
     setExtractedData(null);
     setIsDuplicate(false);
+    setDuplicateTitle("");
 
     try {
       const res = await extractOpportunityAction({
@@ -84,6 +87,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
         if (res.isDuplicate) {
           setIsDuplicate(true);
           setDuplicateType(res.duplicateMatchType || "MATCH");
+          setDuplicateTitle(res.existingOpportunityTitle || "");
         }
       } else {
         setErrorMsg(res.error || "Failed to extract opportunity data.");
@@ -103,6 +107,11 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
     setIsSaving(true);
     setErrorMsg("");
 
+    const rollingNote =
+      extractedData.isRolling && extractedData.deadlineNote
+        ? `[Note]: ${extractedData.deadlineNote}`
+        : "";
+
     try {
       const res = await createOpportunityAction({
         title: extractedData.title,
@@ -119,6 +128,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
         startDate: extractedData.startDate ? new Date(extractedData.startDate).toISOString() : null,
         originalTimezone: extractedData.originalTimezone || "Africa/Lagos",
         essayQuestions: extractedData.essayQuestions.map((q) => ({ question: q })),
+        personalNotes: rollingNote,
         status: "NOT_STARTED",
         priority: "MEDIUM",
       });
@@ -129,6 +139,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
         setExtractedData(null);
         setIsDuplicate(false);
         setDuplicateType("");
+        setDuplicateTitle("");
         setErrorMsg("");
         setIsQuotaError(false);
         onSuccess();
@@ -293,8 +304,10 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
                 <AlertTriangle className="w-5 h-5 text-amber-500 dark:text-amber-400 shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <span className="font-bold">Potential Duplicate Detected ({duplicateType})</span>
-                  <p className="text-slate-550 dark:text-slate-400">
-                    A matching opportunity already exists in your vault. Saving will add this record alongside your existing entry.
+                  <p className="text-slate-550 dark:text-slate-400 leading-relaxed">
+                    {duplicateTitle
+                      ? `Matches existing vault record: "${duplicateTitle}". Saving will add this record alongside your existing entry.`
+                      : "A matching opportunity already exists in your vault. Saving will add this record alongside your existing entry."}
                   </p>
                 </div>
               </div>
@@ -312,13 +325,27 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
                     {extractedData.title}
                   </h3>
                 </div>
-                <span className="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold">
-                  {extractedData.category}
-                </span>
+                <div className="flex flex-col items-end gap-1">
+                  <span className="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold">
+                    {extractedData.category}
+                  </span>
+                  {extractedData.isRolling && (
+                    <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[10px] font-bold">
+                      Rolling Admission
+                    </span>
+                  )}
+                </div>
               </div>
 
               {extractedData.shortDescription && (
                 <p className="text-foreground leading-relaxed">{extractedData.shortDescription}</p>
+              )}
+
+              {/* Rolling Admission Advisory */}
+              {extractedData.isRolling && (
+                <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-[11px] leading-relaxed">
+                  <strong>⚡ Action Advisory:</strong> {extractedData.deadlineNote || "Rolling admission / Open until filled — submit application as soon as possible"}
+                </div>
               )}
 
               <div className="grid grid-cols-2 gap-3 pt-2 text-muted-foreground">
@@ -329,6 +356,8 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
                     <strong className="text-foreground">
                       {extractedData.deadline
                         ? new Date(extractedData.deadline).toLocaleDateString()
+                        : extractedData.isRolling
+                        ? "Rolling"
                         : "N/A"}
                     </strong>
                   </span>

@@ -28,7 +28,7 @@ export class GeminiAIExtractionService implements IAIExtractionService {
 
   async extractFromUrl(url: string): Promise<ExtractedOpportunityData> {
     const pageText = await this.fetchUrlContent(url);
-    const textWithUrl = `Source URL: ${url}\n\n${pageText}`;
+    const textWithUrl = `Target Opportunity URL: ${url}\n\nPage Content:\n${pageText}`;
     const data = await this.extractFromText(textWithUrl);
 
     // Normalize and fallback if AI did not extract URLs
@@ -57,11 +57,13 @@ export class GeminiAIExtractionService implements IAIExtractionService {
             properties: {
               title: {
                 type: Type.STRING,
-                description: "Title of the opportunity",
+                description:
+                  "Clean title of the opportunity without clickbait or aggregator tags (e.g. 'Mandela Washington Fellowship', not '[Fully Funded] Apply: Mandela Fellowship')",
               },
               organization: {
                 type: Type.STRING,
-                description: "Organization or company offering the opportunity",
+                description:
+                  "The actual offering organization, university, or company (e.g. 'Google', 'Stanford University'). NOT the job board or aggregator where it was posted.",
               },
               category: {
                 type: Type.STRING,
@@ -83,32 +85,33 @@ export class GeminiAIExtractionService implements IAIExtractionService {
               },
               shortDescription: {
                 type: Type.STRING,
-                description: "A brief one or two sentence summary of the opportunity",
+                description: "A brief 1-2 sentence executive summary of the opportunity",
               },
               fullDescription: {
                 type: Type.STRING,
-                description: "Full detailed description of the opportunity",
+                description: "Full detailed description of the opportunity and key terms",
               },
               eligibility: {
                 type: Type.ARRAY,
                 items: { type: Type.STRING },
                 description:
-                  "List of eligibility criteria (e.g. age, nationality, education level, GPA)",
+                  "List of eligibility criteria (e.g. nationality, degree, age limit, experience)",
               },
               requirements: {
                 type: Type.ARRAY,
                 items: { type: Type.STRING },
-                description: "List of application requirements (e.g. documents, essays, transcripts)",
+                description: "List of application requirements (e.g. CV, transcripts, references, essays)",
               },
               benefits: {
                 type: Type.ARRAY,
                 items: { type: Type.STRING },
                 description:
-                  "List of benefits provided (e.g. stipend, tuition coverage, travel, mentorship)",
+                  "List of benefits (e.g. stipend, fully-funded travel, tuition, mentorship, health insurance)",
               },
               applicationUrl: {
                 type: Type.STRING,
-                description: "Direct URL to the application form or portal (empty string if not found)",
+                description:
+                  "Direct URL to the actual application form or portal if found in text/links (empty string if not found)",
               },
               officialUrl: {
                 type: Type.STRING,
@@ -124,8 +127,18 @@ export class GeminiAIExtractionService implements IAIExtractionService {
               deadline: {
                 type: Type.STRING,
                 description:
-                  "Application deadline in ISO 8601 format (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss). Null if not found.",
+                  "Application deadline in ISO 8601 format (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss). If application is rolling or open until filled without a fixed date, set null.",
                 nullable: true,
+              },
+              isRolling: {
+                type: Type.BOOLEAN,
+                description:
+                  "Set to true if the application states 'Rolling', 'Rolling basis', 'Open until filled', 'Continuous intake', or has no fixed deadline.",
+              },
+              deadlineNote: {
+                type: Type.STRING,
+                description:
+                  "Description of deadline status. For rolling applications, output: 'Rolling admission / Open until filled — submit application as soon as possible'. For fixed dates, summarize the closing date and timezone.",
               },
               interviewDate: {
                 type: Type.STRING,
@@ -136,13 +149,13 @@ export class GeminiAIExtractionService implements IAIExtractionService {
               originalTimezone: {
                 type: Type.STRING,
                 description:
-                  "Timezone of the deadline (e.g. America/New_York, Africa/Lagos, UTC). Default to Africa/Lagos if unclear.",
+                  "Timezone of the deadline (e.g. America/New_York, Africa/Lagos, UTC). Default to Africa/Lagos if not specified.",
               },
               essayQuestions: {
                 type: Type.ARRAY,
                 items: { type: Type.STRING },
                 description:
-                  "List of essay questions or writing prompts required for the application",
+                  "List of essay prompts, personal statement questions, or motivation questions required",
               },
             },
             required: [
@@ -156,12 +169,14 @@ export class GeminiAIExtractionService implements IAIExtractionService {
               "benefits",
               "applicationUrl",
               "officialUrl",
+              "isRolling",
+              "deadlineNote",
               "originalTimezone",
               "essayQuestions",
             ],
           },
           systemInstruction:
-            "You are an AI assistant for Apply Away, a personal opportunity tracking application. Extract key opportunity information from the provided text into structured JSON. Be thorough and extract ALL details available. For eligibility, requirements, and benefits, extract each item as a separate string in the array. For dates, use ISO 8601 format. If a field is not found in the text, use an empty string for strings, an empty array for arrays, and null for nullable date fields. Always classify the opportunity into the most appropriate category.",
+            "You are an expert AI opportunity analyst for Apply Away, a specialized opportunity vault and tracking application. Your mission is to deeply analyze web pages and text posts (including job boards, aggregator posts, LinkedIn, WhatsApp messages, or official application portals) and extract structured opportunity details with the utmost accuracy.\n\nCRITICAL RULES:\n1. REAL SPONSORING ORGANIZATION: Always extract the actual offering entity/company/institution (e.g. 'Google', 'Stanford University', 'Mastercard Foundation'). NEVER attribute the opportunity to the aggregator or job board where it was posted (e.g. NOT 'OpportunityDesk', 'LinkedIn', 'Jobberman', 'ScholarshipTab').\n2. CLEAN TITLE: Extract the pure, professional opportunity title. Strip promotional junk, clickbait, and status prefixes (e.g., remove '[Fully Funded]', 'Call for Applications 2025:', 'Job Vacancy:').\n3. DEADLINES & ROLLING ADMISSIONS: Inspect the entire text for closing dates, submission cutoffs, and application windows. If the opportunity is 'Rolling', 'Rolling basis', 'Open until filled', or continuous, set isRolling to true, deadline to null, and deadlineNote to 'Rolling admission / Open until filled — submit application as soon as possible'. If a fixed date is provided, format deadline as ISO 8601.\n4. APPLICATION URL: Extract direct application portal/form links (e.g., forms.gle/..., apply.domain.com/...) found within the content.\n5. ELIGIBILITY, REQUIREMENTS & BENEFITS: Extract comprehensive bullet points as separate array items.\n6. ESSAY PROMPTS: Extract any writing prompts or essay questions required for applicants.",
         },
       });
 
@@ -173,6 +188,15 @@ export class GeminiAIExtractionService implements IAIExtractionService {
       const parsed = JSON.parse(rawText);
 
       // Validate and normalize output to match ExtractedOpportunityData
+      const isRolling = Boolean(parsed.isRolling);
+      const deadlineNote =
+        parsed.deadlineNote ||
+        (isRolling
+          ? "Rolling admission / Open until filled — submit application as soon as possible"
+          : parsed.deadline
+          ? `Application deadline: ${parsed.deadline}`
+          : "Rolling admission / Open until filled — submit application as soon as possible");
+
       const result: ExtractedOpportunityData = {
         title: parsed.title || "Extracted Opportunity",
         organization: parsed.organization || "Unknown Organization",
@@ -186,6 +210,8 @@ export class GeminiAIExtractionService implements IAIExtractionService {
         officialUrl: parsed.officialUrl || "",
         startDate: parsed.startDate || null,
         deadline: parsed.deadline || null,
+        isRolling,
+        deadlineNote,
         interviewDate: parsed.interviewDate || null,
         originalTimezone: parsed.originalTimezone || "Africa/Lagos",
         essayQuestions: Array.isArray(parsed.essayQuestions) ? parsed.essayQuestions : [],
@@ -258,25 +284,64 @@ export class GeminiAIExtractionService implements IAIExtractionService {
   }
 
   /**
-   * Fetches and strips HTML from a given URL to extract readable text content.
+   * Fetches and strips HTML from a given URL to extract readable, structured text content.
    */
   private async fetchUrlContent(url: string): Promise<string> {
     try {
       const res = await fetch(url, {
         headers: {
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+          Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "Accept-Language": "en-US,en;q=0.9",
         },
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const html = await res.text();
-      // Basic text cleanup: remove scripts, styles, HTML tags, and normalize whitespace
-      return html
+
+      // Extract metadata
+      const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+      const title = titleMatch ? titleMatch[1].trim() : "";
+
+      const metaDescMatch =
+        html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i) ||
+        html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']description["']/i) ||
+        html.match(/<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']+)["']/i);
+      const description = metaDescMatch ? metaDescMatch[1].trim() : "";
+
+      // Clean HTML structure into readable blocks
+      let cleaned = html
         .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
         .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
+        .replace(/<noscript\b[^<]*(?:(?!<\/noscript>)<[^<]*)*<\/noscript>/gi, "")
+        .replace(/<svg\b[^<]*(?:(?!<\/svg>)<[^<]*)*<\/svg>/gi, "");
+
+      // Replace block tags with newline separators
+      cleaned = cleaned
+        .replace(/<\/(h[1-6]|p|div|section|article|li|tr|blockquote)>/gi, "\n")
+        .replace(/<br\s*[\/]?>/gi, "\n")
+        .replace(/<li[^>]*>/gi, " • ")
         .replace(/<[^>]+>/g, " ")
-        .replace(/\s+/g, " ")
+        .replace(/&nbsp;/gi, " ")
+        .replace(/&amp;/gi, "&")
+        .replace(/&lt;/gi, "<")
+        .replace(/&gt;/gi, ">")
+        .replace(/&quot;/gi, '"')
+        .replace(/&#39;/gi, "'")
+        .replace(/[ \t]+/g, " ")
+        .replace(/\n\s*\n+/g, "\n\n")
         .trim();
+
+      // Combine metadata summary and body text (capped to 15,000 characters)
+      const metaSection = [
+        title ? `Page Title: ${title}` : "",
+        description ? `Meta Description: ${description}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n");
+
+      const combined = `${metaSection}\n\nMain Content:\n${cleaned}`.slice(0, 15000);
+      return combined;
     } catch {
       return `URL: ${url}`;
     }
