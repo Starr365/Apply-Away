@@ -41,8 +41,8 @@ export function CalendarView({ opportunities }: CalendarViewProps) {
         backgroundColor = "#10b981"; // Green for Submitted / Interview / Accepted
         borderColor = "#34d399";
       } else if (isOverdue) {
-        backgroundColor = "#f97316"; // Orange for Missed Deadline (Past & Unsubmitted)
-        borderColor = "#fb923c";
+        backgroundColor = "#475569"; // Neutral Slate for Passed / Closed Deadline
+        borderColor = "#64748b";
       } else if (opp.priority === "HIGH") {
         backgroundColor = "#ef4444"; // Red for High Priority
         borderColor = "#f87171";
@@ -84,8 +84,8 @@ export function CalendarView({ opportunities }: CalendarViewProps) {
 
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-            <span>Missed Deadline</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-slate-500" />
+            <span>Deadline Passed</span>
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
