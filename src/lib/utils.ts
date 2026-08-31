@@ -44,7 +44,12 @@ export function getDaysRemaining(deadline: Date | string | null | undefined): {
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
   if (diffDays < 0) {
-    return { days: Math.abs(diffDays), label: `${Math.abs(diffDays)}d overdue`, isOverdue: true };
+    const elapsed = Math.abs(diffDays);
+    return {
+      days: elapsed,
+      label: elapsed === 1 ? "Deadline passed (1d ago)" : `Deadline passed (${elapsed}d ago)`,
+      isOverdue: true,
+    };
   }
   if (diffDays === 0) {
     return { days: 0, label: "Due Today", isOverdue: false };

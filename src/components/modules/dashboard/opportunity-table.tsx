@@ -169,14 +169,10 @@ export function OpportunityTable({ opportunities, onEdit }: OpportunityTableProp
 
                     {/* Deadline */}
                     <td className="py-3.5 px-4">
-                      <div className="font-medium text-foreground">
+                      <div className={`font-medium ${deadlineInfo.isOverdue ? "text-muted-foreground" : "text-foreground"}`}>
                         {formatDate(opp.deadline)}
                       </div>
-                      <div
-                        className={`text-[11px] ${
-                          deadlineInfo.isOverdue ? "text-destructive font-semibold" : "text-muted-foreground"
-                        }`}
-                      >
+                      <div className="text-[11px] text-muted-foreground/80">
                         {deadlineInfo.label}
                       </div>
                     </td>

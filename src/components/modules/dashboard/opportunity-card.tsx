@@ -222,10 +222,10 @@ export function OpportunityCard({ opportunity, onEdit }: OpportunityCardProps) {
         <div className="flex items-center space-x-1.5">
           <Clock
             className={`w-3.5 h-3.5 ${
-              deadlineInfo.isOverdue ? "text-destructive" : "text-amber-500"
+              deadlineInfo.isOverdue ? "text-muted-foreground/70" : "text-amber-500"
             }`}
           />
-          <span className={deadlineInfo.isOverdue ? "text-destructive font-medium" : ""}>
+          <span className={deadlineInfo.isOverdue ? "text-muted-foreground font-normal" : "text-foreground font-medium"}>
             {deadlineInfo.label} ({formatDate(opportunity.deadline)})
           </span>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Opportunity, ActivityLog, OpportunityStatus, OpportunityPriority } from "@/domain/opportunity.types";
 import {
   CategoryBadge,
@@ -9,13 +10,18 @@ import {
 } from "@/components/ui/badge";
 import { formatDate, getDaysRemaining } from "@/lib/utils";
 import { updateEssayDraftAction, updatePersonalNotesAction } from "@/app/actions/detail.actions";
-import { updateOpportunityStatusAction, updateOpportunityPriorityAction } from "@/app/actions/opportunity.actions";
+import {
+  updateOpportunityStatusAction,
+  updateOpportunityPriorityAction,
+  deleteOpportunityAction,
+} from "@/app/actions/opportunity.actions";
 import {
   ArrowLeft,
   Building,
   ExternalLink,
   Clock,
   Pencil,
+  Trash2,
   CheckCircle2,
   FileText,
   ListCheck,
@@ -27,6 +33,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { OpportunityFormModal } from "@/components/modules/opportunity/opportunity-form-modal";
+import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { useToast } from "@/components/ui/toast-provider";
 import { logger } from "@/lib/logger";
 
@@ -39,6 +46,7 @@ export function OpportunityDetailView({
   opportunity,
   activityLogs,
 }: OpportunityDetailViewProps) {
+  const router = useRouter();
   const toast = useToast();
   const [activeTab, setActiveTab] = useState<
     "overview" | "essays" | "checklist" | "notes" | "timeline"
@@ -48,6 +56,8 @@ export function OpportunityDetailView({
   const [currentPriority, setCurrentPriority] = useState<OpportunityPriority>(opportunity.priority);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [notes, setNotes] = useState(opportunity.personalNotes || "");
   const [isSavingNotes, setIsSavingNotes] = useState(false);
   const [notesSuccess, setNotesSuccess] = useState(false);
@@ -144,6 +154,24 @@ export function OpportunityDetailView({
     }
   };
 
+  const handleDeleteOpportunity = async () => {
+    setIsDeleting(true);
+    try {
+      const res = await deleteOpportunityAction(opportunity.id);
+      if (res.success) {
+        toast.success("Opportunity deleted successfully.");
+        router.push("/dashboard");
+      } else {
+        toast.error(res.error || "Failed to delete opportunity.");
+        setIsDeleting(false);
+      }
+    } catch (err) {
+      logger.error("Failed to delete opportunity:", err);
+      toast.error("Failed to delete opportunity.");
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className="space-y-8">
       {/* Top Header Navigation */}
@@ -156,14 +184,25 @@ export function OpportunityDetailView({
           <span>Back to Vault Dashboard</span>
         </Link>
 
-        <button
-          type="button"
-          onClick={() => setIsEditModalOpen(true)}
-          className="h-10 px-4 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 text-xs font-semibold flex items-center space-x-2 transition-all cursor-pointer"
-        >
-          <Pencil className="w-3.5 h-3.5" />
-          <span>Edit Opportunity</span>
-        </button>
+        <div className="flex items-center space-x-2.5">
+          <button
+            type="button"
+            onClick={() => setIsEditModalOpen(true)}
+            className="h-10 px-4 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 text-xs font-semibold flex items-center space-x-2 transition-all cursor-pointer"
+          >
+            <Pencil className="w-3.5 h-3.5" />
+            <span>Edit</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsDeleteModalOpen(true)}
+            className="h-10 px-4 rounded-xl bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 text-xs font-semibold flex items-center space-x-2 transition-all cursor-pointer"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            <span>Delete</span>
+          </button>
+        </div>
       </div>
 
       {/* Main Opportunity Hero Card */}
@@ -196,12 +235,12 @@ export function OpportunityDetailView({
         <div className="border-t border-border pt-4 flex flex-wrap items-center justify-between gap-4 text-xs">
           <div className="flex items-center space-x-2 text-foreground">
             <Clock
-              className={`w-4 h-4 ${deadlineInfo.isOverdue ? "text-destructive" : "text-amber-500"
+              className={`w-4 h-4 ${deadlineInfo.isOverdue ? "text-muted-foreground/70" : "text-amber-500"
                 }`}
             />
             <span className="font-medium">
               Deadline:{" "}
-              <strong className={deadlineInfo.isOverdue ? "text-destructive" : "text-foreground"}>
+              <strong className={deadlineInfo.isOverdue ? "text-muted-foreground font-normal" : "text-foreground font-semibold"}>
                 {formatDate(opportunity.deadline)} ({deadlineInfo.label})
               </strong>
             </span>
@@ -548,6 +587,20 @@ export function OpportunityDetailView({
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         opportunityToEdit={opportunity}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          if (!isDeleting) setIsDeleteModalOpen(false);
+        }}
+        onConfirm={handleDeleteOpportunity}
+        title="Delete Opportunity"
+        description={`Are you sure you want to delete "${opportunity.title}"? This will permanently remove this opportunity and its associated notes and essay drafts.`}
+        confirmText="Delete Record"
+        variant="danger"
+        isLoading={isDeleting}
       />
     </div>
   );
