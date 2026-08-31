@@ -15,6 +15,8 @@ export interface ExtractedOpportunityData {
   deadline: string | null; // ISO Date String
   interviewDate: string | null; // ISO Date String
   originalTimezone: string;
+  isRolling?: boolean;
+  deadlineNote?: string;
   essayQuestions: string[];
 }
 

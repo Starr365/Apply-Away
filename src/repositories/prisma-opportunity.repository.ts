@@ -147,28 +147,22 @@ export class PrismaOpportunityRepository implements IOpportunityRepository {
 
   async findPotentialDuplicates(
     userId: string,
-    title: string,
-    organization: string,
-    officialUrl?: string
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _title: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _organization: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _officialUrl?: string
   ): Promise<Opportunity[]> {
-    const orConditions: NonNullable<OpportunityWhereInput>[] = [
-      {
-        title: { equals: title, mode: "insensitive" },
-        organization: { equals: organization, mode: "insensitive" },
-      },
-    ];
-
-    if (officialUrl && officialUrl.trim() !== "") {
-      orConditions.push({ officialUrl: { equals: officialUrl } });
-    }
-
     const items = await prisma.opportunity.findMany({
       where: {
         userId,
-        OR: orConditions,
       },
       include: {
         essayQuestions: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
