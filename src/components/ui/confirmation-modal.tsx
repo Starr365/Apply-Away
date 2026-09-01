@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { AlertTriangle, Trash2, X, Loader2 } from "lucide-react";
 import { Button } from "./button";
+import { useMounted } from "@/lib/use-mounted";
 
 export interface ConfirmationModalProps {
   isOpen: boolean;
@@ -27,6 +29,8 @@ export function ConfirmationModal({
   variant = "danger",
   isLoading = false,
 }: ConfirmationModalProps) {
+  const isMounted = useMounted();
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape" && !isLoading) {
@@ -49,7 +53,7 @@ export function ConfirmationModal({
     };
   }, [isOpen, handleKeyDown]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !isMounted) return null;
 
   const getVariantStyles = () => {
     switch (variant) {
@@ -76,11 +80,19 @@ export function ConfirmationModal({
 
   const styles = getVariantStyles();
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-in fade-in duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-9999 w-screen h-screen flex items-center justify-center p-4 bg-black/60 dark:bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+      {/* Backdrop click dismiss */}
+      <div
+        className="fixed inset-0"
+        onClick={() => {
+          if (!isLoading) onClose();
+        }}
+      />
+
       {/* Modal Card */}
       <div
-        className="glass-panel w-full max-w-md rounded-3xl p-6 space-y-6 border border-border shadow-2xl animate-in zoom-in-95 duration-200"
+        className="relative z-10 glass-panel w-full max-w-md rounded-3xl p-6 space-y-6 border border-border shadow-2xl animate-in zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
         aria-labelledby="confirmation-modal-title"
@@ -103,7 +115,7 @@ export function ConfirmationModal({
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="text-muted-foreground hover:text-foreground transition-colors p-1.5 rounded-lg hover:bg-secondary disabled:opacity-50"
+            className="text-muted-foreground hover:text-foreground transition-colors p-1.5 rounded-lg hover:bg-secondary disabled:opacity-50 cursor-pointer"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
@@ -120,7 +132,7 @@ export function ConfirmationModal({
             variant="ghost"
             onClick={onClose}
             disabled={isLoading}
-            className="rounded-xl px-4 py-2 text-sm"
+            className="rounded-xl px-4 py-2 text-sm cursor-pointer"
           >
             {cancelText}
           </Button>
@@ -128,7 +140,7 @@ export function ConfirmationModal({
             type="button"
             onClick={onConfirm}
             disabled={isLoading}
-            className={`rounded-xl px-5 py-2 text-sm font-medium transition-all ${styles.confirmButton}`}
+            className={`rounded-xl px-5 py-2 text-sm font-medium transition-all cursor-pointer ${styles.confirmButton}`}
           >
             {isLoading ? (
               <span className="flex items-center space-x-2">
@@ -141,6 +153,7 @@ export function ConfirmationModal({
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

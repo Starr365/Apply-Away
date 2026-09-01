@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   Opportunity,
   OpportunityCategory,
@@ -14,6 +15,7 @@ import {
 import { X, Plus, Check } from "lucide-react";
 import { useToast } from "@/components/ui/toast-provider";
 import { Button } from "@/components/ui/button";
+import { useMounted } from "@/lib/use-mounted";
 
 interface OpportunityFormModalProps {
   isOpen: boolean;
@@ -26,6 +28,8 @@ export function OpportunityFormModal({
   onClose,
   opportunityToEdit,
 }: OpportunityFormModalProps) {
+  const isMounted = useMounted();
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -37,14 +41,15 @@ export function OpportunityFormModal({
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !isMounted) return null;
 
-  return (
+  return createPortal(
     <OpportunityFormContent
       key={opportunityToEdit?.id || "new"}
       onClose={onClose}
       opportunityToEdit={opportunityToEdit}
-    />
+    />,
+    document.body
   );
 }
 
@@ -125,8 +130,8 @@ function OpportunityFormContent({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md overflow-y-auto">
-      <div className="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto border border-border shadow-2xl">
+    <div className="fixed inset-0 z-9999 w-screen h-screen flex items-center justify-center p-4 bg-black/60 dark:bg-black/75 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-200">
+      <div className="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto border border-border shadow-2xl animate-in zoom-in-95 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border pb-4">
           <div>

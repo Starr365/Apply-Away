@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { extractOpportunityAction } from "@/app/actions/ai-extraction.actions";
 import { createOpportunityAction } from "@/app/actions/opportunity.actions";
 import { ExtractedOpportunityData } from "@/services/interfaces/ai-extraction.service";
@@ -18,6 +19,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { OpportunityCategory } from "@/domain/opportunity.types";
+import { useMounted } from "@/lib/use-mounted";
 
 interface AICaptureModalProps {
   isOpen: boolean;
@@ -27,6 +29,7 @@ interface AICaptureModalProps {
 }
 
 export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }: AICaptureModalProps) {
+  const isMounted = useMounted();
   const [activeTab, setActiveTab] = useState<"url" | "text">("url");
   const [urlInput, setUrlInput] = useState("");
   const [textInput, setTextInput] = useState("");
@@ -65,7 +68,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !isMounted) return null;
 
   const handleExtract = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -166,9 +169,9 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
     onFallbackManual?.();
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md overflow-y-auto">
-      <div className="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto border border-border shadow-2xl">
+  return createPortal(
+    <div className="fixed inset-0 z-9999 w-screen h-screen flex items-center justify-center p-4 bg-black/60 dark:bg-black/75 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-200">
+      <div className="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto border border-border shadow-2xl animate-in zoom-in-95 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border pb-4">
           <div>
@@ -186,107 +189,112 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
           </button>
         </div>
 
-        {/* Quota / Rate Limit Error Banner */}
-        {isQuotaError && (
-          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-3">
-            <div className="flex items-start space-x-3">
-              <ShieldAlert className="w-5 h-5 text-amber-500 dark:text-amber-400 shrink-0 mt-0.5" />
-              <div className="space-y-1.5">
-                <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">AI Usage Limit Reached</p>
-                <p className="text-xs text-slate-650 dark:text-slate-400 leading-relaxed">
-                  AI extraction is temporarily unavailable. You&apos;ve reached the current AI usage limit.
-                  You can still add this opportunity manually, or try again later.
-                </p>
-              </div>
-            </div>
-            {onFallbackManual && (
-              <button
-                type="button"
-                onClick={handleContinueManually}
-                className="w-full h-11 rounded-xl bg-secondary border border-border hover:bg-secondary/80 text-xs font-semibold text-foreground flex items-center justify-center space-x-2 transition-colors cursor-pointer"
-              >
-                <PenLine className="w-4 h-4 text-primary" />
-                <span>Continue manually</span>
-              </button>
+        {/* Error Alert */}
+        {errorMsg && (
+          <div
+            className={`p-4 rounded-2xl border text-xs flex items-start space-x-3 ${
+              isQuotaError
+                ? "bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-300"
+                : "bg-destructive/10 border-destructive/20 text-destructive"
+            }`}
+          >
+            {isQuotaError ? (
+              <ShieldAlert className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+            ) : (
+              <AlertTriangle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
             )}
+            <div className="space-y-2 flex-1">
+              <p className="font-medium leading-relaxed">{errorMsg}</p>
+              {isQuotaError && onFallbackManual && (
+                <button
+                  type="button"
+                  onClick={handleContinueManually}
+                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-800 dark:text-amber-200 font-semibold transition-colors cursor-pointer"
+                >
+                  <PenLine className="w-3.5 h-3.5" />
+                  <span>Add Opportunity Manually Instead</span>
+                </button>
+              )}
+            </div>
           </div>
         )}
 
-        {/* General Error (non-quota) */}
-        {errorMsg && !isQuotaError && (
-          <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-xs text-destructive">
-            {errorMsg}
-          </div>
-        )}
-
-        {/* Step 1: Input Form (when not previewing) */}
-        {!extractedData && !isQuotaError && (
+        {/* Step 1: Input Tab Selection */}
+        {!extractedData && (
           <div className="space-y-5">
-            {/* Input Method Tabs */}
-            <div className="flex rounded-xl bg-secondary/80 p-1.5 border border-border">
+            <div className="flex rounded-xl bg-secondary p-1 border border-border">
               <button
                 type="button"
                 onClick={() => setActiveTab("url")}
-                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "url"
-                    ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.01]"
+                className={`flex-1 py-2 text-xs font-semibold rounded-lg flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                  activeTab === "url"
+                    ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
-                  }`}
+                }`}
               >
                 <LinkIcon className="w-3.5 h-3.5" />
-                <span>Website URL</span>
+                <span>Link / URL</span>
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab("text")}
-                className={`flex-1 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center space-x-2 transition-all cursor-pointer ${activeTab === "text"
-                    ? "bg-primary text-slate-950 shadow-md shadow-primary/30 scale-[1.01]"
+                className={`flex-1 py-2 text-xs font-semibold rounded-lg flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                  activeTab === "text"
+                    ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
-                  }`}
+                }`}
               >
                 <FileText className="w-3.5 h-3.5" />
-                <span>Copied Message / Text</span>
+                <span>Raw Text / Snippet</span>
               </button>
             </div>
 
             <form onSubmit={handleExtract} className="space-y-4">
               {activeTab === "url" ? (
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-foreground">Opportunity Website URL</label>
+                <div className="space-y-1.5">
+                  <label htmlFor="url-input" className="text-xs font-semibold text-foreground">
+                    Opportunity URL
+                  </label>
                   <input
+                    id="url-input"
                     type="url"
-                    required
                     value={urlInput}
                     onChange={(e) => setUrlInput(e.target.value)}
-                    placeholder="https://www.mandelawashingtonfellowship.org/apply..."
-                    className="w-full h-12 px-4 rounded-xl bg-card border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
+                    placeholder="https://example.com/fellowship-2025"
+                    className="w-full h-11 px-4 rounded-xl bg-secondary/50 border border-border text-foreground text-xs focus:outline-none focus:ring-2 focus:ring-primary transition-all placeholder:text-muted-foreground"
+                    required
                   />
+                  <span className="text-[11px] text-muted-foreground block">
+                    We will fetch and analyze the web page to extract all eligibility, deadlines, and requirements.
+                  </span>
                 </div>
               ) : (
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-foreground">
-                    Paste WhatsApp, LinkedIn, or Email Content
+                <div className="space-y-1.5">
+                  <label htmlFor="text-input" className="text-xs font-semibold text-foreground">
+                    Pasted Description / Announcement
                   </label>
                   <textarea
+                    id="text-input"
                     rows={6}
-                    required
                     value={textInput}
                     onChange={(e) => setTextInput(e.target.value)}
-                    placeholder="Paste full opportunity text message here..."
-                    className="w-full p-4 rounded-xl bg-card border border-input text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 resize-none"
+                    placeholder="Paste the WhatsApp broadcast, LinkedIn post, or email announcement here..."
+                    className="w-full p-4 rounded-xl bg-secondary/50 border border-border text-foreground text-xs focus:outline-none focus:ring-2 focus:ring-primary transition-all placeholder:text-muted-foreground leading-relaxed resize-none"
+                    required
                   />
                 </div>
               )}
 
               <button
                 type="submit"
-                disabled={isExtracting}
-                className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25 flex items-center justify-center transition-all cursor-pointer disabled:opacity-50"
+                disabled={isExtracting || (activeTab === "url" ? !urlInput.trim() : !textInput.trim())}
+                className="w-full h-11 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold shadow-lg shadow-primary/20 flex items-center justify-center space-x-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isExtracting ? (
-                  <div className="flex items-center space-x-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-white" />
-                    <span>Extracting Structured Opportunity...</span>
-                  </div>
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Extracting Details with Gemini...</span>
+                  </>
                 ) : (
                   <span>Extract with AI</span>
                 )}
@@ -416,7 +424,7 @@ export function AICaptureModal({ isOpen, onClose, onSuccess, onFallbackManual }:
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
-
